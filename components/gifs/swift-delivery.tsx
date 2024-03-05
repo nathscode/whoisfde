@@ -1,6 +1,6 @@
 export default function SwiftDelivery(){
   // style={{width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px);}}
-  return  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1024" width="250" height="250" preserveAspectRatio="xMidYMid meet" >
+  return  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1024" width="275" height="275" preserveAspectRatio="xMidYMid meet" >
   <defs>
     <clipPath id="__lottie_element_285">
       <rect width="1280" height="1024" x="0" y="0"></rect>

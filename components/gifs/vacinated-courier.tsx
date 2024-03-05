@@ -4,8 +4,8 @@ export default function VacinatedCourier() {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 500 500"
-      width="250"
-      height="250"
+      width="275"
+      height="275"
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>

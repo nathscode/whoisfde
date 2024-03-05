@@ -11,14 +11,14 @@ export default function Home() {
       <First />
       <Second />
       <div className="relative overflow-x-hidden h-fit">
-        <div className="bg-[#3A454B] flex flex-col justify-center items-center py-16 px-10 xl:px-56 text-center gap-10">
+        <div className="bg-[#3A454B] flex flex-col justify-center items-center py-16 px-4 xl:px-56 text-center gap-10">
           <div className="text-[38px] font-bold">Try Us And See How Good Our Services Are.</div>
           <div className="w-fit">
             <button className="rounded-lg px-9 py-3 bg-[#F39F39] text-white">Call us</button>
           </div>
         </div>
         
-        <div className="flex flex-col lg:flex-row max-lg:gap-20 px-10 xl:px-56 bg-white py-10 justify-around">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-sm:gap-20 px-4 xl:px-56 bg-white py-10 justify-between md:justify-around">
           <div className="flex flex-col gap-2 text-black items-center justify-center">
             <SwiftDelivery />
             <div className="text-xl font-semibold text-[#3A454B]">Swift delivery</div>
@@ -34,7 +34,9 @@ export default function Home() {
             </div>
           </div>
           <div className="flex flex-col gap-2 text-black items-center justify-center">
+            
             <SafetyProtocol />
+            
             <div className="text-xl font-semibold text-[#3A454B]">Safety protocol</div>
             <div className="text-wrap text-center">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -55,12 +57,12 @@ export default function Home() {
 
 function First() {
   return (
-    <div className="px-10 xl:px-56 pb-40 pt-2 bg-[#3A454B]">
+    <div className="px-4 xl:px-56 pb-20 lg:pb-40 pt-2 bg-[#3A454B] dark:text-white">
       <div className="flex justify-between items-center">
-        <Image src="/logo.png" height={150} width={135} alt="Exchange" />
+        <Image src="/logo.png" height={50} width={135} alt="Exchange" />
         <Image src="/burger.svg" height={30} width={30} alt="menu" />
       </div>
-      <div className="flex flex-col lg:flex-row gap-16 mt-28">
+      <div className="flex flex-col lg:flex-row gap-3 lg:gap-16 mt-14 lg:mt-28">
         <div>
           <div className="text-5xl md:text-7xl lg:text-[68px]">Reliable Service Every Time</div>
           <div className="pb-10 font-light text-[18px] pt-5 pr-10">
@@ -100,7 +102,7 @@ function First() {
 
 function Second() {
   return (
-    <div className="flex flex-col lg:flex-row px-10 xl:px-56 py-28 gap-20 items-center bg-white text-black">
+    <div className="flex flex-col lg:flex-row px-4 xl:px-56 py-14 lg:py-28 gap-10 lg:gap-20 items-center bg-white text-black">
       <Image src="/bag-exchange.svg" height={550} width={550} alt="We deliver" />
       <div className="flex flex-col gap-10">
         <div className="text-[44px] font-bold opacity-75">

@@ -22,7 +22,7 @@ export default function Home() {
   );
 }
 
-export function Tenth() {
+function Tenth() {
   return (
     <div className="bg-white text-[#3A454B] px-4 xl:px-56 pt-16 md:pt-24 pb-10">
       <div className="flex flex-col max-lg:gap-8 text-center text-lg lg:flex-row justify-between mb-16">
@@ -53,7 +53,7 @@ export function Tenth() {
   );
 }
 
-export function Ninth() {
+function Ninth() {
   return (
     <div className="bg-[#3A454B] text-white px-4 xl:px-56 pt-8 pb-16">
       <div className="text-[46px] font-semibold py-10">Customer testimonials</div>
@@ -86,7 +86,7 @@ export function Ninth() {
   );
 }
 
-export function Eighth() {
+function Eighth() {
   return (
     <div className="px-4 xl:px-56  bg-white text-[#3A454B] flex flex-col lg:flex-row items-center justify-between py-10">
       <div>
@@ -105,7 +105,7 @@ export function Eighth() {
   );
 }
 
-export function Seventh() {
+function Seventh() {
   return (
     <div>
       <div className="px-4 xl:px-56 text-white bg-[#3A454B] text-center py-28">
@@ -141,7 +141,7 @@ export function Seventh() {
   );
 }
 
-export function Sixth() {
+function Sixth() {
   return (
     <div className="flex flex-col justify-around items-center px-4 xl:px-56 lg:flex-row bg-white text-[#3A3A3A]">
       <div className="flex-1">
@@ -177,7 +177,7 @@ export function Sixth() {
   );
 }
 
-export function Fifth() {
+function Fifth() {
   return (
     <div className="pb-10 px-4 xl:px-56 bg-white text-[#3A3A3A]">
       <div className="flex flex-col items-center justify-center pb-28 gap-3">
@@ -204,7 +204,7 @@ export function Fifth() {
   );
 }
 
-export function CrewCard({ image, title, body }: { image: string; title: string; body: string }) {
+function CrewCard({ image, title, body }: { image: string; title: string; body: string }) {
   return (
     <div className="bg-[#253138] max-md:mb-16 text-white rounded-xl h-[325px] sm:h-[395px] w-full flex flex-col px-6 py-4 relative">
       <div className="absolute left-[10%] top-[-50px] p-2 bg-[#E1ECB8] rounded-xl">
@@ -221,7 +221,7 @@ export function CrewCard({ image, title, body }: { image: string; title: string;
   );
 }
 
-export function Fourth() {
+function Fourth() {
   return (
     <div className="pt-20 pb-18 lg:pb-28 bg-white text-[#3A3A3A] px-4 xl:px-56">
       <div className="flex flex-col items-center justify-center pb-36 gap-3">
@@ -252,7 +252,7 @@ export function Fourth() {
   );
 }
 
-export function DeliveryCard({
+function DeliveryCard({
   image,
   title,
   body,

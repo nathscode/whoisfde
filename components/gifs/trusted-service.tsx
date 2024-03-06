@@ -1,6 +1,6 @@
 export default function TrustedService(){
   //style="width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px);"
-  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="275" height="275" preserveAspectRatio="xMidYMid meet">
+  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="250" height="250" preserveAspectRatio="xMidYMid meet">
   <defs>
     <clipPath id="__lottie_element_102">
       <rect width="500" height="500" x="0" y="0"></rect>

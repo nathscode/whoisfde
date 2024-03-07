@@ -12,17 +12,17 @@ export default function WeDeliverEverything() {
       </div>
       <div className="flex flex-col md:flex-row justify-around gap-4 lg:gap-10 items-center">
         <DeliveryCard
-          image="/burger.png"
+          image="/appliances.jpg"
           title="Home appliances"
           body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper."
         />
         <DeliveryCard
-          image="/delivery-box.png"
+          image="/bulldozer.webp"
           title="Heavy machines"
           body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper."
         />
         <DeliveryCard
-          image="/groceries.png"
+          image="/bulldozer.webp"
           title="Construction equipments"
           body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper."
         />
@@ -34,8 +34,8 @@ export default function WeDeliverEverything() {
 function DeliveryCard({ image, title, body }: { image: string; title: string; body: string }) {
   return (
     <div className="bg-[#F0EFE6] flex flex-col sm:flex-row items-center justify-center md:flex-col rounded-md w-full px-4 py-4 md:py-3">
-      <div className="h-36 flex flex-col justify-center m-4">
-        <Image src={image} height={130} width={150} alt={image} />
+      <div className="h-36 w-36 flex flex-col justify-center">
+        <Image src={image} height={150} width={150} alt={image} />
       </div>
       <div className="md:mt-10">
         <div className="text-[34px] mb-4 font-medium text-center sm:text-left">{title}</div>

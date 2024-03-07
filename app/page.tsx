@@ -79,7 +79,7 @@ function First() {
       "
               placeholder="Have a tracking number? Enter!"
             />
-            <button className="rounded-md px-9 py-3 bg-[#F39F39] text-white">Search</button>
+            <button className="rounded-md px-9 py-3 bg-[#F39F39] text-white">Track freight</button>
           </div>
         </div>
         <Image src="/bag-exchange.svg" className="pt-16" height={550} width={550} alt="Exchange" />

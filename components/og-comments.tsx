@@ -9,7 +9,7 @@ export default function ClientsAndOgComments() {
           <div className="md:flex-[2] flex flex-col sm:flex-row gap-4">
             <div className="flex-1 flex flex-col gap-5">
               <div className="font-bold text-2xl">Ajakaye Joshua</div>
-              <div className="font-bold text-xl text-blue-700 mb-3">E.O.Y 23&apps; PARTY</div>
+              <div className="font-bold text-xl text-blue-700 mb-3">E.O.Y 23&apos; PARTY</div>
               <i>
                 <div className="leading-loose font-bold">
                   <span className="text-3xl font-extrabold">&quot;</span>

@@ -44,10 +44,10 @@ export default function ClientsAndOgComments() {
         </div>
       </div>
       <div className="flex justify-between w-full mt-14">
-        <div className="px-4 py-2 border hover:bg-gray-200 hover:border-none border-black rounded-md">
+        <div className="px-4 py-2 border active:bg-gray-200 active:border-none border-black rounded-md">
           <Image src={"/previous.png"} className="" width={20} height={20} alt="previous" />
         </div>
-        <div className="px-4 py-2 border hover:bg-gray-200 hover:border-none border-black rounded-md">
+        <div className="px-4 py-2 border active:bg-gray-200 active:border-none border-black rounded-md">
           <Image src={"/next.png"} className="" width={20} height={20} alt="next" />
         </div>
       </div>

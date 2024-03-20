@@ -39,7 +39,7 @@ export default function Reviews() {
           <Image src="/reviews_and_ogs.png" width={350} height={60} alt="reviews and ogs" />
           <div className="text-lg font-light text-left md:text-center">
             Read reviews of clients I've worked with, pictures and recordings from behind the scene
-            with my OG’s
+            with my OGs
           </div>
         </div>
         <div className="flex justify-center items-center gap-10 mt-5 mb-0 text-sm">
@@ -68,8 +68,8 @@ export default function Reviews() {
             style={{ color: colorAt === 1 ? "#4159AD" : "black" }}
             className="hover:cursor-pointer"
           >
-            <div className="max-md:hidden">OG's Behind The Scene</div>
-            <div className="md:hidden">OG's Reviews</div>
+            <div className="max-md:hidden">OGs Behind The Scene</div>
+            <div className="md:hidden">OGs Reviews</div>
           </div>
           <div
             ref={thirdRef}

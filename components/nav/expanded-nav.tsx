@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import Reviews from "../reviews/reviews";
 import Landing from "../landing";
+import Pricing from "../pricing";
 
 export default function ExpandedNav({setHomeSection}:{setHomeSection: Dispatch<SetStateAction<JSX.Element>>}) {
   return (
@@ -17,7 +18,7 @@ export default function ExpandedNav({setHomeSection}:{setHomeSection: Dispatch<S
           >
             Journal
           </div>
-          <div className="flex items-center gap-2  hover:cursor-pointer hover:opacity-50">
+          {/* <div className="flex items-center gap-2  hover:cursor-pointer hover:opacity-50">
             <span>+234 812340593</span>
             <Image
               src={"/black-phone.png"}
@@ -36,12 +37,12 @@ export default function ExpandedNav({setHomeSection}:{setHomeSection: Dispatch<S
               height={20}
               alt="location"
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex gap-20 justify-around items-center">
-          <div className="hover:cursor-pointer hover:opacity-50">Projects</div>
+          {/*<div className="hover:cursor-pointer hover:opacity-50">Projects</div>
           <div className="hover:cursor-pointer hover:opacity-50">About me</div>
-          <div className="flex gap-2 items-center hover:cursor-pointer hover:opacity-50">
+           <div className="flex gap-2 items-center hover:cursor-pointer hover:opacity-50">
             <span>English</span>
             <Image
               src={"/black-globe.png"}
@@ -50,10 +51,13 @@ export default function ExpandedNav({setHomeSection}:{setHomeSection: Dispatch<S
               height={24}
               alt="Globe"
             />
-          </div>
+          </div> */}
           <div className="hover:cursor-pointer hover:opacity-50" onClick={() => {
             setHomeSection(<Reviews />)
-          }}>OGs & Reviews</div>
+          }}>Reviews</div>
+          <div className="hover:cursor-pointer hover:opacity-50" onClick={() => {
+            setHomeSection(<Pricing />)
+          }}>Pricing</div>
           <div>
           <Image
               src={"/profile.png"}

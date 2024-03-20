@@ -23,7 +23,7 @@ export default function ContactUs() {
                   placeholder="Enter your message"
                 />
               </div>
-              <button className="text-yellow-500 active:bg-yellow-300 active:text-black border rounded-lg w-full py-2 text-lg border-gray-500">
+              <button className="text-yellow-500 active:bg-yellow-200 lg:hover:bg-yellow-200 active:text-black border rounded-lg w-full py-2 text-lg border-gray-500">
                 Send
               </button>
               <div>I agree to the terms of service</div>

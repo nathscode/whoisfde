@@ -18,7 +18,8 @@ export default function Reviews() {
   const [activeComponent, setActiveComponent] = useState(<OrdinaryReviews />);
 
   const [indicatorWidth, setWidth] = useState(0);
-  
+  const [canShowIndicator, setCanUseIndicator] = useState(false);
+
   const handleResize = () => {
     setWidth((activeRef.current! as Element).getBoundingClientRect().width);
     setLp((activeRef.current! as Element).getBoundingClientRect().left);
@@ -26,6 +27,7 @@ export default function Reviews() {
 
   useEffect(() => {
     handleResize();
+    setCanUseIndicator(true);
     // window.addEventListener("resize", handleResize);
 
     // return () => {
@@ -36,11 +38,11 @@ export default function Reviews() {
   return (
     <div className="bg-white text-black mt-10">
       <div className="flex flex-col items-center gap-4">
-        <div className="px-2 md:px-[50px] lg:px-[200px] xl:px-[400px] flex flex-col items-center gap-4">
-          <Image src="/reviews_and_ogs.png" width={350} height={60} alt="reviews and ogs" />
+        <div className="px-2 md:px-[50px] lg:px-[200px] xl:px-[400px] flex flex-col items-start md:items-center gap-4">
+          <div className="text-3xl font-[500]">REVIEWS AND OG&apos;S BTS</div>
           <div className="text-lg font-light text-left md:text-center">
-            Read reviews of clients I have worked with over the years. You also get 
-            access to pictures and recordings from my behind the scene with my OGs
+            Read reviews of clients I have worked with over the years. You also get access to
+            pictures and recordings from behind the scene moments with my OGs
           </div>
         </div>
         <div className="flex justify-center items-center gap-10 mt-5 mb-0 text-sm">
@@ -95,10 +97,12 @@ export default function Reviews() {
           </div>
         </div>
         <div className="h-[2.5px] mt-[-10px] bg-gray-200 w-full relative flex items-center">
-          <div
-            style={{ left: lp, width: indicatorWidth, transition: "left 0.25s linear" }}
-            className={`absolute bg-[#4159AD] h-[2.5px] rounded-full hover:cursor-pointer`}
-          />
+          {canShowIndicator ? (
+            <div
+              style={{ left: lp, width: indicatorWidth, transition: "left 0.25s linear" }}
+              className={`absolute bg-[#4159AD] h-[2.5px] rounded-full hover:cursor-pointer`}
+            />
+          ) : null}
         </div>
         {activeComponent}
       </div>

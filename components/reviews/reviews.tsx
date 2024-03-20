@@ -96,7 +96,7 @@ export default function Reviews() {
         </div>
         <div className="h-[2.5px] mt-[-10px] bg-gray-200 w-full relative flex items-center">
           <div
-            style={{ left: lp, width: indicatorWidth }}
+            style={{ left: lp, width: indicatorWidth, transition: "left 500ms linear" }}
             className={`absolute bg-[#4159AD] h-[2.5px] rounded-full hover:cursor-pointer`}
           />
         </div>

@@ -45,7 +45,7 @@ export default function WhoAmI() {
         <div className="h-fit">
           <Image src={"/fde-small.png"} width={35} height={20} alt="fde" />
         </div>
-        <Image src={"/FDE.png"} width={150} height={100} alt="fde" />
+        <Image src={"/fde.png"} width={150} height={100} alt="fde" />
       </div>
     </div>
   );

@@ -44,11 +44,11 @@ export default function ClientsAndOgComments() {
         </div>
       </div>
       <div className="flex justify-between w-full mt-14">
-        <div className="px-4 py-2 border active:bg-gray-200 active:border-none border-black rounded-md">
-          <Image src={"/previous.png"} className="" width={20} height={20} alt="previous" />
+        <div className="px-[14px] py-2 border active:bg-gray-200 active:border-none border-black rounded-md">
+          <Image src={"/previous.png"} className="" width={15} height={15} alt="previous" />
         </div>
-        <div className="px-4 py-2 border active:bg-gray-200 active:border-none border-black rounded-md">
-          <Image src={"/next.png"} className="" width={20} height={20} alt="next" />
+        <div className="px-[14px] py-2 border active:bg-gray-200 active:border-none border-black rounded-md">
+          <Image src={"/next.png"} className="" width={15} height={15} alt="next" />
         </div>
       </div>
     </div>

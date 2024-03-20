@@ -38,7 +38,7 @@ export default function Reviews() {
         <div className="px-2 md:px-[50px] lg:px-[200px] xl:px-[400px] flex flex-col items-center gap-4">
           <Image src="/reviews_and_ogs.png" width={350} height={60} alt="reviews and ogs" />
           <div className="text-lg font-light text-left md:text-center">
-            Read reviews of clients I've worked with, pictures and recordings from behind the scene
+            Read reviews of clients I have worked with, pictures and recordings from behind the scene
             with my OGs
           </div>
         </div>

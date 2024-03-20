@@ -58,7 +58,7 @@ export default function MinimizedTopNav({
         <div
           className={`${
             openNav ? "" : "shadow-md"
-          } flex items-center py-[14px] justify-between px-2`}
+          } flex items-center py-[14px] justify-between pl-2`}
         >
           <div
             className="text-[26px] font-[350]"

@@ -70,7 +70,7 @@ function Plan({
   return (
     <div style={{ borderColor: planColor, }} className="border-[0.65px] shadow-md rounded-md px-2 py-4">
       <div className="mb-6">
-        <div style={{ color: planColor }} className="text-4xl">
+        <div style={{ color: planColor }} className="text-4xl font-light sm:font-normal">
           {name}
         </div>
         <div className="mt-2 text-2xl font-light"><span className="font-[350]">{`\u20A6`}</span>{formatWithComma(cost)}</div>

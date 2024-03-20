@@ -51,7 +51,7 @@ export default function ExpandedNav({setHomeSection}:{setHomeSection: Dispatch<S
               alt="Globe"
             />
           </div>
-          <div onClick={() => {
+          <div className="hover:cursor-pointer hover:text-gray-400" onClick={() => {
             setHomeSection(<Reviews />)
           }}>OGs & Reviews</div>
           <div>

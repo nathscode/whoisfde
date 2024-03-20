@@ -8,7 +8,7 @@ export default function Nav({setHomeSection}:{setHomeSection: Dispatch<SetStateA
       <div className="lg:hidden">
         <MinimizedTopNav setHomeSection={setHomeSection} />
       </div>
-      <div className="hidden lg:block mb-[50px]">
+      <div className="hidden lg:block">
         <ExpandedNav setHomeSection={setHomeSection} />
       </div>
     </div>

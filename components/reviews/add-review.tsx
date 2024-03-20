@@ -17,7 +17,7 @@ export default function AddReview() {
               <div>
                 <Image src={"/add_black.svg"} width={16} height={16} alt="add" />
               </div>
-              <div className="font-bold">Add location</div>
+              <div className="font-semibold">Add location</div>
             </div>
           </div>
         </div>

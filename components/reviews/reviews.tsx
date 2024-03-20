@@ -18,18 +18,19 @@ export default function Reviews() {
   const [activeComponent, setActiveComponent] = useState(<OrdinaryReviews />);
 
   const [indicatorWidth, setWidth] = useState(0);
+  
+  const handleResize = () => {
+    setWidth((activeRef.current! as Element).getBoundingClientRect().width);
+    setLp((activeRef.current! as Element).getBoundingClientRect().left);
+  };
 
   useEffect(() => {
-    const handleResize = () => {
-      setWidth((activeRef.current! as Element).getBoundingClientRect().width);
-      setLp((activeRef.current! as Element).getBoundingClientRect().left);
-    };
     handleResize();
-    window.addEventListener("resize", handleResize);
+    // window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    // return () => {
+    //   window.removeEventListener("resize", handleResize);
+    // };
   }, []);
 
   return (
@@ -38,8 +39,8 @@ export default function Reviews() {
         <div className="px-2 md:px-[50px] lg:px-[200px] xl:px-[400px] flex flex-col items-center gap-4">
           <Image src="/reviews_and_ogs.png" width={350} height={60} alt="reviews and ogs" />
           <div className="text-lg font-light text-left md:text-center">
-            Read reviews of clients I have worked with, pictures and recordings from behind the scene
-            with my OGs
+            Read reviews of clients I have worked with over the years. You also get 
+            access to pictures and recordings from my behind the scene with my OGs
           </div>
         </div>
         <div className="flex justify-center items-center gap-10 mt-5 mb-0 text-sm">

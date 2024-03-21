@@ -4,7 +4,7 @@ export default function AddReview() {
 
   return (
     <div className="px-2 sm:px-[75px] md:px-[150px] lg:px-[300px] xl:px-[400px]">
-      <div className="flex gap-8 flex-col sm:flex-row">
+      <div className="flex gap-6 flex-col sm:flex-row">
         <div className="flex-1">
           <img src="/under-rock.png" className="rounded-lg" />
         </div>

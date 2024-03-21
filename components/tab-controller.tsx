@@ -23,14 +23,11 @@ function TabController({
   const [indicatorWidth, setWidth] = useState(0);
   const [canShowIndicator, setCanUseIndicator] = useState(false);
   const offsetLeft = useRef(0);
-
+  
+  //we adding 1 to get an additional offset getter
   //the first ref is always for determining our offset
   //the offset is for things like margin; in our case left
-  const refs: MutableRefObject<null>[] = [];
-
-  for (let i = 0; i < children.length + 1; i++) {
-    refs[i] = useRef(null);
-  }
+  const refs: MutableRefObject<null>[] = Array.from(new Array(children.length + 1)).map(_ => useRef(null));
 
   const styles = [`hover:cursor-pointer text-[${activeElementColor}]`, "hover:cursor-pointer text-black"];
 

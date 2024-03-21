@@ -2,8 +2,9 @@ import Image from "next/image";
 
 export default function WhoAmI() {
   return (
-    <div className="bg-black text-white relative py-4 px-2 min-[1200px]:px-[100px] min-[1400px]:px-[296px]">
-      <div className="mb-5 text-4xl font-semibold pl-2 min-[1200px]:pl-[100px] min-[1400px]:pl-[296px]">WHO AM I?</div>
+    <div className="bg-black text-white relative md:h-screen flex items-center justify-center px-2 min-[1200px]:px-[100px] min-[1400px]:px-[296px]">
+      <div>
+      <div className="mb-5 text-4xl font-semibold">WHO AM I?</div>
       <div className="py-10">
         <div className="flex-1 flex flex-col md:flex-row gap-10 justify-center items-center">
           <div className="relative">
@@ -46,6 +47,7 @@ export default function WhoAmI() {
           <Image src={"/fde-small.png"} width={35} height={20} alt="fde" />
         </div>
         <Image src={"/fde.png"} width={150} height={100} alt="fde" />
+      </div>
       </div>
     </div>
   );

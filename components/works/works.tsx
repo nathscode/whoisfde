@@ -1,18 +1,40 @@
 import Image from "next/image";
-import Tabs from "./tabs";
+import TabController from "../tab-controller";
 
 export default function Works() {
   return (
     <div className="px-2 min-[1200px]:px-[100px] min-[1400px]:px-[296px]">
       <div>
         <div className="text-3xl font-[500]">SOME OF MY WORKS</div>
-        <Tabs />
-        <div className="flex justify-center sm:items-center gap-2 flex-row sm:gap-6 lg:gap-8">
-          <div className="flex flex-col gap-2 sm:gap-6 lg:gap-8">
+        <div className="my-7">
+          <TabController
+            elementsStyle="flex justify-between items-center mb-1"
+            activeElementColor="#4159AD"
+            indicatorColor="#4159AD"
+            railColor="#eeeeee"
+          >
+            <div>CONCERTS</div>
+            <div>PARTIES</div>
+            <div>WEDDINGS</div>
+            <div>CONTENTS</div>
+            <div className="flex gap-2 items-center">
+              <span>PHOTOGRAPHY</span>
+              <Image
+                src={"/wedding_camera.png"}
+                className="bg-blend-difference"
+                width={10}
+                height={10}
+                alt="photography"
+              />
+            </div>
+          </TabController>
+        </div>
+        <div className="flex justify-center sm:items-center gap-2 flex-row sm:gap-4">
+          <div className="flex flex-col gap-2 sm:gap-4">
             <img src={"/davido.png"} className="bg-blend-difference" alt="artist" />
             <img src={"/under-davido.png"} className="bg-blend-difference" alt="artist" />
           </div>
-          <div className="flex flex-col gap-2 sm:gap-7 lg:gap-9">
+          <div className="flex flex-col gap-2 sm:gap-5">
             <img src={"/rock-n-roll.png"} className="bg-blend-difference" alt="rock n roll" />
             <img src={"/under-rock.png"} className="bg-blend-difference" alt="worship" />
           </div>

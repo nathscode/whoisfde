@@ -3,16 +3,16 @@ import Image from "next/image";
 export default function AddReview() {
 
   return (
-    <div className="px-4">
+    <div className="px-2 sm:px-[75px] md:px-[150px] lg:px-[300px] xl:px-[400px]">
       <div className="flex gap-8 flex-col sm:flex-row">
         <div className="flex-1">
           <img src="/under-rock.png" className="rounded-lg" />
         </div>
-        <div className="flex-1 flex flex-col gap-2">
-          <div className="border flex-1 border-dashed px-10 py-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
+        <div className="flex-1 grid grid-cols-1 gap-2">
+          <div className="border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
             <Image src={"/add_black.svg"} width={20} height={20} alt="add" />
           </div>
-          <div className="border flex-3 border-dashed px-10 py-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
+          <div className="border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
             <div className="flex gap-2 items-center">
               <div>
                 <Image src={"/add_black.svg"} width={16} height={16} alt="add" />

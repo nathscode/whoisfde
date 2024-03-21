@@ -1,18 +1,60 @@
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import Reviews from "../reviews/reviews";
 import Landing from "../landing";
 import Pricing from "../pricing";
 
-export default function ExpandedNav({setHomeSection}:{setHomeSection: Dispatch<SetStateAction<JSX.Element>>}) {
+export default function ExpandedNav({
+  setHomeSection,
+}: {
+  setHomeSection: Dispatch<SetStateAction<JSX.Element>>;
+}) {
+  type DynamicStyles = {
+    color: string;
+    bg: string;
+  };
+
+  const [isHome, setIsHome] = useState(true);
+
+  const [dynamicStyles, setDynamicStyles] = useState<DynamicStyles>({
+    bg: "transparent",
+    color: "white",
+  });
+
+  const scrollHandler = () => {
+    if (window.scrollY >= window.screen.height) {
+      setDynamicStyles({ bg: "white", color: "black" });
+    } else {
+      if (window.scrollY <= window.screen.height) {
+        setDynamicStyles({ bg: "transparent", color: "white" });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isHome) {
+      scrollHandler();
+      window.addEventListener("scroll", scrollHandler);
+
+      return () => {
+        window.removeEventListener("scroll", scrollHandler);
+      };
+    }
+  }, [isHome]);
+
   return (
-    <div className="bg-white text-black fixed z-10 left-0 right-0 top-0">
-      <div className="flex justify-between items-center px-[28px] py-[14px] text-lg">
+    <div
+      style={{ color: dynamicStyles.color, backgroundColor: dynamicStyles.bg }}
+      className={"fixed flex left-0 right-0 z-10 h-[61px]  text-semibold text-lg"}
+    >
+      <div className="flex justify-between items-center px-2 text-lg w-full">
         <div className="flex gap-20 justify-around items-center ">
           {/* <button className="px-5 py-2 rounded-sm text-black bg-[#E3C3C3]">Logo</button> */}
           <div
-            className="text-[30px] hover:cursor-pointer hover:opacity-50"
+            className="text-[24px] hover:cursor-pointer hover:opacity-50 active:opacity-50"
             onClick={() => {
+              setIsHome(true);
+              setDynamicStyles({ bg: "transparent", color: "white" });
               setHomeSection(<Landing />);
             }}
           >
@@ -52,14 +94,28 @@ export default function ExpandedNav({setHomeSection}:{setHomeSection: Dispatch<S
               alt="Globe"
             />
           </div> */}
-          <div className="hover:cursor-pointer hover:opacity-50" onClick={() => {
-            setHomeSection(<Reviews />)
-          }}>Reviews</div>
-          <div className="hover:cursor-pointer hover:opacity-50" onClick={() => {
-            setHomeSection(<Pricing />)
-          }}>Pricing</div>
+          <div
+            className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
+            onClick={() => {
+              setIsHome(false);
+              setDynamicStyles({ bg: "white", color: "black" });
+              setHomeSection(<Reviews />);
+            }}
+          >
+            Reviews
+          </div>
+          <div
+            className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
+            onClick={() => {
+              setIsHome(false);
+              setDynamicStyles({ bg: "white", color: "black" });
+              setHomeSection(<Pricing />);
+            }}
+          >
+            Pricing
+          </div>
           <div>
-          <Image
+            <Image
               src={"/profile.png"}
               width={35}
               className="hover:cursor-pointer hover:opacity-50"

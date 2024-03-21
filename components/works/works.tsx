@@ -6,7 +6,7 @@ export default function Works() {
     <div className="px-2 min-[1200px]:px-[100px] min-[1400px]:px-[296px]">
       <div>
         <div className="text-4xl font-semibold">SOME OF MY WORKS</div>
-        <div className="my-8">
+        <div className="my-8 text-[10.5px] min-[400]:text-[14px] sm:text-[17px] md:text-[20px]">
           <TabController
             elementsStyle="flex justify-between items-center mb-1"
             activeElementColor="#4159AD"
@@ -25,12 +25,12 @@ export default function Works() {
         </div>
         <div className="flex justify-center sm:items-center gap-2 flex-row sm:gap-3">
           <div className="flex flex-col gap-2 sm:gap-3">
-            <img src={"/davido.png"} className="aspect-[5/3]" alt="artist" />
-            <img src={"/under-davido.png"} className="aspect-[3/2.412]" alt="artist" />
+            <img src={"/davido.png"} className="aspect-[5/3.4]" alt="artist" />
+            <img src={"/under-davido.png"} className="aspect-[3/2.75]" alt="artist" />
           </div>
           <div className="flex flex-col gap-2 sm:gap-3">
-            <img src={"/rock-n-roll.png"} className="aspect-[5/4]" alt="rock n roll" />
-            <img src={"/under-rock.png"} className="aspect-[5/3]" alt="worship" />
+            <img src={"/rock-n-roll.png"} className="aspect-[5/4.5]" alt="rock n roll" />
+            <img src={"/under-rock.png"} className="aspect-[5/3.5]" alt="worship" />
           </div>
         </div>
       </div>

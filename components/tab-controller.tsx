@@ -19,27 +19,26 @@ function TabController({
   elementsStyle: string
 }) {
   const [lp, setLm] = useState(0);
-  const position = useRef(1);
+  const position = useRef(0);
   const [indicatorWidth, setWidth] = useState(0);
   const [canShowIndicator, setCanUseIndicator] = useState(false);
   const offsetLeft = useRef(0);
-  
-  //we adding 1 to get an additional offset getter
-  //the first ref is always for determining our offset
-  //the offset is for things like margin; in our case left
-  const refs: MutableRefObject<null>[] = Array.from(new Array(children.length + 1)).map(_ => useRef(null));
+  const refs = useRef<Array<HTMLDivElement | null>>([])
+  const offsetRef = useRef(null)
 
   const styles = [`hover:cursor-pointer text-[${activeElementColor}]`, "hover:cursor-pointer text-black"];
 
   const slideTo = () => {
-    setWidth((refs[position.current].current! as Element).getBoundingClientRect().width);
-    offsetLeft.current = (refs[0].current! as Element).getBoundingClientRect().left;
+    setWidth((refs.current[position.current]! as Element).getBoundingClientRect().width);
+    offsetLeft.current = (offsetRef.current! as Element).getBoundingClientRect().left;
     setLm(
-      (refs[position.current].current! as Element).getBoundingClientRect().left - offsetLeft.current
+      (refs.current[position.current]! as Element).getBoundingClientRect().left - offsetLeft.current
     );
   };
 
   useEffect(() => {
+
+
     setCanUseIndicator(true);
     slideTo();
 
@@ -56,22 +55,22 @@ function TabController({
         {children.map((child, index) => (
           <div
             key={index}
-            ref={refs[index + 1]}
+            ref={e => refs.current[index] = e}
             onClick={() => {
-              position.current = index + 1;
+              position.current = index;
               slideTo();
               if (callback) {
                 callback(index);
               }
             }}
-            className={position.current === index + 1 ? styles[0] : styles[1]}
+            className={position.current === index ? styles[0] : styles[1]}
           >
             {child}
           </div>
         ))}
       </div>
       <div
-        ref={refs[0]}
+        ref={offsetRef}
         style={{backgroundColor: railColor ? railColor : "inherit"}}
         className={`h-[2.5px] relative w-full flex items-center rounded-full`}
       >

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Landing from "../landing";
 import Reviews from "../reviews/reviews";
 import Pricing from "../pricing";
@@ -11,6 +11,39 @@ export default function MinimizedTopNav({
 }: {
   setHomeSection: Dispatch<SetStateAction<JSX.Element>>;
 }) {
+  type DynamicStyles = {
+    color: string;
+    bg: string;
+  };
+
+  const [isHome, setIsHome] = useState(true);
+
+  const [dynamicStyles, setDynamicStyles] = useState<DynamicStyles>({
+    bg: "transparent",
+    color: "white",
+  });
+
+  const scrollHandler = () => {
+    if (window.scrollY >= (window.screen.height / 2)) {
+      setDynamicStyles({ bg: "white", color: "black" });
+    } else {
+      if (window.scrollY <= (window.screen.height / 2)) {
+        setDynamicStyles({ bg: "transparent", color: "white" });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isHome) {
+      scrollHandler();
+      window.addEventListener("scroll", scrollHandler);
+
+      return () => {
+        window.removeEventListener("scroll", scrollHandler);
+      };
+    }
+  }, [isHome]);
+
   const [openNav, setOpenNav] = useState(false);
 
   const toggleNav = () => {
@@ -36,14 +69,28 @@ export default function MinimizedTopNav({
           <span>English</span>
           <Image src={"/black-globe.png"} width={24} height={24} alt="Globe" />
         </div> */}
-        <div onClick={() => {
-          setOpenNav(false)
-          setHomeSection(<Reviews />)
-        }} className="">Reviews</div>
-        <div className="hover:cursor-pointer hover:opacity-50 " onClick={() => {
-          setOpenNav(false)
-            setHomeSection(<Pricing />)            
-          }}>Pricing</div>
+        <div
+          onClick={() => {
+            setOpenNav(false);
+            setIsHome(false);
+            setDynamicStyles({ bg: "white", color: "black" });
+            setHomeSection(<Reviews />);
+          }}
+          className=""
+        >
+          Reviews
+        </div>
+        <div
+          className="hover:cursor-pointer hover:opacity-50 "
+          onClick={() => {
+            setOpenNav(false);
+            setIsHome(false);
+            setDynamicStyles({ bg: "white", color: "black" });
+            setHomeSection(<Pricing />);
+          }}
+        >
+          Pricing
+        </div>
         <div>
           <Image src={"/profile.png"} width={35} height={35} alt="location" />
         </div>
@@ -52,7 +99,10 @@ export default function MinimizedTopNav({
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-10 bg-white text-black">
+    <header
+      className="fixed top-0 left-0 right-0 z-10"
+      style={{ color: dynamicStyles.color, backgroundColor: dynamicStyles.bg }}
+    >
       <div className="mx-auto md:flex items-center md:justify-between">
         <div
           className={`${
@@ -62,7 +112,9 @@ export default function MinimizedTopNav({
           <div
             className="text-[26px] font-[350]"
             onClick={() => {
-              setOpenNav(false)
+              setIsHome(true);
+              setDynamicStyles({ bg: "transparent", color: "white" });
+              setOpenNav(false);
               setHomeSection(<Landing />);
             }}
           >

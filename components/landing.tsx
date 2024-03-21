@@ -2,11 +2,13 @@ import Image from "next/image";
 import Works from "./works/works";
 import WhoAmI from "./who-am-i";
 import ClientsAndOgComments from "./og-comments";
+import Nav from "./nav/nav";
 
 export default function Landing() {
   return (
-    <div>
-      <div className="bg-[url('/bg.png')] bg-repeat-round h-[400px] sm:h-screen overflow-x-clip flex justify-end pr-3 lg-pr-20 items-center">
+    <div className="">
+      <div className="h-[50vh] md:h-screen">
+      <div className="bg-[url('/bg.png')] bg-repeat-round h-full overflow-x-clip flex justify-end pr-3 lg-pr-20 items-center">
         <div className="flex flex-col gap-4 items-center mt-10">
           <Image
             src={"/instagram.png"}
@@ -30,6 +32,7 @@ export default function Landing() {
             alt="phone"
           />
         </div>
+      </div>
       </div>
       <div className="pt-10 md:pt-20">
         <Works />

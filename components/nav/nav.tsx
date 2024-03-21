@@ -4,7 +4,7 @@ import MinimizedTopNav from "./minimized-nav";
 
 export default function Nav({setHomeSection}:{setHomeSection: Dispatch<SetStateAction<JSX.Element>>}) {
   return (
-    <div className="mb-[50px]">
+    <div className="">
       <div className="md:hidden">
         <MinimizedTopNav setHomeSection={setHomeSection} />
       </div>

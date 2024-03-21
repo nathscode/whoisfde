@@ -15,7 +15,7 @@ export default function Reviews() {
   const [activeComponent, setActiveComponent] = useState(<OrdinaryReviews />);
 
   return (
-    <div className="bg-white text-black mt-10">
+    <div className="bg-white text-black mt-20">
       <div className="flex flex-col items-center gap-4">
         <div className="px-2 md:px-[50px] lg:px-[200px] xl:px-[400px] flex flex-col items-start md:items-center gap-4">
           <div className="text-3xl font-[500]">REVIEWS AND COMMENTS FROM MY OG&apos;S</div>

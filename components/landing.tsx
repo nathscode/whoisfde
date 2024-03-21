@@ -7,7 +7,7 @@ import Nav from "./nav/nav";
 export default function Landing() {
   return (
     <div className="">
-      <div className="h-[50vh] md:h-screen">
+      <div className="h-[50vh] sm:h-screen">
       <div className="bg-[url('/bg.png')] bg-repeat-round h-full overflow-x-clip flex justify-end pr-3 lg-pr-20 items-center">
         <div className="flex flex-col gap-4 items-center mt-10">
           <Image

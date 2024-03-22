@@ -97,7 +97,7 @@ export default function MinimizedTopNav({
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-10` + dynamicStyles}
+      className={`fixed top-0 left-0 right-0 z-10 ` + dynamicStyles}
     >
       <div className="mx-auto md:flex items-center md:justify-between">
         <div className={`flex items-center py-[14px] justify-between pl-2`}>

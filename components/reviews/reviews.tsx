@@ -41,7 +41,7 @@ export default function Reviews() {
           }}
         >
           <div>Client Reviews</div>
-          <div>WHAT OGS SAY</div>
+          <div>What Ogs Say</div>
           <div className="flex gap-2 items-center">
             <div>
               {position.current !== 2 ? (

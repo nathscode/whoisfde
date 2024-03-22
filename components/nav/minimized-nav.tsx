@@ -47,7 +47,7 @@ setOpenNav(false)
         window.removeEventListener("scroll", scrollHandler);
       };
     }
-  }, [openNav]);
+  }, []);
 
   const toggleNav = () => {
     setOpenNav(!openNav);

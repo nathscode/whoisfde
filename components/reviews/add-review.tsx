@@ -9,10 +9,10 @@ export default function AddReview() {
           <img src="/under-rock.png" className="rounded-lg" />
         </div>
         <div className="flex-1 grid grid-cols-1 gap-2">
-          <div className="active:bg-gray-100 active:border-gray-100 active:opacity-50 md:hover:bg-gray-100 hover:cursor-pointer border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
+          <div className="active:bg-gray-100 max-sm:py-8 active:border-gray-100 active:opacity-50 md:hover:bg-gray-100 hover:cursor-pointer border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
             <Image src={"/add_black.svg"} width={20} height={20} alt="add" />
           </div>
-          <div className="active:bg-gray-100 active:border-gray-100 active:opacity-50 md:hover:bg-gray-100 hover:cursor-pointer border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
+          <div className="active:bg-gray-100 max-sm:py-8 active:border-gray-100 active:opacity-50 md:hover:bg-gray-100 hover:cursor-pointer border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
             <div className="flex gap-2 items-center">
               <div>
                 <Image src={"/add_black.svg"} width={16} height={16} alt="add" />

@@ -45,7 +45,7 @@ setOpenNav(false)
         window.removeEventListener("scroll", scrollHandler);
       };
     }
-  }, [isHome]);
+  }, [openNav]);
 
   const [openNav, setOpenNav] = useState(false);
 

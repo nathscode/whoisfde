@@ -1,12 +1,13 @@
 import Image from "next/image";
 import TabController from "../tab-controller";
+import Padding from "../util/padding";
 
 export default function Works() {
   return (
-    <div className="px-2 min-[1200px]:px-[100px] min-[1400px]:px-[296px]">
+    <Padding>
       <div>
         <div className="text-[33px] sm:text-4xl font-semibold">SOME OF MY WORKS</div>
-        <div className="my-8 text-[10.5px] min-[400]:text-[14px] sm:text-[17px] md:text-[20px]">
+        <div className="my-8 text-[11px] sm:text-[15px] md:text-[20px]">
           <TabController
             elementsStyle="flex justify-between items-center mb-1"
             activeElementColor="#4159AD"
@@ -43,6 +44,6 @@ export default function Works() {
           See more
         </button>
       </div>
-    </div>
+    </Padding>
   );
 }

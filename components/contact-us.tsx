@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Padding from "./util/padding";
 
 export default function ContactUs() {
   return (
-    <div className="w-full bg-black text-white flex justify-center px-2 lg:px-[25px] min-[1300px]:px-[100px] min-[1500px]:px-[250px]">
-      <div className="bg-[url('/bg-camera.png')] bg-no-repeat w-full py-20 flex md:justify-end items-center">     
-        <div>
+    <div className="w-full bg-black text-white flex justify-center items-center">
+      <div className="bg-[url('/bg-camera.png')] px-2  bg-no-repeat w-full py-20 flex justify-start sm:justify-center lg:justify-end lg:pr-[100px] xl:pr-[200px] items-center">     
+        <div className="">
           <div className="text-bold text-2xl">CONTACT US</div>
           <div className="pt-4 pb-8 text-semibold text-lg">
             sign up to our mailing list to get up to date messages
@@ -23,7 +24,7 @@ export default function ContactUs() {
                   placeholder="Enter your message"
                 />
               </div>
-              <button className="text-yellow-500 active:bg-yellow-200 lg:hover:bg-yellow-200 active:text-black border rounded-lg w-full py-2 text-lg border-gray-500">
+              <button className="text-yellow-500 active:bg-yellow-200 lg:hover:opacity-50 active:text-black border rounded-lg w-full py-2 text-lg border-gray-500">
                 Send
               </button>
               <div>I agree to the terms of service</div>

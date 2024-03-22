@@ -1,8 +1,9 @@
 import Image from "next/image";
+import Padding from "./util/padding";
 
 export default function ClientsAndOgComments() {
   return (
-    <div className="px-2 min-[1200px]:px-[100px] md:h-screen flex items-center justify-center min-[1400px]:px-[296px]">
+    <Padding className="md:h-screen flex items-center justify-center">
       <div>
         <div>
           <div className="text-4xl font-semibold mb-6 md:mb-12">
@@ -57,6 +58,6 @@ export default function ClientsAndOgComments() {
           </div>
         </div>
       </div>
-    </div>
+    </Padding>
   );
 }

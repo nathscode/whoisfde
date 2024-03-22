@@ -1,8 +1,9 @@
 import Image from "next/image";
+import Padding from "./util/padding";
 
 export default function WhoAmI() {
   return (
-    <div className="bg-black text-white relative md:h-screen flex items-center justify-center px-2 min-[1200px]:px-[100px] min-[1400px]:px-[296px]">
+    <Padding className="bg-black text-white relative md:h-screen flex items-center justify-center">
       <div>
       <div className="mb-5 text-4xl font-semibold">WHO AM I?</div>
       <div className="py-10">
@@ -49,6 +50,6 @@ export default function WhoAmI() {
         <Image src={"/fde.png"} width={150} height={100} alt="fde" />
       </div>
       </div>
-    </div>
+    </Padding>
   );
 }

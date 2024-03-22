@@ -105,7 +105,7 @@ export default function MinimizedTopNav({
             className="text-[26px] font-[350]"
             onClick={() => {
               setIsHome(true);
-              setDynamicStyles( 'bg-white text-black');  );
+              setDynamicStyles( 'bg-white text-black'  );
               setOpenNav(false);
               setHomeSection(<Landing />);
             }}

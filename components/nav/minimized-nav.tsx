@@ -70,7 +70,7 @@ export default function MinimizedTopNav({
           onClick={() => {
             setOpenNav(false);
             setIsHome(false);
-            setDynamicStyles( 'bg-white text-black' );
+            setDynamicStyles( 'bg-white text-black shadow-lg' );
             setHomeSection(<Reviews />);
           }}
           className=""
@@ -82,7 +82,7 @@ export default function MinimizedTopNav({
           onClick={() => {
             setOpenNav(false);
             setIsHome(false);
-            setDynamicStyles('bg-white text-black');
+            setDynamicStyles('bg-white text-black shadow-lg');
             setHomeSection(<Pricing />);
           }}
         >
@@ -105,7 +105,7 @@ export default function MinimizedTopNav({
             className="text-[23px] font-[350]"
             onClick={() => {
               setIsHome(true);
-              setDynamicStyles( 'bg-white text-black'  );
+              setDynamicStyles( 'bg-white text-black shadow-lg'  );
               setOpenNav(false);
               setHomeSection(<Landing />);
             }}

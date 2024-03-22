@@ -18,10 +18,7 @@ export default function MinimizedTopNav({
 
   const [isHome, setIsHome] = useState(true);
 
-  const [dynamicStyles, setDynamicStyles] = useState<DynamicStyles>({
-    bg: "transparent",
-    color: "white",
-  });
+  const [dynamicStyles, setDynamicStyles] = useState<DynamicStyles>('bg-transparent text-white');
 
   const scrollHandler = () => {
     if (window.scrollY >= window.screen.height / 2 - 50) {
@@ -73,7 +70,7 @@ export default function MinimizedTopNav({
           onClick={() => {
             setOpenNav(false);
             setIsHome(false);
-            setDynamicStyles({ bg: "white", color: "black" });
+            setDynamicStyles( 'bg-white text-black' );
             setHomeSection(<Reviews />);
           }}
           className=""
@@ -85,7 +82,7 @@ export default function MinimizedTopNav({
           onClick={() => {
             setOpenNav(false);
             setIsHome(false);
-            setDynamicStyles({ bg: "white", color: "black" });
+            setDynamicStyles('bg-white text-black');
             setHomeSection(<Pricing />);
           }}
         >
@@ -100,7 +97,7 @@ export default function MinimizedTopNav({
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-10` + !openNav ? `bg-transparent text-white` : `bg-white text-black shadow-lg`}
+      className={`fixed top-0 left-0 right-0 z-10` + dynamicStyles}
     >
       <div className="mx-auto md:flex items-center md:justify-between">
         <div className={`flex items-center py-[14px] justify-between pl-2`}>
@@ -108,7 +105,7 @@ export default function MinimizedTopNav({
             className="text-[26px] font-[350]"
             onClick={() => {
               setIsHome(true);
-              setDynamicStyles({ bg: "transparent", color: "white" });
+              setDynamicStyles( 'bg-white text-black');  );
               setOpenNav(false);
               setHomeSection(<Landing />);
             }}

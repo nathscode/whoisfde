@@ -1,9 +1,10 @@
 import OrdinaryReview from "./ordinary-review";
 import { ordinaryReviews } from "./data";
+import ReviewsPadding from "../util/reviews-padding";
 
 export default function OrdinaryReviews() {
   return (
-    <div className="flex flex-col mt-6 gap-8 px-2 sm:px-[75px] md:px-[150px] lg:px-[300px] xl:px-[400px]">
+    <ReviewsPadding className="flex flex-col mt-6 gap-8">
       {ordinaryReviews.map((review, index) => (
         <OrdinaryReview
           key={index}
@@ -13,6 +14,6 @@ export default function OrdinaryReviews() {
           body={review.body}
         />
       ))}
-    </div>
+    </ReviewsPadding>
   );
 }

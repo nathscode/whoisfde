@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Padding from "./util/padding";
+import Padding from "./util/home-padding";
 
 export default function ContactUs() {
   return (

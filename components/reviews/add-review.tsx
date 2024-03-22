@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Padding from "../util/padding";
+import ReviewsPadding from "../util/reviews-padding";
 
 export default function AddReview() {
-
   return (
-    <Padding>
+    <ReviewsPadding>
       <div className="flex gap-6 flex-col sm:flex-row">
         <div className="flex-1">
           <img src="/under-rock.png" className="rounded-lg" />
@@ -24,13 +23,19 @@ export default function AddReview() {
         </div>
       </div>
       <div>
-        <textarea rows={6} cols={50} className="border-[0.75px] my-2 w-full p-2 outline-none rounded-md border-gray-400">
+        <textarea
+          rows={6}
+          cols={50}
+          className="border-[0.75px] my-2 w-full p-2 outline-none rounded-md border-gray-400"
+        >
           Type in your reviews or captions here
         </textarea>
       </div>
       <div className="w-full flex justify-end">
-        <button className="bg-[#4159AD] md:hover:bg-[#2f407e] active:opacity-50 text-white rounded-md px-4 py-2">Done</button>
+        <button className="bg-[#4159AD] md:hover:bg-[#2f407e] active:opacity-50 text-white rounded-md px-4 py-2">
+          Done
+        </button>
       </div>
-    </Padding>
+    </ReviewsPadding>
   );
 }

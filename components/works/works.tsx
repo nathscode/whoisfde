@@ -1,6 +1,6 @@
 import Image from "next/image";
 import TabController from "../tab-controller";
-import Padding from "../util/padding";
+import Padding from "../util/home-padding";
 
 export default function Works() {
   return (

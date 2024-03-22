@@ -55,7 +55,7 @@ export default function Reviews() {
         </TabController>
         {activeComponent}
       </div>
-      <div className="px-[2px] md:px-32 mt-24">
+      <div className="px-[2px] md:px-32 mt-10 md:mt-20">
         <div className="h-[1px] w-full bg-black rounded-full" />
       </div>
     </div>

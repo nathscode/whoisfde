@@ -24,10 +24,10 @@ export default function MinimizedTopNav({
   });
 
   const scrollHandler = () => {
-    if (window.scrollY >= (window.screen.height / 2)) {
+    if (window.scrollY >= window.screen.height / 2 - 50) {
       setDynamicStyles({ bg: "white", color: "black" });
     } else {
-      if (window.scrollY <= (window.screen.height / 2)) {
+      if (window.scrollY <= window.screen.height / 2 - 50) {
         setDynamicStyles({ bg: "transparent", color: "white" });
       }
     }
@@ -101,14 +101,14 @@ export default function MinimizedTopNav({
   return (
     <header
       className="fixed top-0 left-0 right-0 z-10"
-      style={{ color: dynamicStyles.color, backgroundColor: dynamicStyles.bg }}
+      style={
+        openNav
+          ? { color: "black", backgroundColor: "white" }
+          : { color: dynamicStyles.color, backgroundColor: dynamicStyles.bg }
+      }
     >
       <div className="mx-auto md:flex items-center md:justify-between">
-        <div
-          className={`${
-            openNav ? "" : "shadow-md"
-          } flex items-center py-[14px] justify-between pl-2`}
-        >
+        <div className={`flex items-center py-[14px] justify-between pl-2`}>
           <div
             className="text-[26px] font-[350]"
             onClick={() => {

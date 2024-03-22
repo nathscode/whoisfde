@@ -100,7 +100,7 @@ export default function MinimizedTopNav({
 
   return (
     <header
-      className={openNav ? `fixed top-0 left-0 right-0 z-10 text-black bg-white shadow-lg` : `fixed top-0 left-0 right-0 z-10 bg-transparent text-white`}
+      className={`fixed top-0 left-0 right-0 z-10` + !openNav ? `bg-transparent text-white` : `bg-white text-black shadow-lg`}
     >
       <div className="mx-auto md:flex items-center md:justify-between">
         <div className={`flex items-center py-[14px] justify-between pl-2`}>

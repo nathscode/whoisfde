@@ -16,10 +16,10 @@ export default function ExpandedNav({
     if (!isHome.current) {
       return;
     }
-    if (window.scrollY >= window.screen.height - 175) {
+    if (window.scrollY >= window.screen.height - 60) {
       setDynamicStyles("bg-white text-black shadow-lg");
     } else {
-      if (window.scrollY <= window.screen.height - 175) {
+      if (window.scrollY <= window.screen.height - 60) {
         setDynamicStyles("bg-transparent text-white");
       }
     }
@@ -36,12 +36,18 @@ export default function ExpandedNav({
 
   return (
     <div
+      style={{ transition: "all 0.5s linear" }}
       className={`fixed flex left-0 right-0 z-10 h-[61px] text-semibold text-lg ${dynamicStyles}`}
     >
       <div
-        className="px-2
-    lg:px-[150px] 
-    xl:px-[250px] flex justify-between items-center text-lg w-full"
+        className="
+        px-2
+        lg:px-[150px] 
+        xl:px-[250px] 
+        flex 
+        justify-between 
+        items-center 
+        text-lg w-full"
       >
         <div className="flex gap-20 justify-around items-center ">
           <div

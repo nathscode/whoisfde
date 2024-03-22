@@ -70,7 +70,10 @@ export default function MinimizedTopNav({
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-10 ${dynamicStyles}`}>
+    <header
+      style={{ transition: "all 0.5s linear" }}
+      className={`fixed top-0 left-0 right-0 z-10 ${dynamicStyles}`}
+    >
       <div className="mx-auto md:flex items-center md:justify-between">
         <div className={`flex items-center py-[14px] justify-between pl-2`}>
           <div
@@ -120,9 +123,9 @@ export default function MinimizedTopNav({
         </div>
         <nav className="hidden md:flex space-x-4">{navElements()}</nav>
         <div
-          className={
-            `${openNav ? "" : "hidden"} mt-2 flex flex-col gap-4 px-2 pb-5 rounded ${dynamicStyles}`
-          }
+          className={`${
+            openNav ? "" : "hidden"
+          } mt-2 flex flex-col gap-4 px-2 pb-5 rounded ${dynamicStyles}`}
         >
           {navElements()}
         </div>

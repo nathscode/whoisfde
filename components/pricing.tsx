@@ -1,17 +1,18 @@
 import { formatWithComma } from "@/lib/utils";
 import Image from "next/image";
+import Padding from "./util/home-padding";
 
 export default function Pricing() {
   return (
     <div>
-      <div className="px-2 md:px-[50px] lg:px-[200px] xl:px-[400px] flex flex-col items-center gap-4 mb-10 mt-20">
+      <Padding className="flex flex-col items-center gap-4 mb-10 mt-20">
         <div className="text-[28px] sm:text-3xl font-[500]">SERVICE BOOKING FORM</div>
         <div className="text-lg font-light text-left md:text-center">
           Fill the form below in other for me to get a complete idea and scenario of what we will be
           working on.
         </div>
-      </div>
-      <div className="flex flex-col sm:flex-row gap-2 justify-center px-3">
+      </Padding>
+      <div className="flex flex-col sm:flex-row gap-2 lg:gap-8 justify-center px-2">
         <Plan
           name="Regular plan"
           cost={300000}
@@ -68,7 +69,7 @@ function Plan({
   planFeatures: string[];
 }) {
   return (
-    <div style={{ borderColor: planColor, }} className="border-[0.65px] shadow-md rounded-md px-2 py-4">
+    <div style={{ borderColor: planColor, }} className="border-[0.65px] shadow-md rounded-md px-3 py-4">
       <div className="mb-6">
         <div style={{ color: planColor }} className="text-3xl font-light sm:font-normal">
           {name}

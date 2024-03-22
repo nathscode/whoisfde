@@ -3,58 +3,50 @@ import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } fro
 import Reviews from "../reviews/reviews";
 import Landing from "../landing";
 import Pricing from "../pricing";
+import Padding from "../util/home-padding";
 
 export default function ExpandedNav({
   setHomeSection,
 }: {
   setHomeSection: Dispatch<SetStateAction<JSX.Element>>;
 }) {
-  type DynamicStyles = {
-    color: string;
-    bg: string;
-  };
-
-  const [isHome, setIsHome] = useState(true);
-
-  const [dynamicStyles, setDynamicStyles] = useState<DynamicStyles>({
-    bg: "transparent",
-    color: "white",
-  });
+  const isHome = useRef(true)
+  const [dynamicStyles, setDynamicStyles] = useState("bg-transparent text-white");
 
   const scrollHandler = () => {
-    if (window.scrollY >= window.screen.height) {
-      setDynamicStyles({ bg: "white", color: "black" });
+    if(!isHome.current){
+      return;
+    }
+    if (window.scrollY >= window.screen.height - 175) {
+      setDynamicStyles("bg-white text-black shadow-lg");
     } else {
-      if (window.scrollY <= window.screen.height) {
-        setDynamicStyles({ bg: "transparent", color: "white" });
+      if (window.scrollY <= window.screen.height - 175) {
+        setDynamicStyles("bg-transparent text-white");
       }
     }
   };
 
   useEffect(() => {
-    if (isHome) {
-      scrollHandler();
-      window.addEventListener("scroll", scrollHandler);
+    scrollHandler();
+    window.addEventListener("scroll", scrollHandler);
 
-      return () => {
-        window.removeEventListener("scroll", scrollHandler);
-      };
-    }
-  }, [isHome]);
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, []);
 
   return (
     <div
-      style={{ color: dynamicStyles.color, backgroundColor: dynamicStyles.bg }}
-      className={"fixed flex left-0 right-0 z-10 h-[61px]  text-semibold text-lg"}
+      className={`fixed flex left-0 right-0 z-10 h-[61px] text-semibold text-lg ${dynamicStyles}`}
     >
-      <div className="flex justify-between items-center px-2 text-lg w-full">
+      <Padding className="flex justify-between items-center text-lg w-full">
         <div className="flex gap-20 justify-around items-center ">
           {/* <button className="px-5 py-2 rounded-sm text-black bg-[#E3C3C3]">Logo</button> */}
           <div
             className="text-[24px] hover:cursor-pointer hover:opacity-50 active:opacity-50"
             onClick={() => {
-              setIsHome(true);
-              setDynamicStyles({ bg: "transparent", color: "white" });
+              isHome.current = true;
+              setDynamicStyles("bg-transparent text-white");
               setHomeSection(<Landing />);
             }}
           >
@@ -97,8 +89,8 @@ export default function ExpandedNav({
           <div
             className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
             onClick={() => {
-              setIsHome(false);
-              setDynamicStyles({ bg: "white", color: "black" });
+              isHome.current = false;
+              setDynamicStyles("bg-white text-black shadow-lg");
               setHomeSection(<Reviews />);
             }}
           >
@@ -107,8 +99,8 @@ export default function ExpandedNav({
           <div
             className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
             onClick={() => {
-              setIsHome(false);
-              setDynamicStyles({ bg: "white", color: "black" });
+              isHome.current = false;
+              setDynamicStyles("bg-white text-black shadow-lg");
               setHomeSection(<Pricing />);
             }}
           >
@@ -124,7 +116,7 @@ export default function ExpandedNav({
             />
           </div>
         </div>
-      </div>
+      </Padding>
     </div>
   );
 }

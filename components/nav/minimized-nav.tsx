@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import Landing from "../landing";
 import Reviews from "../reviews/reviews";
 import Pricing from "../pricing";
@@ -11,43 +11,39 @@ export default function MinimizedTopNav({
 }: {
   setHomeSection: Dispatch<SetStateAction<JSX.Element>>;
 }) {
-  type DynamicStyles = {
-    color: string;
-    bg: string;
-  };
-
-  const [isHome, setIsHome] = useState(true);
-
-const [openNav, setOpenNav] = useState(false);
-
-  const [dynamicStyles, setDynamicStyles] = useState('bg-transparent text-white');
+  const isHome = useRef(true);
+  const [openNav, setOpenNav] = useState(false);
+  const [dynamicStyles, setDynamicStyles] = useState("bg-transparent text-white");
 
   const scrollHandler = () => {
+    if(!isHome.current){
+      return;
+    }
     if (window.scrollY >= window.screen.height / 2 - 60) {
-      setDynamicStyles('bg-white text-black shadow-lg');
-
-if(openNav){
-setOpenNav(false)
-}    } else {
+      setDynamicStyles("bg-white text-black shadow-lg");
+      if (openNav) {
+        setOpenNav(false);
+      }
+    } else {
       if (window.scrollY <= window.screen.height / 2 - 60) {
-        setDynamicStyles('bg-transparent text-white');
-
-if(openNav){
-setOpenNav(false)
-}      }
+        setDynamicStyles("bg-transparent text-white");
+        if (openNav) {
+          setOpenNav(false);
+        }
+      }
     }
   };
 
   useEffect(() => {
-    if (isHome) {
+   
       scrollHandler();
       window.addEventListener("scroll", scrollHandler);
 
       return () => {
         window.removeEventListener("scroll", scrollHandler);
       };
-    }
-  }, []);
+    
+  }, []);
 
   const toggleNav = () => {
     setOpenNav(!openNav);
@@ -75,8 +71,8 @@ setOpenNav(false)
         <div
           onClick={() => {
             setOpenNav(false);
-            setIsHome(false);
-            setDynamicStyles( 'bg-white text-black shadow-lg' );
+            isHome.current = false;
+            setDynamicStyles("bg-white text-black shadow-lg");
             setHomeSection(<Reviews />);
           }}
           className=""
@@ -87,8 +83,8 @@ setOpenNav(false)
           className="hover:cursor-pointer hover:opacity-50 "
           onClick={() => {
             setOpenNav(false);
-            setIsHome(false);
-            setDynamicStyles('bg-white text-black shadow-lg');
+            isHome.current = false;
+            setDynamicStyles("bg-white text-black shadow-lg");
             setHomeSection(<Pricing />);
           }}
         >
@@ -102,16 +98,14 @@ setOpenNav(false)
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-10 ` + dynamicStyles}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-10 ${dynamicStyles}`}>
       <div className="mx-auto md:flex items-center md:justify-between">
         <div className={`flex items-center py-[14px] justify-between pl-2`}>
           <div
             className="text-[23px] font-[350]"
             onClick={() => {
-              setIsHome(true);
-              setDynamicStyles( 'bg-white text-black shadow-lg'  );
+              isHome.current = true;
+              setDynamicStyles("bg-white text-black shadow-lg");
               setOpenNav(false);
               setHomeSection(<Landing />);
             }}
@@ -151,9 +145,10 @@ setOpenNav(false)
         </div>
         <nav className="hidden md:flex space-x-4">{navList()}</nav>
         <div
-          className={`${
-            openNav ? "" : "hidden"
-          } mt-2 flex flex-col gap-4 px-2 pb-5  rounded ` + dynamicStyles}
+          className={
+            `${openNav ? "" : "hidden"} mt-2 flex flex-col gap-4 px-2 pb-5  rounded ` +
+            dynamicStyles
+          }
         >
           {navList()}
         </div>

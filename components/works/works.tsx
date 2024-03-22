@@ -7,7 +7,7 @@ export default function Works() {
     <Padding>
       <div>
         <div className="text-[33px] sm:text-4xl font-semibold">SOME OF MY WORKS</div>
-        <div className="my-8 text-[11px] sm:text-[15px] md:text-[20px]">
+        <div className="my-8 text-[10.5px] sm:text-[14px] md:text-[18px]">
           <TabController
             elementsStyle="flex justify-between items-center mb-1"
             activeElementColor="#4159AD"

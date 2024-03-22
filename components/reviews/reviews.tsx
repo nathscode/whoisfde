@@ -50,7 +50,7 @@ export default function Reviews() {
                 <Image src={"/add_blue.svg"} width={14} height={14} alt="add" />
               )}
             </div>
-            <div>Add</div>
+            <div>Add Review</div>
           </div>
         </TabController>
         {activeComponent}

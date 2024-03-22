@@ -22,7 +22,7 @@ export default function MinimizedTopNav({
 
   const scrollHandler = () => {
     if (window.scrollY >= window.screen.height / 2 - 50) {
-      setDynamicStyles('bg-white text-black');
+      setDynamicStyles('bg-white text-black shadow-lg');
     } else {
       if (window.scrollY <= window.screen.height / 2 - 50) {
         setDynamicStyles('bg-transparent text-white');

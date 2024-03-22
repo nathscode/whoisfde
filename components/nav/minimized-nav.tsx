@@ -21,9 +21,6 @@ export default function MinimizedTopNav({
   const [dynamicStyles, setDynamicStyles] = useState('bg-transparent text-white');
 
   const scrollHandler = () => {
-if(openNav){
-setOpenNav(false)
-}
     if (window.scrollY >= window.screen.height / 2 - 50) {
       setDynamicStyles('bg-white text-black shadow-lg');
     } else {
@@ -31,6 +28,9 @@ setOpenNav(false)
         setDynamicStyles('bg-transparent text-white');
       }
     }
+if(openNav){
+setOpenNav(false)
+}
   };
 
   useEffect(() => {

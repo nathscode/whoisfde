@@ -65,7 +65,6 @@ export default function MinimizedTopNav({
           onClick={() => {
             setOpenNav(false);
             isHome.current = false
-            setDynamicStyles("bg-white text-black shadow-lg");
             setHomeSection(<Reviews />);
           }}
           className=""

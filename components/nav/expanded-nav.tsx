@@ -47,7 +47,6 @@ export default function ExpandedNav({
             onClick={() => {
               isHome.current = true
               scrollHandler()
-              setDynamicStyles("bg-transparent text-white");
               setHomeSection(<Landing />);
             }}
           >

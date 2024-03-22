@@ -1,10 +1,12 @@
 import Image from "next/image";
 import TabController from "./tab-controller";
-import Padding from "./util/home-padding";
+import Padding from "../util/home-padding";
 
 export default function Works() {
   return (
-    <Padding>
+    <div className="px-2
+    lg:px-[150px] 
+    xl:px-[250px]">
       <div>
         <div className="text-[33px] sm:text-4xl font-semibold">SOME OF MY WORKS</div>
         <div className="my-8 text-[10.5px] sm:text-[14px] md:text-[18px]">
@@ -44,6 +46,6 @@ export default function Works() {
           See more
         </button>
       </div>
-    </Padding>
+    </div>
   );
 }

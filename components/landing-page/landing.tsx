@@ -2,7 +2,7 @@ import Image from "next/image";
 import Works from "./works";
 import WhoAmI from "./who-am-i";
 import ClientsAndOgComments from "./og-comments";
-import Nav from "./nav/nav";
+import Nav from "../nav/nav";
 
 export default function Landing() {
   return (

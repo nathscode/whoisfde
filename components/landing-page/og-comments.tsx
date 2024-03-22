@@ -1,14 +1,21 @@
 import Image from "next/image";
-import Padding from "./util/home-padding";
+import Padding from "../util/home-padding";
 
 export default function ClientsAndOgComments() {
   return (
-    <Padding className="md:h-screen flex items-center justify-center">
+    <div
+      className="
+      px-2 
+      lg:px-[150px] 
+      xl:px-[250px] 
+      md:h-screen 
+      flex 
+      items-center 
+      justify-center"
+    >
       <div>
         <div>
-          <div className="text-4xl font-semibold mb-6 md:mb-12">
-            CLIENTS AND OG&apos;S COMMENTS
-          </div>
+          <div className="text-4xl font-semibold mb-6 md:mb-12">CLIENTS AND OG&apos;S COMMENTS</div>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <div className="md:flex-[2] flex flex-col sm:flex-row gap-4">
               <div className="flex-1 flex flex-col gap-2">
@@ -28,7 +35,7 @@ export default function ClientsAndOgComments() {
               <div className="flex-1 w-full flex justify-start">
                 <Image
                   src={"/og-pic.png"}
-                  className="rounded-md"
+                  className="rounded-sm"
                   width={500}
                   height={750}
                   alt="og image"
@@ -58,6 +65,6 @@ export default function ClientsAndOgComments() {
           </div>
         </div>
       </div>
-    </Padding>
+    </div>
   );
 }

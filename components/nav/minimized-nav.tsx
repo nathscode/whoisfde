@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import Landing from "../landing";
+import Landing from "../landing-page/landing";
 import Reviews from "../reviews/reviews";
 import Pricing from "../pricing";
 import { unstable_renderSubtreeIntoContainer } from "react-dom";
@@ -17,11 +17,11 @@ export default function MinimizedTopNav({
   const [dynamicStyles, setDynamicStyles] = useState("bg-transparent text-white");
 
   const scrollHandler = () => {
-    if(!isHome.current){
+    if (!isHome.current) {
       return;
     }
     if (window.scrollY >= window.screen.height / 2 - 60) {
-      setDynamicStyles("bg-white text-black shadow-lg");  
+      setDynamicStyles("bg-white text-black shadow-lg");
     } else {
       if (window.scrollY <= window.screen.height / 2 - 60) {
         setDynamicStyles("bg-transparent text-white");
@@ -38,33 +38,13 @@ export default function MinimizedTopNav({
     };
   }, []);
 
-  const toggleNav = () => {
-    setOpenNav(!openNav);
-  };
-
-  const navList = () => {
+  const navElements = () => {
     return (
       <div className="flex flex-col gap-5 text-[23px] font-[350]">
-        {/* <button className="px-3 py-2 rounded-lg text-black bg-[#E3C3C3]">Logo</button> */}
-        {/* <div className="flex items-center gap-2">
-          <span>+234 812340593</span>
-          <Image src={"/black-phone.png"} width={20} height={20} alt="phone" />
-        </div> */}
-        {/* <div className="flex items-center gap-2">
-          <span>West Brom, UK</span>{" "}
-          <Image src={"/black-location.png"} width={20} height={20} alt="location" />
-        </div> */}
-
-        {/* <div>Projects</div>
-        <div>About me</div> */}
-        {/* <div className="flex gap-2 items-center">
-          <span>English</span>
-          <Image src={"/black-globe.png"} width={24} height={24} alt="Globe" />
-        </div> */}
         <div
           onClick={() => {
             setOpenNav(false);
-            isHome.current = false
+            isHome.current = false;
             setHomeSection(<Reviews />);
           }}
           className=""
@@ -75,7 +55,7 @@ export default function MinimizedTopNav({
           className="hover:cursor-pointer hover:opacity-50 "
           onClick={() => {
             setOpenNav(false);
-            isHome.current = false
+            isHome.current = false;
             setDynamicStyles("bg-white text-black shadow-lg");
             setHomeSection(<Pricing />);
           }}
@@ -97,14 +77,17 @@ export default function MinimizedTopNav({
             className="text-[23px] font-[350]"
             onClick={() => {
               isHome.current = true;
-              scrollHandler()
+              scrollHandler();
               setOpenNav(false);
               setHomeSection(<Landing />);
             }}
           >
             Journal
           </div>
-          <button onClick={toggleNav} className="block md:hidden p-2 rounded focus:outline-none">
+          <button
+            onClick={() => setOpenNav((prev) => !prev)}
+            className="block md:hidden p-2 rounded focus:outline-none"
+          >
             <svg
               className={`w-6 h-6 ${openNav ? "hidden" : "block"}`}
               fill="none"
@@ -135,14 +118,13 @@ export default function MinimizedTopNav({
             </svg>
           </button>
         </div>
-        <nav className="hidden md:flex space-x-4">{navList()}</nav>
+        <nav className="hidden md:flex space-x-4">{navElements()}</nav>
         <div
           className={
-            `${openNav ? "" : "hidden"} mt-2 flex flex-col gap-4 px-2 pb-5  rounded ` +
-            dynamicStyles
+            `${openNav ? "" : "hidden"} mt-2 flex flex-col gap-4 px-2 pb-5 rounded ${dynamicStyles}`
           }
         >
-          {navList()}
+          {navElements()}
         </div>
       </div>
     </header>

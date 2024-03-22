@@ -1,4 +1,4 @@
-import { formatWithComma } from "@/lib/utils";
+import { formatWithComma } from "@/lib/price-format";
 import Image from "next/image";
 import Padding from "./util/home-padding";
 
@@ -69,12 +69,18 @@ function Plan({
   planFeatures: string[];
 }) {
   return (
-    <div style={{ borderColor: planColor, }} className="border-[0.65px] shadow-md rounded-md px-3 py-4">
+    <div
+      style={{ borderColor: planColor }}
+      className="border-[0.65px] shadow-md rounded-md px-3 py-4"
+    >
       <div className="mb-6">
         <div style={{ color: planColor }} className="text-3xl font-light sm:font-normal">
           {name}
         </div>
-        <div className="mt-2 text-2xl font-light"><span className="font-[350]">{`\u20A6`}</span>{formatWithComma(cost)}</div>
+        <div className="mt-2 text-2xl font-light">
+          <span className="font-[350]">{`\u20A6`}</span>
+          {formatWithComma(cost)}
+        </div>
       </div>
       <div className="flex flex-col gap-4 text-lg font-light">
         {planFeatures.map((feature, index) => (

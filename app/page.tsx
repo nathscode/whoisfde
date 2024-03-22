@@ -1,7 +1,7 @@
 "use client";
 
 import ContactUs from "@/components/contact-us";
-import Landing from "@/components/landing";
+import Landing from "@/components/landing-page/landing";
 import Nav from "@/components/nav/nav";
 import {  useState } from "react";
 

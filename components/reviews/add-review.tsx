@@ -9,10 +9,44 @@ export default function AddReview() {
           <img src="/under-rock.png" className="rounded-lg" />
         </div>
         <div className="flex-1 grid grid-cols-1 gap-2">
-          <div className="active:bg-gray-100 max-sm:py-8 active:border-gray-100 active:opacity-50 md:hover:bg-gray-100 hover:cursor-pointer border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
+          <div
+            className="
+               active:bg-gray-100 
+               max-sm:py-8 
+               active:border-gray-100 
+               active:opacity-50 
+               md:hover:bg-gray-100 
+               hover:cursor-pointer 
+               border 
+               border-dashed 
+               px-10 
+               border-spacing-24 
+               rounded-lg 
+               border-gray-500 
+               flex 
+               justify-center 
+               items-center"
+          >
             <Image src={"/add_black.svg"} width={17} height={17} alt="add" />
           </div>
-          <div className="active:bg-gray-100 max-sm:py-8 active:border-gray-100 active:opacity-50 md:hover:bg-gray-100 hover:cursor-pointer border border-dashed px-10 border-spacing-24 rounded-lg border-gray-500 flex justify-center items-center">
+          <div
+            className="
+              active:bg-gray-100 
+              max-sm:py-8 
+              active:border-gray-100 
+              active:opacity-50 
+              md:hover:bg-gray-100 
+              hover:cursor-pointer 
+              border 
+              border-dashed 
+              px-10 
+              border-spacing-24 
+              rounded-lg 
+              border-gray-500 
+              flex 
+              justify-center 
+              items-center"
+          >
             <div className="flex gap-2 items-center">
               <div>
                 <Image src={"/add_black.svg"} width={17} height={17} alt="add" />
@@ -32,8 +66,17 @@ export default function AddReview() {
         </textarea>
       </div>
       <div className="w-full flex justify-end">
-        <button className="bg-[#4159AD] md:hover:bg-[#2f407e] active:opacity-50 text-white rounded-md px-4 py-2">
-          Done
+        <button
+          className="
+                bg-[#4159AD] 
+                md:hover:bg-[#2f407e] 
+                active:opacity-50 
+                text-white 
+                rounded-md 
+                px-4 
+                py-2"
+        >
+          Submit
         </button>
       </div>
     </ReviewsPadding>

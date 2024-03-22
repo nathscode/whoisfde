@@ -1,14 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import ClientReview from "./ordinary-review";
-import { ordinaryReviews } from "./data";
-import OrdinaryReview from "./ordinary-reviews";
-import OrdinaryReviews from "./ordinary-reviews";
-import OgReviews from "./og-reviews";
+import { useRef, useState } from "react";
+import TabController from "../util/tab-controller";
 import AddReview from "./add-review";
-import TabController from "../tab-controller";
+import OgReviews from "./og-reviews";
+import OrdinaryReviews from "./ordinary-reviews";
 
 export default function Reviews() {
   const position = useRef(0);
@@ -17,7 +14,17 @@ export default function Reviews() {
   return (
     <div className="bg-white text-black mt-20">
       <div className="flex flex-col items-center gap-4">
-        <div className="px-2 md:px-[50px] lg:px-[200px] xl:px-[400px] flex flex-col items-start md:items-center gap-4">
+        <div
+          className="
+             px-2 
+             md:px-[50px] 
+             lg:px-[200px] 
+             xl:px-[400px] 
+             flex flex-col 
+             items-start 
+             md:items-center 
+             gap-4"
+        >
           <div className="text-3xl font-[500]">REVIEWS AND COMMENTS FROM MY OG&apos;S</div>
           <div className="text-lg font-light text-left md:text-center">
             Read reviews of clients I have worked with over the years. You also get access to
@@ -25,7 +32,16 @@ export default function Reviews() {
           </div>
         </div>
         <TabController
-          elementsStyle="my-7 flex px-2 sm:px-[75px] md:px-[150px] lg:px-[300px] xl:px-[400px] justify-between items-center mb-1"
+          elementsStyle="
+          my-7 flex px-2 
+          sm:px-[75px] 
+          md:px-[150px] 
+          lg:px-[300px] 
+          xl:px-[400px] 
+          justify-between 
+          items-center 
+          mb-1
+          "
           activeElementColor="#4159AD"
           indicatorColor="#4159AD"
           railColor="#eeeeee"

@@ -73,9 +73,10 @@ export default function ContactUs() {
                   alt="phone"
                 />
               </div>
-              <div>Lorem Ipsum set</div>
+              <div>Company info</div>
             </div>
           </div>
+          <div className="text-light text-gray-400 text-sm">&copy; 2024, Journals Inc. All rights reserved</div>
         </div>
       </div>
     </div>

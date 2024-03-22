@@ -147,7 +147,7 @@ export default function MinimizedTopNav({
         <div
           className={`${
             openNav ? "" : "hidden"
-          } mt-2 shadow-lg  bg-white text-black flex flex-col gap-4 px-2 pb-5  rounded `}
+          } mt-2 flex flex-col gap-4 px-2 pb-5  rounded ` + dynamicStyles}
         >
           {navList()}
         </div>

@@ -21,10 +21,10 @@ export default function MinimizedTopNav({
   const [dynamicStyles, setDynamicStyles] = useState('bg-transparent text-white');
 
   const scrollHandler = () => {
-    if (window.scrollY >= window.screen.height / 2 - 50) {
+    if (window.scrollY >= window.screen.height / 2 - 60) {
       setDynamicStyles('bg-white text-black shadow-lg');
     } else {
-      if (window.scrollY <= window.screen.height / 2 - 50) {
+      if (window.scrollY <= window.screen.height / 2 - 60) {
         setDynamicStyles('bg-transparent text-white');
       }
     }

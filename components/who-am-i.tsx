@@ -3,7 +3,7 @@ import Padding from "./util/home-padding";
 
 export default function WhoAmI() {
   return (
-    <Padding className="bg-black text-white relative md:h-screen flex items-center justify-center">
+    <Padding className="bg-black text-white relative max-md:pt-4 md:h-screen flex items-center justify-center">
       <div>
       <div className="mb-5 text-4xl font-semibold">WHO AM I?</div>
       <div className="py-10">

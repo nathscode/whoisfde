@@ -36,7 +36,7 @@ export default function ExpandedNav({
 
   return (
     <div
-      style={{ transition: "all 0.5s linear" }}
+      style={{ transition: "all 0.35s linear" }}
       className={`fixed flex left-0 right-0 z-10 h-[61px] text-semibold text-lg ${dynamicStyles}`}
     >
       <div

@@ -71,7 +71,7 @@ export default function MinimizedTopNav({
 
   return (
     <header
-      style={{ transition: "all 0.5s linear" }}
+      style={{ transition: "all 0.35s linear" }}
       className={`fixed top-0 left-0 right-0 z-10 ${dynamicStyles}`}
     >
       <div className="mx-auto md:flex items-center md:justify-between">

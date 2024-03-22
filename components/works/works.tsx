@@ -25,7 +25,7 @@ export default function Works() {
         </div>
         <div className="flex justify-center sm:items-center gap-2 flex-row sm:gap-3">
           <div className="flex flex-col gap-2 sm:gap-3">
-            <img src={"/davido.png"} className="aspect-[5/3.4]" alt="artist" />
+            <img src={"/davido.png"} className="aspect-[5/3.4125]" alt="artist" />
             <img src={"/under-davido.png"} className="aspect-[3/2.75]" alt="artist" />
           </div>
           <div className="flex flex-col gap-2 sm:gap-3">

@@ -1,2 +1,2 @@
-# Freights
-## Package delivery made easy
+# Journal
+## Photography and videography redefined

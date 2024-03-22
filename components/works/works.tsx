@@ -23,12 +23,12 @@ export default function Works() {
             </div>
           </TabController>
         </div>
-        <div className="flex justify-center sm:items-center gap-2 flex-row sm:gap-3">
-          <div className="flex flex-col gap-2 sm:gap-3">
+        <div className="flex justify-center sm:items-center gap-1 flex-row sm:gap-2">
+          <div className="flex flex-col gap-1 sm:gap-2">
             <img src={"/davido.png"} className="aspect-[5/3.4125]" alt="artist" />
             <img src={"/under-davido.png"} className="aspect-[3/2.75]" alt="artist" />
           </div>
-          <div className="flex flex-col gap-2 sm:gap-3">
+          <div className="flex flex-col gap-1 sm:gap-2">
             <img src={"/rock-n-roll.png"} className="aspect-[5/4.5]" alt="rock n roll" />
             <img src={"/under-rock.png"} className="aspect-[5/3.5]" alt="worship" />
           </div>

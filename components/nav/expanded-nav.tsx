@@ -45,7 +45,8 @@ export default function ExpandedNav({
           <div
             className="text-[24px] hover:cursor-pointer hover:opacity-50 active:opacity-50"
             onClick={() => {
-              isHome.current = true;
+              isHome.current = true
+              scrollHandler()
               setDynamicStyles("bg-transparent text-white");
               setHomeSection(<Landing />);
             }}

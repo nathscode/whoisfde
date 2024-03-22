@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import Landing from "../landing";
 import Reviews from "../reviews/reviews";
 import Pricing from "../pricing";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export default function MinimizedTopNav({
   setHomeSection,
@@ -20,29 +21,21 @@ export default function MinimizedTopNav({
       return;
     }
     if (window.scrollY >= window.screen.height / 2 - 60) {
-      setDynamicStyles("bg-white text-black shadow-lg");
-      if (openNav) {
-        setOpenNav(false);
-      }
+      setDynamicStyles("bg-white text-black shadow-lg");  
     } else {
       if (window.scrollY <= window.screen.height / 2 - 60) {
         setDynamicStyles("bg-transparent text-white");
-        if (openNav) {
-          setOpenNav(false);
-        }
       }
     }
   };
 
   useEffect(() => {
-   
-      scrollHandler();
-      window.addEventListener("scroll", scrollHandler);
+    scrollHandler();
+    window.addEventListener("scroll", scrollHandler);
 
-      return () => {
-        window.removeEventListener("scroll", scrollHandler);
-      };
-    
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
   }, []);
 
   const toggleNav = () => {
@@ -71,7 +64,7 @@ export default function MinimizedTopNav({
         <div
           onClick={() => {
             setOpenNav(false);
-            isHome.current = false;
+            isHome.current = false
             setDynamicStyles("bg-white text-black shadow-lg");
             setHomeSection(<Reviews />);
           }}
@@ -83,7 +76,7 @@ export default function MinimizedTopNav({
           className="hover:cursor-pointer hover:opacity-50 "
           onClick={() => {
             setOpenNav(false);
-            isHome.current = false;
+            isHome.current = false
             setDynamicStyles("bg-white text-black shadow-lg");
             setHomeSection(<Pricing />);
           }}
@@ -105,7 +98,7 @@ export default function MinimizedTopNav({
             className="text-[23px] font-[350]"
             onClick={() => {
               isHome.current = true;
-              setDynamicStyles("bg-white text-black shadow-lg");
+              scrollHandler()
               setOpenNav(false);
               setHomeSection(<Landing />);
             }}

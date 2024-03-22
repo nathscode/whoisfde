@@ -1,9 +1,10 @@
 import Image from "next/image";
+import Padding from "../util/padding";
 
 export default function AddReview() {
 
   return (
-    <div className="px-2 sm:px-[75px] md:px-[150px] lg:px-[300px] xl:px-[400px]">
+    <Padding>
       <div className="flex gap-6 flex-col sm:flex-row">
         <div className="flex-1">
           <img src="/under-rock.png" className="rounded-lg" />
@@ -30,6 +31,6 @@ export default function AddReview() {
       <div className="w-full flex justify-end">
         <button className="bg-[#4159AD] md:hover:bg-[#2f407e] active:opacity-50 text-white rounded-md px-4 py-2">Done</button>
       </div>
-    </div>
+    </Padding>
   );
 }

@@ -12,8 +12,8 @@ export default function Padding({ children, className = "" }: PaddingProps) {
     px-2 
     sm:px-[75px] 
     md:px-[150px]
-    lg:px-[250px] 
-    xl:px-[300px]
+    lg:px-[200px] 
+    xl:px-[250px]
     ${className}
     `}
     >

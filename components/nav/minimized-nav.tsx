@@ -92,7 +92,7 @@ export default function MinimizedTopNav({
           Pricing
         </div>
         <div>
-          <Image src={"/profile.png"} width={35} height={35} alt="location" />
+          <Image src={"/profile.png"} width={35} height={35} loading="eager" alt="location" />
         </div>
       </div>
     );

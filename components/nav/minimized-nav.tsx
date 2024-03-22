@@ -49,7 +49,7 @@ export default function MinimizedTopNav({
 
   const navList = () => {
     return (
-      <div className="flex flex-col gap-5 text-[20px] font-[350]">
+      <div className="flex flex-col gap-5 text-[23px] font-[350]">
         {/* <button className="px-3 py-2 rounded-lg text-black bg-[#E3C3C3]">Logo</button> */}
         {/* <div className="flex items-center gap-2">
           <span>+234 812340593</span>
@@ -102,7 +102,7 @@ export default function MinimizedTopNav({
       <div className="mx-auto md:flex items-center md:justify-between">
         <div className={`flex items-center py-[14px] justify-between pl-2`}>
           <div
-            className="text-[26px] font-[350]"
+            className="text-[23px] font-[350]"
             onClick={() => {
               setIsHome(true);
               setDynamicStyles( 'bg-white text-black'  );

@@ -5,7 +5,7 @@ export default function Works() {
   return (
     <div className="px-2 min-[1200px]:px-[100px] min-[1400px]:px-[296px]">
       <div>
-        <div className="text-4xl font-semibold">SOME OF MY WORKS</div>
+        <div className="text-[32px] sm:text-4xl font-semibold">SOME OF MY WORKS</div>
         <div className="my-8 text-[10.5px] min-[400]:text-[14px] sm:text-[17px] md:text-[20px]">
           <TabController
             elementsStyle="flex justify-between items-center mb-1"

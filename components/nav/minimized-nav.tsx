@@ -18,6 +18,8 @@ export default function MinimizedTopNav({
 
   const [isHome, setIsHome] = useState(true);
 
+const [openNav, setOpenNav] = useState(false);
+
   const [dynamicStyles, setDynamicStyles] = useState('bg-transparent text-white');
 
   const scrollHandler = () => {
@@ -45,9 +47,7 @@ setOpenNav(false)
         window.removeEventListener("scroll", scrollHandler);
       };
     }
-  }, [openNav]);
-
-  const [openNav, setOpenNav] = useState(false);
+  }, [openNav]);
 
   const toggleNav = () => {
     setOpenNav(!openNav);

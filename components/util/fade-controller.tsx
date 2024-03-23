@@ -5,18 +5,16 @@ export default function FadeOnScroll({ child }: { child: ReactNode }) {
   const elementRef = useRef(null);
   const elementHeight = useRef(0);
   const [opacity, setOpacity] = useState(1);
-  const [wasResized, setWasResized] = useState(false)
+  const [wasResized, setWasResized] = useState(false);
   const topOffset = useRef(0);
-  const staticOffset = useRef(0)
+  const staticOffset = useRef(0);
 
-  const a = formatWithComma(90)
+  const a = formatWithComma(90);
 
-  const handleScroll = () => {    
-  topOffset.current = (elementRef.current! as Element).getBoundingClientRect().top;
-   const offsetTop = topOffset.current;
-
-    let scrolledExtent = window.scrollY;
-    if (offsetTop > 1) {
+  const handleScroll = () => {
+    topOffset.current = (elementRef.current! as Element).getBoundingClientRect().top;
+    const offsetTop = topOffset.current;
+    if (offsetTop > 0) {
       return;
     }
     //this bit is nice efficiency wise
@@ -30,14 +28,12 @@ export default function FadeOnScroll({ child }: { child: ReactNode }) {
     setOpacity(1 - (window.scrollY - staticOffset.current) / elementHeight.current);
   };
 
-  const screenResize = () => {
-    setWasResized(!wasResized)
-  }
+  const screenResize = () => setWasResized(!wasResized);
 
-  useEffect(() => {      
+  useEffect(() => {
     staticOffset.current = (elementRef.current! as Element).getBoundingClientRect().top;
     elementHeight.current = (elementRef.current! as Element).getBoundingClientRect().height;
-    handleScroll()
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("resize", screenResize);
 

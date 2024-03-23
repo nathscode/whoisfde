@@ -28,18 +28,18 @@ export default function FadeOnScroll({ child }: { child: ReactNode }) {
     setOpacity(1 - (window.scrollY - staticOffset.current) / elementHeight.current);
   };
 
-  const screenResize = () => setWasResized(!wasResized);
+  //const screenResize = () => setWasResized(!wasResized);
 
   useEffect(() => {
     staticOffset.current = (elementRef.current! as Element).getBoundingClientRect().top;
     elementHeight.current = (elementRef.current! as Element).getBoundingClientRect().height;
     handleScroll();
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", screenResize);
+    //window.addEventListener("resize", screenResize);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", screenResize);
+      //window.removeEventListener("resize", screenResize);
     };
   }, [wasResized]);
 

@@ -7,11 +7,10 @@ import FadeOnScroll from "../util/fade-controller";
 export default function Landing() {
   return (
     <div className="">
-      <FadeOnScroll
-        child={
-          <div className="h-[50vh] sm:h-screen">
-            <div
-              className="
+      <FadeOnScroll>
+        <div className="h-[50vh] sm:h-screen">
+          <div
+            className="
           bg-[url('/bg.png')] 
           bg-repeat-round 
           h-full 
@@ -19,36 +18,35 @@ export default function Landing() {
           flex 
           justify-end 
           pr-3 
-          lg-pr-20 
+          lg:pr-20
           items-center"
-            >
-              <div className="flex flex-col gap-4 items-center mt-10">
-                <Image
-                  src={"/instagram.png"}
-                  className="bg-blend-difference"
-                  width={15}
-                  height={15}
-                  alt="phone"
-                />
-                <Image
-                  src={"/x.png"}
-                  className="bg-blend-difference"
-                  width={10}
-                  height={10}
-                  alt="phone"
-                />
-                <Image
-                  src={"/youtube.png"}
-                  className="bg-blend-difference"
-                  width={15}
-                  height={15}
-                  alt="phone"
-                />
-              </div>
+          >
+            <div className="flex flex-col gap-4 items-center mt-12">
+              <Image
+                src={"/instagram.png"}
+                className="bg-blend-difference"
+                width={15}
+                height={15}
+                alt="phone"
+              />
+              <Image
+                src={"/x.png"}
+                className="bg-blend-difference"
+                width={10}
+                height={10}
+                alt="phone"
+              />
+              <Image
+                src={"/youtube.png"}
+                className="bg-blend-difference"
+                width={15}
+                height={15}
+                alt="phone"
+              />
             </div>
           </div>
-        }
-      />
+        </div>
+      </FadeOnScroll>
       <div className="pt-10 md:pt-20">
         <Works />
       </div>

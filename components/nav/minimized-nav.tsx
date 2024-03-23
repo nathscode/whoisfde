@@ -3,9 +3,8 @@
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import Landing from "../landing-page/landing";
-import Reviews from "../reviews/reviews";
 import Pricing from "../pricing";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
+import Reviews from "../reviews/reviews";
 
 export default function MinimizedTopNav({
   setHomeSection,

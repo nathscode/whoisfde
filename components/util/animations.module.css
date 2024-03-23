@@ -1,0 +1,31 @@
+.initial {
+  margin-top: 400px;
+  opacity: 0;
+}
+
+.final {
+  animation: push-up 0.75s linear;
+}
+
+@keyframes push-up {
+  0% {
+    margin-top: 400px;
+    opacity: 0;
+  }
+  25% {
+    margin-top: 300px;
+    opacity: 0.25;
+  }
+  50% {
+    margin-top: 200px;
+    opacity: 0.5;
+  }
+  75% {
+    margin-top: 100px;
+    opacity: 0.75;
+  }
+  100% {
+    margin-top: 0px;
+    opacity: 1;
+  }
+}

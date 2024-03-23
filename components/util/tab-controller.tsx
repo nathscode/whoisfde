@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { useRef, useState, useEffect, MutableRefObject, ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 function TabController({
   children,
@@ -9,24 +8,27 @@ function TabController({
   indicatorColor,
   activeElementColor,
   railColor,
-  elementsStyle
+  elementsStyle,
 }: {
   children: ReactNode[];
   onTabPress?: (index: number) => void;
   indicatorColor: string;
   railColor?: string;
   activeElementColor: string;
-  elementsStyle: string
+  elementsStyle: string;
 }) {
   const [lp, setLm] = useState(0);
   const position = useRef(0);
   const [indicatorWidth, setWidth] = useState(0);
   const [canShowIndicator, setCanUseIndicator] = useState(false);
   const offsetLeft = useRef(0);
-  const refs = useRef<Array<HTMLDivElement | null>>([])
-  const offsetRef = useRef(null)
+  const refs = useRef<Array<HTMLDivElement | null>>([]);
+  const offsetRef = useRef(null);
 
-  const styles = [`hover:cursor-pointer text-[${activeElementColor}]`, "hover:cursor-pointer text-black"];
+  const styles = [
+    `hover:cursor-pointer text-[${activeElementColor}]`,
+    "hover:cursor-pointer text-black",
+  ];
 
   const slideTo = () => {
     setWidth((refs.current[position.current]! as Element).getBoundingClientRect().width);
@@ -53,7 +55,7 @@ function TabController({
         {children.map((child, index) => (
           <div
             key={index}
-            ref={e => refs.current[index] = e}
+            ref={(e) => (refs.current[index] = e)}
             onClick={() => {
               position.current = index;
               slideTo();
@@ -69,7 +71,7 @@ function TabController({
       </div>
       <div
         ref={offsetRef}
-        style={{backgroundColor: railColor ? railColor : "inherit"}}
+        style={{ backgroundColor: railColor ? railColor : "inherit" }}
         className={`h-[2.5px] relative w-full flex items-center rounded-full`}
       >
         {canShowIndicator ? (

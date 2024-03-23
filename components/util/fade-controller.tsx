@@ -15,7 +15,7 @@ export default function FadeOnScroll({ child }: { child: ReactNode }) {
   topOffset.current = (elementRef.current! as Element).getBoundingClientRect().top;
    const offsetTop = topOffset.current;
 
-    const scrolledExtent = window.scrollY;
+    let scrolledExtent = window.scrollY;
     if (offsetTop > 1) {
       return;
     }
@@ -27,7 +27,7 @@ export default function FadeOnScroll({ child }: { child: ReactNode }) {
     //   return
     // }
 
-    setOpacity(1 - (scrolledExtent) / elementHeight.current);
+    setOpacity(1 - (window.scrollY - staticOffset.current) / elementHeight.current);
   };
 
   const screenResize = () => {

@@ -76,7 +76,7 @@ export default function ContactUs() {
               <div>Company info</div>
             </div>
           </div>
-          <div className="text-light text-gray-400 text-sm">&copy; 2024, Journals Inc. All rights reserved</div>
+          <div className="text-light text-gray-600 text-[12px] mt-10">&copy; 2024 Journals Inc. All rights reserved</div>
         </div>
       </div>
     </div>

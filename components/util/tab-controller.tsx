@@ -37,8 +37,6 @@ function TabController({
   };
 
   useEffect(() => {
-
-
     setCanUseIndicator(true);
     slideTo();
 

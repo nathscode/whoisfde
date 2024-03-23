@@ -17,11 +17,9 @@ export default function ScrollIn({
   const intersectionCallback: IntersectionObserverCallback = (
     entries: IntersectionObserverEntry[]
   ) => {
-    entries.forEach((entry) => {
-      if (entry.intersectionRatio > 0) {
-        setAdded(animations.final);
-      }
-    });
+    const entry = entries[0];
+    if (entry.intersectionRatio <= 0) return;
+    setAdded(animations.final);
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import ScrollIn from "../util/scroll-in-controller";
 
 export default function WhoAmI() {

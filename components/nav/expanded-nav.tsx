@@ -1,46 +1,17 @@
+"use client";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import Landing from "../landing-page/landing";
-import Pricing from "../pricing";
-import Reviews from "../reviews/reviews";
+import Link from "next/link";
+import { useState } from "react";
+import TransitionLink from "../TransitionLink";
 
-export default function ExpandedNav({
-  setHomeSection,
-}: {
-  setHomeSection: Dispatch<SetStateAction<JSX.Element>>;
-}) {
-  const isHome = useRef(true);
-  const [dynamicStyles, setDynamicStyles] = useState("bg-transparent text-white");
-
-  const scrollHandler = () => {
-    if (!isHome.current) {
-      return;
-    }
-    if (window.scrollY >= window.screen.height - 60) {
-      setDynamicStyles("bg-white text-black shadow-lg");
-    } else {
-      if (window.scrollY <= window.screen.height - 60) {
-        setDynamicStyles("bg-transparent text-white");
-      }
-    }
-  };
-
-  useEffect(() => {
-    scrollHandler();
-    window.addEventListener("scroll", scrollHandler);
-
-    return () => {
-      window.removeEventListener("scroll", scrollHandler);
-    };
-  }, []);
-
-  return (
-    <div
-      style={{ transition: "all 0.35s linear" }}
-      className={`fixed flex left-0 right-0 z-10 h-[61px] text-semibold text-lg ${dynamicStyles}`}
-    >
-      <div
-        className="
+export default function ExpandedNav() {
+	return (
+		<div
+			style={{ transition: "all 0.35s linear" }}
+			className={`fixed bg-black/50 top-0 text-white flex left-0 right-0 z-10 h-[61px] text-semibold text-lg`}
+		>
+			<div
+				className="
         px-2
         lg:px-[150px] 
         xl:px-[250px] 
@@ -48,51 +19,51 @@ export default function ExpandedNav({
         justify-between 
         items-center 
         text-lg w-full"
-      >
-        <div className="flex gap-20 justify-around items-center ">
-          <div
-            className="text-[24px] hover:cursor-pointer hover:opacity-50 active:opacity-50"
-            onClick={() => {
-              isHome.current = true;
-              scrollHandler();
-              setHomeSection(<Landing />);
-            }}
-          >
-            Journal
-          </div>
-        </div>
-        <div className="flex gap-20 justify-around items-center">
-          <div
-            className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
-            onClick={() => {
-              isHome.current = false;
-              setDynamicStyles("bg-white text-black shadow-lg");
-              setHomeSection(<Reviews />);
-            }}
-          >
-            Reviews
-          </div>
-          <div
-            className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
-            onClick={() => {
-              isHome.current = false;
-              setDynamicStyles("bg-white text-black shadow-lg");
-              setHomeSection(<Pricing />);
-            }}
-          >
-            Pricing
-          </div>
-          <div>
-            <Image
-              src={"/profile.png"}
-              width={35}
-              className="hover:cursor-pointer hover:opacity-50"
-              height={35}
-              alt="location"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+			>
+				<div className="flex gap-20 justify-around items-center ">
+					<Link
+						href={"/"}
+						className="inline-flex text-[24px] hover:cursor-pointer hover:opacity-50 active:opacity-50"
+					>
+						<Image
+							src={"/logo/logo-white.png"}
+							width={180}
+							height={50}
+							alt="logo"
+						/>
+					</Link>
+				</div>
+				<div className="flex gap-20 justify-around items-center">
+					{/* <TransitionLink href="/reviews" label="Review" />{" "} */}
+					<Link
+						href={"/reviews"}
+						className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
+					>
+						Reviews
+					</Link>
+					<Link
+						href={"/pricing"}
+						className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
+					>
+						Pricing
+					</Link>
+					<Link
+						href={"/contact"}
+						className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
+					>
+						Contact
+					</Link>
+					<div>
+						<Image
+							src={"/profile.png"}
+							width={35}
+							className="hover:cursor-pointer hover:opacity-50"
+							height={35}
+							alt="location"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }

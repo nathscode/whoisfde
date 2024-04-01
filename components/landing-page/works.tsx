@@ -1,71 +1,69 @@
-import Image from "next/image";
+"use client";
+import Link from "next/link";
+import { useRef, useState } from "react";
 import TabController from "../util/tab-controller";
+import ConcertContent from "../work/ConcertContent";
+import GeneralContent from "../work/GeneralContent";
+import PartiesContent from "../work/PartiesContent";
+import PhotographyContent from "../work/PhotographyContent";
+import WeddingContent from "../work/WeddingContent";
+import Reveal from "../Reveal";
 
 export default function Works() {
-  return (
-    <div className="px-2 lg:px-[150px] xl:px-[250px]">
-      <div>
-        <div className="text-[33px] sm:text-4xl font-semibold">SOME OF MY WORKS</div>
-        <div className="my-8 text-[10.5px] sm:text-[14px] md:text-[18px]">
-          <TabController
-            elementsStyle="flex justify-between items-center mb-1"
-            activeElementColor="#4159AD"
-            indicatorColor="#4159AD"
-            railColor="#eeeeee"
-          >
-            <div>CONCERTS</div>
-            <div>PARTIES</div>
-            <div>WEDDINGS</div>
-            <div>CONTENTS</div>
-            <div className="flex gap-2 items-center">
-              <span>PHOTOGRAPHY</span>
-              <Image src={"/wedding_camera.png"} width={10} height={10} alt="photography" />
-            </div>
-          </TabController>
-        </div>
-        <div className="flex justify-center sm:items-center gap-1 flex-row sm:gap-2">
-          <div className="flex flex-col gap-1 sm:gap-2">
-            <img src={"/davido.png"} className="aspect-[5/3.4125]" alt="artist" />
-            <img src={"/under-davido.png"} className="aspect-[3/2.75]" alt="artist" />
-          </div>
-          <div className="flex flex-col gap-1 sm:gap-2">
-            <img src={"/rock-n-roll.png"} className="aspect-[5/4.5]" alt="rock n roll" />
-            <img src={"/under-rock.png"} className="aspect-[5/3.5]" alt="worship" />
-          </div>
-        </div>
-      </div>
+	const [activeComponent, setActiveComponent] = useState(<ConcertContent />);
+	const position = useRef(0);
 
-      <div className="flex justify-end gap-2 items-center mt-4 md:mt-6">
-        <button
-          className="
-              rounded-lg 
-              active:text-gray-300 
-              active:opacity-75 
-              bg-gradient-to-r 
-              active:bg-[#c06cf5] 
-              from-[#c06cf5] 
-              to-[#4159AD] 
-              text-white 
-              px-7 py-[6px] 
-              font-semibold"
-        >
-          Price list
-        </button>
-        <button
-          className="
-              rounded-lg 
-              border 
-              active:text-white 
-              active:bg-[#f3e0ff] 
-              active:border-[#c06cf5] 
-              border-[#4159AD] 
-              text-[#4159AD] 
-              px-4 py-[6px] 
-              font-bold"
-        >
-          See more
-        </button>
-      </div>
-    </div>
-  );
+	return (
+		<div className="py-20 h-full">
+			<div className="px-2 lg:px-[150px] xl:px-[250px]">
+				<div>
+					<Reveal>
+						<div className=" font-heading text-[33px] sm:text-4xl font-semibold">
+							MY WORKS
+						</div>
+					</Reveal>
+					<div className=" my-8 text-[10.5px] sm:text-[14px] md:text-[18px]">
+						<TabController
+							elementsStyle="flex justify-start space-x-5 items-center mb-1"
+							activeElementColor="#4159AD"
+							indicatorColor="#4159AD"
+							railColor="#eeeeee"
+							onTabPress={(index) => {
+								position.current = index;
+								if (index === 0) {
+									setActiveComponent(<ConcertContent />);
+								} else if (index === 1) {
+									setActiveComponent(<PartiesContent />);
+								} else if (index === 2) {
+									setActiveComponent(<WeddingContent />);
+								} else if (index === 3) {
+									setActiveComponent(<GeneralContent />);
+								} else {
+									setActiveComponent(<PhotographyContent />);
+								}
+							}}
+						>
+							<div className="text-sm uppercase font-medium">CONCERTS</div>
+							<div className="text-sm uppercase font-medium">PARTIES</div>
+							<div className="text-sm uppercase font-medium">WEDDINGS</div>
+							<div className="text-sm uppercase font-medium">CONTENTS</div>
+							<div className="flex text-sm uppercase font-medium">
+								Photography
+							</div>
+						</TabController>
+						{activeComponent}
+					</div>
+				</div>
+
+				<div className="flex justify-end gap-2 items-center mt-4 md:mt-6">
+					<Link
+						href={"/pricing"}
+						className="flex justify-center w-fit px-10 py-3 mt-4 text-sm font-semibold text-white bg-black border border-black rounded active:text-gray-500 hover:bg-transparent hover:text-black focus:outline-none focus:ring"
+					>
+						Price list
+					</Link>
+				</div>
+			</div>
+		</div>
+	);
 }

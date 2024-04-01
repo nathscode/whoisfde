@@ -1,21 +1,21 @@
 "use client";
-
-import ContactUs from "@/components/contact-us";
+import { useEffect } from "react";
 import Landing from "@/components/landing-page/landing";
-import Nav from "@/components/nav/nav";
-import {  useState } from "react";
-
+import Lenis from "@studio-freight/lenis";
 
 export default function Home() {
-  const [homeSection, setHomeSection] = useState(<Landing />);
+	useEffect(() => {
+		const lenis = new Lenis();
+		function raf(time: any) {
+			lenis.raf(time);
+			requestAnimationFrame(raf);
+		}
+		requestAnimationFrame(raf);
+	}, []);
 
-  return (
-      <div className="flex flex-col justify-between">
-      <Nav setHomeSection={setHomeSection} />
-      {homeSection}
-      <div className="pt-10">
-        <ContactUs />
-      </div>
-    </div>
-  );
+	return (
+		<div className="flex flex-col justify-between">
+			<Landing />
+		</div>
+	);
 }

@@ -1,22 +1,30 @@
+import TransitionProvider from "@/components/TranstionProvider";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({
+	weight: ["400", "500", "700"],
+	style: ["normal", "italic"],
+	subsets: ["latin"],
+	display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Clients & OGs",
-  description: "Graphing per exelon",
+	title: "Clients & OGs",
+	description: "Graphing per exelon",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<body className={montserrat.className}>
+				<TransitionProvider>{children}</TransitionProvider>
+			</body>
+		</html>
+	);
 }

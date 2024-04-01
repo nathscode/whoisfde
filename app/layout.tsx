@@ -11,8 +11,34 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-	title: "Clients & OGs",
-	description: "Graphing per exelon",
+	metadataBase: new URL("https://whoisfde.vercel.app"),
+	title: {
+		template: "%s | whoisfde.vercel.app",
+		default: "Whoisfde - Videographer & Photographer",
+	},
+	description: "Whoisfde Videographer & Photographer",
+	other: {
+		"theme-color": "#000000",
+		"color-scheme": "light",
+		"twitter:image": "/images/logo/logo-white.png",
+		"twitter:card": "summary_large_image",
+		"og:url": "https:Whoisfde.com",
+		"og:image": "/images/logo/logo-white.png",
+		"og:type": "website",
+	},
+	openGraph: {
+		title: "Whoisfde - Videographer & Photographer",
+		description: "Whoisfde Videographer & Photographer",
+		url: "https://whoisfde.vercel.app",
+		siteName: "Whoisfde",
+		images: [
+			{
+				url: "/images/logo/logo-white.png",
+				width: 1200,
+				height: 600,
+			},
+		],
+	},
 };
 
 export default function RootLayout({

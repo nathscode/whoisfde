@@ -1,4 +1,9 @@
 import PricingSection from "@/components/PricingSection";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Pricing",
+};
 
 type Props = {};
 

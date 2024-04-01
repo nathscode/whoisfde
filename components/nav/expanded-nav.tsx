@@ -26,7 +26,7 @@ export default function ExpandedNav() {
 						className="inline-flex text-[24px] hover:cursor-pointer hover:opacity-50 active:opacity-50"
 					>
 						<Image
-							src={"/logo/logo-white.png"}
+							src={"/images/logo/logo-white.png"}
 							width={180}
 							height={50}
 							alt="logo"

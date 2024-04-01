@@ -1,7 +1,11 @@
 import BookingForm from "@/components/forms/BookingForm";
 import Padding from "@/components/util/home-padding";
+import { Metadata } from "next";
 import React from "react";
 
+export const metadata: Metadata = {
+	title: "Booking",
+};
 type Props = {};
 
 const BookingPage = (props: Props) => {

@@ -25,7 +25,7 @@ const NavMenu = () => {
 						className="inline-flex hover:cursor-pointer hover:opacity-50 active:opacity-50"
 					>
 						<Image
-							src={"/logo/logo-white.png"}
+							src={"/images/logo/logo-white.png"}
 							width={100}
 							height={20}
 							alt="logo"

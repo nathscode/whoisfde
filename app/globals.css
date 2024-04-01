@@ -75,6 +75,7 @@
 	* {
 		@apply border-border;
 		scroll-behavior: smooth;
+		overflow: hidden;
 	}
 	body {
 		@apply bg-background text-foreground;

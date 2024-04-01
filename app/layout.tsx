@@ -20,10 +20,10 @@ export const metadata: Metadata = {
 	other: {
 		"theme-color": "#000000",
 		"color-scheme": "light",
-		"twitter:image": "/images/logo/logo-white.png",
+		"twitter:image": "/images/logo/logo-opg.jpg",
 		"twitter:card": "summary_large_image",
 		"og:url": "https:Whoisfde.com",
-		"og:image": "/images/logo/logo-white.png",
+		"og:image": "/images/logo/logo-opg.jpg",
 		"og:type": "website",
 	},
 	openGraph: {
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 		siteName: "Whoisfde",
 		images: [
 			{
-				url: "/images/logo/logo-white.png",
+				url: "/images/logo/logo-opg.jpg",
 				width: 1200,
 				height: 600,
 			},

@@ -26,7 +26,7 @@ const SendVerificationEmail = ({ name, email, password, code }: Props) => {
 				<Container style={parentContainer}>
 					<Section style={{ marginTop: "32px" }}>
 						<Img
-							src={`https://whoisfde.vercel.app/_next/image?url=%2Fimages%2Flogo%2Flogo-white.png&w=80&q=100`}
+							src={`https://whoisfde.vercel.app/_next/image?url=%2Fimages%2Flogo%2Flogo-question.png&w=96&q=75`}
 							width="80"
 							height="37"
 							alt="Vercel"

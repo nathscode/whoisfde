@@ -41,12 +41,11 @@ const CommentClients = (props: Props) => {
 	}
 
 	if (error) {
-		console.log(error);
-		return <div>Error retrieving recent products</div>;
+		return <div>Error retrieving Reviews</div>;
 	}
 
 	if (!data || data.length === 0) {
-		return <div>No recent products found</div>;
+		return <div>No Review Yet</div>;
 	}
 	return (
 		<Carousel className="w-full max-w-[300px] sm:max-w-4xl">

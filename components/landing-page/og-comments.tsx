@@ -6,28 +6,6 @@ import CommentClients from "./CommentClients";
 import SuspenseSkeleton from "../skeletons/SuspenseSkeleton";
 
 export default function ClientsAndOgComments() {
-	const testimonials: {
-		id: number;
-		name: string;
-		location: string;
-		text: string;
-		image?: string;
-	}[] = [
-		{
-			id: 1,
-			name: "Ajakaye Joshua",
-			location: "E.O.Y 23' PARTY",
-			text: "I recently used this website for a purchase and I was extremely satisfied with the ease of use and the variety of options 							available. The checkout process was seamless and the delivery was				prompt",
-			image: "/who-image.png",
-		},
-		{
-			id: 2,
-			name: "John Peter",
-			location: "E.O.Y 23' PARTY",
-			text: "I recently used this website for a purchase and I was extremely satisfied.",
-		},
-	];
-
 	return (
 		<div
 			className="

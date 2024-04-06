@@ -5,9 +5,7 @@ export const metadata: Metadata = {
 	title: "Pricing",
 };
 
-type Props = {};
-
-const PricingPage = (props: Props) => {
+const PricingPage = async () => {
 	return (
 		<div className="flex flex-col justify-center items-center py-20">
 			<PricingSection />

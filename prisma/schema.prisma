@@ -1,0 +1,158 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+enum RoleType {
+    USER
+    ADMIN
+}
+
+enum BookingStatus {
+    PENDING
+    PROCESSING
+    DENIED
+    SUCCESS
+}
+
+
+model User {
+    id                 String     @id @unique @default(cuid())
+    name               String?    @db.VarChar(255)
+    email              String?    @unique @db.VarChar(255)
+    phone              String?
+    password           String?
+    verified           Boolean?   @default(false)
+    verificationCode   String?    @unique @db.VarChar(30)
+    emailVerified      DateTime?
+    role               RoleType?  @default(USER)
+    createdAt          DateTime   @default(now())
+    updatedAt          DateTime   @updatedAt
+    passwordResetToken String?
+    passwordResetAt    DateTime?
+    accounts           Account[]
+    sessions           Session[]
+    ogreviews          OgReview[]
+
+    @@unique([email, verificationCode, passwordResetToken])
+    @@index([email, verificationCode, passwordResetToken])
+    @@map("users")
+}
+
+model Account {
+    id                String   @id @default(cuid())
+    userId            String   @map("user_id")
+    type              String?
+    provider          String
+    providerAccountId String   @map("provider_account_id")
+    token_type        String?
+    refresh_token     String?  @db.Text
+    access_token      String?  @db.Text
+    expires_at        Int?
+    scope             String?
+    id_token          String?  @db.Text
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
+    user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@map("accounts")
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    userId       String?  @map("user_id")
+    sessionToken String   @unique @map("session_token") @db.Text
+    accessToken  String?  @map("access_token") @db.Text
+    expires      DateTime
+    user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    @@map("sessions")
+}
+
+model PasswordReset {
+    id         String   @id @default(cuid())
+    email      String?  @db.VarChar(255)
+    code       String?  @db.VarChar(255)
+    expiredAt  DateTime?
+    createdAt  DateTime @default(now())
+
+    @@unique([id])
+    @@map("PasswordResets")
+}
+
+model Booking {
+ id                String    @id @unique @default(cuid())
+ bookingNumber     String? @db.VarChar(30)
+ name              String?   @db.VarChar(255)
+ phone             String?  @db.VarChar(255)
+ email             String? @unique @db.VarChar(255)
+ description       String?   @db.VarChar()
+ typeOfEvent       String?      @db.VarChar(255)
+ bookType          String?      @db.VarChar(100)
+ note              String?      @db.VarChar(5000)
+ date              DateTime?
+ status            BookingStatus?  @default(PENDING)
+ active Boolean @default(false)
+ createdAt    DateTime @default(now())
+ updatedAt    DateTime @updatedAt
+
+ 
+ }
+
+model Request {
+ id                String    @id @unique @default(cuid())
+ name              String?   @db.VarChar(255)
+ phone             String?  @db.VarChar(255)
+ email             String? @unique @db.VarChar(255)
+ answer             String? @unique @db.VarChar(5000)
+ isCreated         Boolean @default(false)
+ createdAt          DateTime @default(now())
+ 
+ }
+
+ model Review {
+    id         String   @id @unique @default(cuid())
+    name       String?   @db.VarChar(255)
+    content    String?  @db.VarChar(5000)
+    isApproved Boolean @default(false)
+    createdAt  DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    @@index([id])
+    @@map("reviews")
+}
+
+
+ model OgReview {
+    id         String   @id @unique @default(cuid())
+    user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId     String
+    content    String?  @db.VarChar(5000)
+    location   String?  @db.VarChar(255)
+    isApproved Boolean @default(false)
+
+    files       Files[]     
+    createdAt  DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    @@unique([userId, id])
+    @@index([id])
+    @@map("OgReviews")
+}
+
+model Files {
+    id         String   @id @default(cuid())
+    url        String?  @db.VarChar(5000)
+    ogReview   OgReview @relation(fields: [ogReviewId], references: [id])
+    ogReviewId String
+    createdAt  DateTime @default(now())
+    @@unique([ogReviewId, id])
+    @@map("files")
+}

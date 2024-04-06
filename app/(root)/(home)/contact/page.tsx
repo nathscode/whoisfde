@@ -5,9 +5,7 @@ export const metadata: Metadata = {
 	title: "Contact us",
 };
 
-type Props = {};
-
-const ContactPage = (props: Props) => {
+const ContactPage = async () => {
 	return <div>ContactPage</div>;
 };
 

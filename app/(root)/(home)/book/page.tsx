@@ -1,14 +1,13 @@
 import BookingForm from "@/components/forms/BookingForm";
 import Padding from "@/components/util/home-padding";
 import { Metadata } from "next";
-import React from "react";
+import React, { Suspense } from "react";
 
 export const metadata: Metadata = {
-	title: "Booking",
+	title: "Book",
 };
-type Props = {};
 
-const BookingPage = (props: Props) => {
+const BookPage = async () => {
 	return (
 		<div className="py-20">
 			<Padding className="flex flex-col items-center gap-4 mb-10 mt-20">
@@ -22,11 +21,13 @@ const BookingPage = (props: Props) => {
 			</Padding>
 			<div className="flex justify-center items-center flex-col w-full py-24">
 				<div className="flex flex-col items-center justify-center w-full max-w-4xl">
-					<BookingForm />
+					<Suspense>
+						<BookingForm />
+					</Suspense>
 				</div>
 			</div>
 		</div>
 	);
 };
 
-export default BookingPage;
+export default BookPage;

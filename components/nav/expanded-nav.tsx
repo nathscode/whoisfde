@@ -1,10 +1,12 @@
-"use client";
+import { CustomUser } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import TransitionLink from "../TransitionLink";
 
-export default function ExpandedNav() {
+type Props = {
+	session?: CustomUser;
+};
+
+export default function ExpandedNav({ session }: Props) {
 	return (
 		<div
 			style={{ transition: "all 0.35s linear" }}
@@ -53,15 +55,17 @@ export default function ExpandedNav() {
 					>
 						Contact
 					</Link>
-					<div>
-						<Image
-							src={"/profile.png"}
-							width={35}
-							className="hover:cursor-pointer hover:opacity-50"
-							height={35}
-							alt="location"
-						/>
-					</div>
+					{session && (
+						<div>
+							<Image
+								src={"/images/logo/logo-question.png"}
+								width={35}
+								className="hover:cursor-pointer hover:opacity-50 bg-slate-50 rounded-full"
+								height={35}
+								alt="location"
+							/>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

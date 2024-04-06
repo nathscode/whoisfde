@@ -46,7 +46,7 @@ const Reveal = ({ children, width }: Props) => {
 						bottom: 4,
 						left: 0,
 						right: 0,
-						background: "#00ff00",
+						background: "#94a3b8",
 						zIndex: 20,
 					}}
 				></motion.div>

@@ -4,12 +4,14 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import Footer from "./Footer";
 import NavBar from "./nav/nav";
+import { CustomUser } from "@/types";
 
 type Props = {
 	children: React.ReactNode;
+	session: CustomUser;
 };
 
-const TransitionProvider = ({ children }: Props) => {
+const TransitionProvider = ({ children, session }: Props) => {
 	const pathName = usePathname();
 	const [isAnimationComplete, setIsAnimationComplete] = useState<boolean>(true);
 
@@ -44,7 +46,7 @@ const TransitionProvider = ({ children }: Props) => {
 					initial={{ height: "140vh" }}
 					animate={{ height: "0vh", transition: { delay: 0.5 } }}
 				/>
-				<NavBar />
+				<NavBar session={session} />
 				<div>{children}</div>
 				<Footer />
 			</div>

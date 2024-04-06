@@ -1,17 +1,17 @@
+import { getFileExtension } from "@/lib/utils";
+import { Files } from "@prisma/client";
 import Image from "next/image";
 
 export default function OgReview({
 	name,
-	work,
 	body,
 	image,
-	images,
+	files,
 }: {
 	image: string;
 	name: string;
 	body: string;
-	work: string;
-	images: string[];
+	files: Files[];
 }) {
 	return (
 		<div className="flex gap-5">
@@ -19,15 +19,14 @@ export default function OgReview({
 				<Image
 					src={image}
 					className="bg-blend-difference"
-					width={175}
-					height={175}
+					width={45}
+					height={45}
 					alt="og"
 				/>
 			</div>
 			<div>
 				<div>
-					<div className="text-xl">{name}</div>
-					<div className="text-sm font-light mt-1 mb-4">{work}</div>
+					<div className="text-base font-semibold">{name}</div>
 					<div className="text-sm">{body}</div>
 				</div>
 				<div className="flex gap-2 md:gap-8 mt-10">
@@ -53,13 +52,33 @@ export default function OgReview({
 								alt="right"
 							/>
 						</div>
-						<Image
-							src={images[0]}
-							className="rounded-lg"
-							height={50}
-							width={50}
-							alt="og report image"
-						/>
+						{files &&
+							files.length > 0 &&
+							files.map((file, index) => {
+								const extension = getFileExtension(file.url!);
+								const isImage = ["jpg", "jpeg", "png", "gif"].includes(
+									extension!
+								);
+
+								return (
+									<div key={index}>
+										{isImage ? (
+											<img
+												src={file.url!}
+												className="rounded-lg"
+												height={50}
+												width={50}
+												alt="file"
+											/>
+										) : (
+											<video controls>
+												<source src={file.url!} type={`video/${extension}`} />
+												Your browser does not support the video tag.
+											</video>
+										)}
+									</div>
+								);
+							})}
 					</div>
 					<div className="relative bg-black">
 						<div
@@ -83,13 +102,6 @@ export default function OgReview({
 								alt="right"
 							/>
 						</div>
-						<Image
-							src={images[1]}
-							height={50}
-							width={50}
-							className="opacity-50 rounded-lg"
-							alt="og report image"
-						/>
 					</div>
 				</div>
 			</div>

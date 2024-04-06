@@ -69,9 +69,7 @@ export default function WhoAmI() {
 					</div>
 					<div className="flex-1 flex flex-col gap-4 px-4">
 						<Reveal>
-							<div className="text-2xl font-bold">
-								HELLO, MY NAME IS FAVOUR IMIDE
-							</div>
+							<div className="text-2xl font-bold">HELLO, I am FDE</div>
 						</Reveal>
 						<Reveal>
 							<motion.div

@@ -9,8 +9,11 @@ export const BookingSchema = z.object({
 	typeOfEvent: z.string().min(1, {
 		message: "Type of Event is required",
 	}),
-	date: z.date({
-		required_error: "A date  is required.",
-	}),
+	bookType: z.string().optional(),
+	note: z.string().optional(),
+	date: z
+		.string()
+		.or(z.date())
+		.transform((arg) => new Date(arg)),
 });
 export type BookingSchemaInfer = z.infer<typeof BookingSchema>;

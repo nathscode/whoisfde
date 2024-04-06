@@ -1,7 +1,8 @@
-import TransitionProvider from "@/components/TranstionProvider";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import Providers from "@/components/Providers";
+import { Toaster } from "@/components/ui/toaster";
 
 const montserrat = Montserrat({
 	weight: ["400", "500", "700"],
@@ -20,10 +21,10 @@ export const metadata: Metadata = {
 	other: {
 		"theme-color": "#000000",
 		"color-scheme": "light",
-		"twitter:image": "/images/logo/logo-opg.jpg",
+		"twitter:image": "/images/site_summary.png",
 		"twitter:card": "summary_large_image",
-		"og:url": "https:Whoisfde.com",
-		"og:image": "/images/logo/logo-opg.jpg",
+		"og:url": "https://whoisfde.vercel.app",
+		"og:image": "/images/site_summary.png",
 		"og:type": "website",
 	},
 	openGraph: {
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
 		siteName: "Whoisfde",
 		images: [
 			{
-				url: "/images/logo/logo-opg.jpg",
+				url: "/images/site_summary.png",
 				width: 1200,
 				height: 600,
 			},
@@ -48,8 +49,11 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${montserrat.className} overflow-x-hidden`}>
-				<TransitionProvider>{children}</TransitionProvider>
+			<body className={`${montserrat.className}`}>
+				<Providers>
+					{children}
+					<Toaster />
+				</Providers>
 			</body>
 		</html>
 	);

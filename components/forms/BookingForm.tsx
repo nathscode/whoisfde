@@ -34,10 +34,20 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import moment from "moment";
 import LoadingButton from "../common/LoadingButton";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Textarea } from "../ui/textarea";
+import axios, { AxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { apiClient } from "@/lib/constants";
+import { useToast } from "../ui/use-toast";
 
 type Props = {};
 
 const BookingForm = (props: Props) => {
+	const router = useRouter();
+	const { toast } = useToast();
+	const searchParam = useSearchParams();
+	const type = searchParam.get("type");
 	const datetimeRef = useRef(null);
 
 	const form = useForm<BookingSchemaInfer>({
@@ -47,10 +57,68 @@ const BookingForm = (props: Props) => {
 			phone: "",
 			email: "",
 			typeOfEvent: "",
+			note: "",
+			bookType: type ? type : "",
+		},
+	});
+
+	const { mutate, isPending } = useMutation({
+		mutationFn: async ({
+			name,
+			phone,
+			email,
+			typeOfEvent,
+			note,
+			bookType,
+			date,
+		}: BookingSchemaInfer) => {
+			const payload: BookingSchemaInfer = {
+				name,
+				phone,
+				email,
+				typeOfEvent,
+				note,
+				bookType,
+				date,
+			};
+			const { data } = await apiClient.post("/booking", payload);
+			return data;
+		},
+		onSuccess: (data) => {
+			window.location.reload();
+			form.reset();
+			return toast({
+				description: "Booking created successfully",
+			});
+		},
+		onError: (err: any) => {
+			if (err instanceof AxiosError) {
+				if (err.response?.data?.status === 409) {
+					return toast({
+						title: "An error occurred.",
+						description: `${err.response?.data?.errors?.message}`,
+						variant: "destructive",
+					});
+				}
+
+				if (err.response?.status === 422) {
+					return toast({
+						title: "Invalid credentials.",
+						description: `${err.response.data?.errors?.message}`,
+						variant: "destructive",
+					});
+				}
+				toast({
+					title: "There was an error",
+					description: "Could not create user, check your network connections",
+					variant: "destructive",
+				});
+			}
 		},
 	});
 
 	function onSubmit(values: BookingSchemaInfer) {
+		mutate(values);
 		console.log(values);
 	}
 	return (
@@ -75,6 +143,7 @@ const BookingForm = (props: Props) => {
 											<FormControl>
 												<Input
 													type="text"
+													disabled={isPending}
 													placeholder="Enter Full name"
 													{...field}
 												/>
@@ -92,6 +161,7 @@ const BookingForm = (props: Props) => {
 											<FormControl>
 												<Input
 													type="text"
+													disabled={isPending}
 													placeholder="Enter Phone number"
 													{...field}
 												/>
@@ -108,6 +178,7 @@ const BookingForm = (props: Props) => {
 											<FormLabel>Email</FormLabel>
 											<FormControl>
 												<Input
+													disabled={isPending}
 													type="email"
 													placeholder="Enter your email"
 													{...field}
@@ -127,6 +198,7 @@ const BookingForm = (props: Props) => {
 												<Select
 													onValueChange={field.onChange}
 													defaultValue={field.value}
+													disabled={isPending}
 												>
 													<SelectTrigger className="w-full">
 														<SelectValue placeholder="Category" />
@@ -187,7 +259,15 @@ const BookingForm = (props: Props) => {
 														value={field.value}
 														onChange={(value) => {
 															if (moment.isMoment(value)) {
-																field.onChange(value.toDate());
+																const formattedDate = value.format(
+																	"ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(]z[)]"
+																);
+																field.onChange(
+																	moment(
+																		formattedDate,
+																		"ddd MMM DD YYYY HH:mm:ss [GMT]ZZ [(]z[)]"
+																	).toDate()
+																);
 															}
 														}}
 													/>
@@ -200,10 +280,29 @@ const BookingForm = (props: Props) => {
 										</FormItem>
 									)}
 								/>
+								<FormField
+									control={form.control}
+									name="note"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Note</FormLabel>
+											<FormControl>
+												<Textarea
+													disabled={isPending}
+													className=" rounded-none"
+													placeholder="Have anything in mind to say..."
+													id="note"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
 								<LoadingButton
 									variant={"default"}
 									type="submit"
-									loading={false}
+									loading={isPending}
 									className="mt-6 w-full"
 								>
 									Submit

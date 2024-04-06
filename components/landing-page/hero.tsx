@@ -42,8 +42,8 @@ const HeroSection = (props: Props) => {
 						</h1>
 					</Reveal>
 					<Reveal>
-						<div className="occupation border border-[#FFE500] text-[#FFE500] p-2 font-medium md:text-sm text-[10px] mt-2">
-							VIDEOGRAPHER & PHOTOGRAPHER
+						<div className="occupation border border-[#FFE500] text-[#FFE500] py-2 px-10 font-medium uppercase md:text-sm text-[10px] mt-2">
+							visual prodigy
 						</div>
 					</Reveal>
 				</div>

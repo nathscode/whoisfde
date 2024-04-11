@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 export const apiClient = axios.create({
-	baseURL: "http://localhost:3000/api",
+	baseURL: `${process.env.NEXT_PUBLIC_APP_URL}/api`,
 });
 export const navLinks = [
 	{

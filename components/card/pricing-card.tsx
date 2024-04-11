@@ -9,7 +9,7 @@ type Props = {
 const PricingCard = ({ name, features }: Props) => {
 	return (
 		<div
-			className="border-gray-600 rounded-2xl border  divide-y divide-gray-200 max-w-sm space-x-5 mt-20"
+			className="border-gray-600 rounded-2xl border  divide-y divide-gray-200 w-[300px] space-x-5 mt-5"
 			style={{
 				boxShadow:
 					"rgba(45, 50, 130, 0.15) 0px 12px 16px -4px, rgba(45, 50, 130, 0.15) 0px 4px 6px -2px",
@@ -29,7 +29,7 @@ const PricingCard = ({ name, features }: Props) => {
 			</div>
 			<div className="px-6 pt-6 pb-5">
 				<h3 className="text-sm font-medium text-gray-900">
-					What&pos;s included
+					What&apos;s included
 				</h3>
 				<ul role="list" className="mt-6 space-y-4">
 					{features.map((feature, i) => (

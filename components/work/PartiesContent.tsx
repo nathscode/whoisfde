@@ -63,7 +63,7 @@ const PartiesContent = (props: Props) => {
 	return (
 		<div className="flex flex-col w-full py-4">
 			<h1 className="font-heading text-2xl mb-4">Parties</h1>
-			<div className="flex justify-center sm:items-center gap-1 flex-row sm:gap-2">
+			<div className="flex flex-col justify-center sm:items-center gap-4 sm:flex-row sm:gap-2">
 				{data &&
 					data.map((party: any) => (
 						<div key={party.id} className="flex flex-col gap-1 sm:gap-2">

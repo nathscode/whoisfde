@@ -29,7 +29,7 @@ export const itemCoverMotion = {
 	animate: {
 		height: 0,
 		transition: {
-			delay: 1,
+			delay: 0.1,
 			duration: 0.8,
 			ease: easings.easeInOutQuint,
 		},
@@ -56,7 +56,7 @@ export const itemContentMotion = {
 		transition: {
 			type: "spring",
 			bounce: 0.5,
-			duration: 0.5,
+			duration: 0.8,
 		},
 	},
 };

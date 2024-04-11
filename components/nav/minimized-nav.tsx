@@ -11,6 +11,7 @@ import NavMenuToggle from "./NavMenuToggle";
 const NavMenu = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navItems: { href: string; title: string }[] = [
+		{ href: "/", title: "Home" },
 		{ href: "/reviews", title: "Reviews" },
 		{ href: "/pricing", title: "Pricing" },
 		{ href: "/contact", title: "Contact" },

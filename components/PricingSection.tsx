@@ -31,6 +31,13 @@ const pricingData = [
 			"360 camera highlights",
 		],
 	},
+	{
+		name: "Blank",
+		features: [
+			"Freedom to tell us what you want",
+			"Tell us what you want when booking.",
+		],
+	},
 ];
 
 const PricingSection = () => {
@@ -50,10 +57,12 @@ const PricingSection = () => {
 					Select pricing that best suit your budget.
 				</motion.div>
 			</Padding>
-			<div className="flex flex-col sm:flex-row gap-2 justify-center">
-				{pricingData.map((data, i) => (
-					<PricingCard key={i} {...data} />
-				))}
+			<div className="max-w-[1200px] mx-auto">
+				<div className="flex flex-col lg:flex-row gap-2 items-start justify-center">
+					{pricingData.map((data, i) => (
+						<PricingCard key={i} {...data} />
+					))}
+				</div>
 			</div>
 		</div>
 	);

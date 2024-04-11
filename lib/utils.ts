@@ -22,3 +22,15 @@ export function getFileExtension(url: string): string | null {
 	const fileExtension = segments.pop() || null;
 	return fileExtension;
 }
+
+export function getValueAfterYoutuBe(url: string): string | null {
+	try {
+		const urlObj = new URL(url);
+		const pathname = urlObj.pathname;
+		const valueAfterYoutuBe = pathname.substring(1);
+		return valueAfterYoutuBe;
+	} catch (error) {
+		console.error("Invalid URL", error);
+		return null;
+	}
+}

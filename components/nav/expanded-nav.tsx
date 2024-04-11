@@ -1,4 +1,5 @@
 import { CustomUser } from "@/types";
+import { RoleType } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export default function ExpandedNav({ session }: Props) {
+	const isAdmin = session?.role === RoleType.ADMIN ? true : false;
 	return (
 		<div
 			style={{ transition: "all 0.35s linear" }}
@@ -55,6 +57,14 @@ export default function ExpandedNav({ session }: Props) {
 					>
 						Contact
 					</Link>
+					{isAdmin && (
+						<Link
+							href={"/dashboard"}
+							className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
+						>
+							Dashboard
+						</Link>
+					)}
 					{session && (
 						<div>
 							<Image

@@ -40,6 +40,8 @@ export const BookingColumns: ColumnDef<SafeBooking>[] = [
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => <span>View</span>,
+		cell: ({ row }) => (
+			<Link href={`/dashboard/bookings/${row.original.id}`}>View</Link>
+		),
 	},
 ];

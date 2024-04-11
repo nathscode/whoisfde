@@ -21,7 +21,7 @@ const PricingCard = ({ name, features }: Props) => {
 				</div>
 
 				<Link
-					href={`booking?type=${name}`}
+					href={`/book?type=${name}`}
 					className="flex justify-center w-full py-3 mt-4 text-sm font-semibold text-white bg-black border border-black rounded active:text-gray-500 hover:bg-transparent hover:text-black focus:outline-none focus:ring"
 				>
 					Book Now

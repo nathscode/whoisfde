@@ -147,6 +147,29 @@ model Request {
     @@map("OgReviews")
 }
 
+
+model Work {
+ id                String    @id @unique @default(cuid())
+ workType          String?   @db.VarChar(100)
+ caption           String?   @db.VarChar(5000)
+ links             String?  @db.VarChar(500)
+ isActive          Boolean @default(false)
+ createdAt         DateTime @default(now())
+ workFiles         WorkFiles[]
+ }
+
+
+
+model WorkFiles {
+    id         String   @id @default(cuid())
+    url        String?  @db.VarChar(5000)
+    work        Work @relation(fields: [workId], references: [id], onDelete: Cascade)
+    workId          String
+    createdAt  DateTime @default(now())
+    @@unique([workId, id])
+    @@map("Workfiles")
+}
+
 model Files {
     id         String   @id @default(cuid())
     url        String?  @db.VarChar(5000)
@@ -156,3 +179,4 @@ model Files {
     @@unique([ogReviewId, id])
     @@map("files")
 }
+

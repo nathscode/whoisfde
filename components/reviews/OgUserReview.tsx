@@ -147,7 +147,7 @@ const OgUserReview = ({ session }: Props) => {
 					/>
 
 					<div className="flex flex-col">
-						<Label className="mb-4">Product Image</Label>
+						<Label className="mb-4"> File</Label>
 						<div
 							{...getRootProps()}
 							className={`border-2 border-dashed rounded-lg p-4 ${

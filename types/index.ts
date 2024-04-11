@@ -5,6 +5,8 @@ import {
 	Review,
 	Files,
 	User,
+	Work,
+	WorkFiles,
 } from "@prisma/client";
 import { ISODateString } from "next-auth";
 
@@ -29,6 +31,10 @@ export type SafeRequest = Omit<Request, "createdAt"> & {
 	createdAt: string;
 	updatedAt: string;
 };
+
+export type SafeWork = Omit<Work, "createdAt"> & {
+	createdAt: string;
+};
 export type SafeReview = Omit<Review, "createdAt"> & {
 	createdAt: string;
 	updatedAt: string;
@@ -40,4 +46,7 @@ export type SafeOgReview = Omit<OgReview, "createdAt"> & {
 export type SafeOgReviewExtras = SafeOgReview & {
 	user: User | null;
 	files: Files[];
+};
+export type SafeWorkExtras = SafeWork & {
+	files: WorkFiles[];
 };

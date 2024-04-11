@@ -4,8 +4,13 @@ import { Suspense } from "react";
 import Reveal from "../Reveal";
 import CommentClients from "./CommentClients";
 import SuspenseSkeleton from "../skeletons/SuspenseSkeleton";
+import useMount from "@/hooks/use-mount";
 
 export default function ClientsAndOgComments() {
+	const mount = useMount();
+
+	if (!mount) return;
+
 	return (
 		<div
 			className="

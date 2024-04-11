@@ -30,13 +30,13 @@ const CommentClients = (props: Props) => {
 
 	if (isPending) {
 		return (
-			<Shell className="max-w-6xl">
-				<section className="grid grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-					{Array.from({ length: 4 }).map((_, i) => (
-						<NormalReviewSkeleton key={i} />
-					))}
-				</section>
-			</Shell>
+			<div className="flex justify-start max-w-full gap-4 my-5">
+				{Array.from({ length: 4 }).map((_, i) => (
+					<div key={i} className="flex flex-col w-full justify-start">
+						<NormalReviewSkeleton />
+					</div>
+				))}
+			</div>
 		);
 	}
 

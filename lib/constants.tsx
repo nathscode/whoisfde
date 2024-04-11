@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+	Cog,
 	LayoutDashboard,
 	Mail,
 	Receipt,
@@ -35,5 +36,10 @@ export const navLinks = [
 		url: "/dashboard/users",
 		icon: <UsersRound />,
 		label: "Users",
+	},
+	{
+		url: "/dashboard/works",
+		icon: <Cog />,
+		label: "Works",
 	},
 ];

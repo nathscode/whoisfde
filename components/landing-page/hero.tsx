@@ -48,7 +48,7 @@ const HeroSection = (props: Props) => {
 					</Reveal>
 				</div>
 				<div className="flex flex-col gap-4 items-center mt-12 z-30">
-					<Link href={"#"}>
+					<Link href={"https://www.instagram.com/whoisfde/"}>
 						<Image
 							src={"/instagram.png"}
 							className="bg-blend-difference"
@@ -57,7 +57,9 @@ const HeroSection = (props: Props) => {
 							alt="phone"
 						/>
 					</Link>
-					<Link href={"#"}>
+					<Link
+						href={"https://twitter.com/whoisfde?s=21&t=5JI4fTXO-ojJnYgPmGxchA"}
+					>
 						<Image
 							src={"/x.png"}
 							className="bg-blend-difference"
@@ -66,7 +68,7 @@ const HeroSection = (props: Props) => {
 							alt="phone"
 						/>
 					</Link>
-					<Link href={"#"}>
+					<Link href={"https://youtube.com/@whoisfde?si=GjNm22At7bOxrRo_"}>
 						<Image
 							src={"/youtube.png"}
 							className="bg-blend-difference"

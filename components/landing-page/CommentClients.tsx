@@ -41,11 +41,19 @@ const CommentClients = (props: Props) => {
 	}
 
 	if (error) {
-		return <div>Error retrieving Reviews</div>;
+		return (
+			<div className="flex flex-col justify-center items-center my-5">
+				Error retrieving Reviews
+			</div>
+		);
 	}
 
 	if (!data || data.length === 0) {
-		return <div>No Review Yet</div>;
+		return (
+			<div className="flex flex-col justify-center items-center my-5">
+				No Review Yet
+			</div>
+		);
 	}
 	return (
 		<Carousel className="w-full max-w-[300px] sm:max-w-4xl">

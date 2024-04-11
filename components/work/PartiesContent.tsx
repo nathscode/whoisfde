@@ -1,14 +1,18 @@
 "use client";
-import { apiClient } from "@/lib/constants";
 import { getValueAfterYoutuBe } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import YoutubeEmbed from "../common/YoutubeEmbed";
 import { ContentSkeleton } from "../skeletons/ContentSkeleton";
 import axios from "axios";
+import { useMediaQuery } from "usehooks-ts";
 
 type Props = {};
 
 const PartiesContent = (props: Props) => {
+	const media = useMediaQuery("(max-width: 600px)");
+
+	const mobile = media ? "320px" : "500px";
+
 	const partiesContentData = () => {
 		return axios
 			.get("/api/work/", {
@@ -31,12 +35,20 @@ const PartiesContent = (props: Props) => {
 	});
 	if (isPending) {
 		return (
-			<div className="flex justify-start max-w-full gap-4 my-5">
+			<div className="flex flex-col sm:flex-row justify-start max-w-full gap-4 my-5">
 				{Array.from({ length: 4 }).map((_, i) => (
 					<div key={i} className="flex flex-col w-full justify-start">
 						<ContentSkeleton />
 					</div>
 				))}
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div className="flex flex-col justify-center items-center my-5">
+				Error retrieving Parties Uploads
 			</div>
 		);
 	}
@@ -61,7 +73,7 @@ const PartiesContent = (props: Props) => {
 									caption={party.captions}
 								/>
 							) : (
-								<video controls width={"500px"}>
+								<video controls width={mobile}>
 									<source src={party.workFiles[0].url!} type={`video/mp4`} />
 									Your browser does not support the video tag.
 								</video>

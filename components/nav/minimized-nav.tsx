@@ -42,9 +42,9 @@ const NavMenu = () => {
 					initial={{ y: "-100%" }}
 					animate={{
 						y: 0,
-						transition: { duration: 1, ease: easings.easeOutQuart },
+						transition: { duration: 0.1, ease: easings.easeOutQuart },
 					}}
-					exit={{ y: "-100%", transition: { duration: 0.3 } }}
+					exit={{ y: "-100%", transition: { duration: 0.1 } }}
 				>
 					<motion.ul exit={{ opacity: 0, transition: { duration: 0 } }}>
 						{navItems.map((item, idx) => (

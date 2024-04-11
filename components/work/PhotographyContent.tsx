@@ -30,7 +30,7 @@ const PhotographyContent = (props: Props) => {
 	});
 	if (isPending) {
 		return (
-			<div className="flex justify-start max-w-full gap-4 my-5">
+			<div className="flex flex-col sm:flex-row justify-start max-w-full gap-4 my-5">
 				{Array.from({ length: 4 }).map((_, i) => (
 					<div key={i} className="flex flex-col w-full justify-start">
 						<ContentSkeleton />

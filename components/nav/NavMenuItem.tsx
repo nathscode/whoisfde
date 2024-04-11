@@ -3,11 +3,11 @@ import React, { useState } from "react";
 
 import {
 	arrowMotion,
-	itemCoverMotion,
 	dividerMotion,
 	itemContentMotion,
+	itemCoverMotion,
 } from "@/components/util/animations";
-import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import { ArrowBigRight } from "lucide-react";
 import Link from "next/link";
 
 interface NavMenuItem {

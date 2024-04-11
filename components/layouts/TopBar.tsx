@@ -14,7 +14,7 @@ const TopBar = () => {
 	const pathname = usePathname();
 
 	return (
-		<div className="sticky top-0 z-[9999] w-full flex justify-between items-center px-8 py-4 bg-blue-2 shadow-xl lg:hidden">
+		<div className="sticky top-0 z-50 w-full flex justify-between items-center px-8 py-4 bg-blue-2 shadow-xl lg:hidden">
 			<Image
 				src={"/images/site_summary.png"}
 				alt="logo"

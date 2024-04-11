@@ -5,6 +5,7 @@ import Reveal from "../Reveal";
 import CommentClients from "./CommentClients";
 import SuspenseSkeleton from "../skeletons/SuspenseSkeleton";
 import useMount from "@/hooks/use-mount";
+import { NormalReviewSkeleton } from "../skeletons/NormalReviewSkeleton";
 
 export default function ClientsAndOgComments() {
 	const mount = useMount();
@@ -29,7 +30,7 @@ export default function ClientsAndOgComments() {
 					</div>
 				</Reveal>
 				<div className="flex flex-col md:flex-row gap-4 justify-center">
-					<Suspense fallback={<SuspenseSkeleton />}>
+					<Suspense fallback={<NormalReviewSkeleton />}>
 						<CommentClients />
 					</Suspense>
 				</div>

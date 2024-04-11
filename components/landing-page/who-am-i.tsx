@@ -59,7 +59,7 @@ export default function WhoAmI() {
 
 						<div className="p-4">
 							<Image
-								src={"/who-image.png"}
+								src={"/images/logo/logo-question.png"}
 								className="object-fill"
 								alt="who image"
 								height={300}

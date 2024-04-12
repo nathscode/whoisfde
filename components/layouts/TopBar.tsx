@@ -5,9 +5,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
-
 import { navLinks } from "@/lib/constants";
 import { Button } from "../ui/button";
+import { signOut } from 'next-auth/react';
+
 
 const TopBar = () => {
 	const [dropdownMenu, setDropdownMenu] = useState(false);
@@ -55,7 +56,7 @@ const TopBar = () => {
 					</div>
 				)}
 				<div className="flex flex-col">
-					<Button type="button">Log out</Button>
+					<Button onClick={() => signOut({ callbackUrl: '/' }) } type="button">Log out</Button>
 				</div>
 			</div>
 		</div>

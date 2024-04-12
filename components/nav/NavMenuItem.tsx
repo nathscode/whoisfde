@@ -14,9 +14,10 @@ interface NavMenuItem {
 	index: number;
 	title: string;
 	href: string;
+	isAdmin: boolean;
 }
 
-const NavMenuItem: React.FC<NavMenuItem> = ({ index, href, title }) => {
+const NavMenuItem: React.FC<NavMenuItem> = ({ index, href, title, isAdmin }) => {
 	const [isLoading, setIsLoading] = useState(true);
 
 	return (
@@ -52,7 +53,7 @@ const NavMenuItem: React.FC<NavMenuItem> = ({ index, href, title }) => {
 				variants={dividerMotion}
 			/>
 		</motion.li>
-	);
+	) 
 };
 
 export default NavMenuItem;

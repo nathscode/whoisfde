@@ -7,6 +7,8 @@ import {
 	UserReviewSchemaInfer,
 } from "@/lib/validators/user-reviews";
 import { ZodError } from "zod";
+import getCurrentUser from "@/actions/getCurrentUser";
+import checkIsAdmin from "@/actions/checkIsAdmin";
 export async function POST(req: NextRequest) {
 	try {
 		const body: UserReviewSchemaInfer = await req.json();
@@ -47,5 +49,64 @@ export async function POST(req: NextRequest) {
 			status = 422;
 		}
 		return handlerNativeResponse({ status, message }, status);
+	}
+}
+
+
+export async function DELETE(req: NextRequest) {
+	if (req.method !== "DELETE") {
+		return handlerNativeResponse(
+			{ status: 405, errors: { message: "Method not allowed" } },
+			405
+		);
+	}
+	const searchParams = req.nextUrl.searchParams;
+	const params = Object.fromEntries(searchParams);
+	const id = params.id;
+	const session = await getCurrentUser();
+	const isAdmin = await checkIsAdmin();
+
+	if (!session) {
+		return handlerNativeResponse(
+			{ status: 403, errors: { message: "Unauthorized" } },
+			401
+		);
+	}
+
+	if (!isAdmin) {
+		return handlerNativeResponse(
+			{
+				status: 403,
+				errors: { message: "Unauthorized and access denied" },
+			},
+			401
+		);
+	}
+
+	try {
+		const review = await db.review.findUnique({
+			where: { id: id },
+		});
+
+		if (!review) {
+			return handlerNativeResponse(
+				{ status: 404, errors: { message: "review not found" } },
+				404
+			);
+		}
+		
+
+		const reviewObj = await db.review.delete({
+			where: {
+				id: id,
+			},
+		});
+
+		if (reviewObj) {
+			return NextResponse.json({ success: true });
+		}
+	} catch (error: any) {
+		let status = 500;
+		return handlerNativeResponse({ status, message: error.message }, status);
 	}
 }

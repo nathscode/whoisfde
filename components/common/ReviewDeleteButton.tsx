@@ -9,19 +9,20 @@ import { Loader2, Trash } from "lucide-react";
 
 type Props = {
 	id: string | null;
+  url: string
 };
 
-const DeleteButton = ({ id }: Props) => {
+const DeleteButton = ({ id, url }: Props) => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
 	const { toast } = useToast();
 	const { mutate, isPending } = useMutation({
 		mutationFn: async () => {
-			const { data } = await axios.delete(`/api/work`, {
+			const { data } = await axios.delete(`/api/${url}`, {
 				params: {
 					id: id,
 				},
-				headers: {
+        headers: {
 					"Content-Type": "multipart/form-data",
 				},
 			});
@@ -89,7 +90,7 @@ const DeleteButton = ({ id }: Props) => {
 	return (
 		<div className="w-full">
 			<ConfirmModal
-				description="You're about to delete this work"
+				description="You're about to delete this review"
 				onConfirm={onDeleteWork}
 			>
 				<Button

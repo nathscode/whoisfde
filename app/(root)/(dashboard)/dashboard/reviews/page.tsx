@@ -1,6 +1,7 @@
 import { getAllOgsReviews } from "@/actions/getAllOgsReviews";
 import { getAllReviews } from "@/actions/getAllReviews";
 import { ReviewsColumns } from "@/components/columns/ReviewsColumns";
+import { ReviewsOgColumns } from "@/components/columns/ReviewsOgColumns";
 import { DataTable } from "@/components/common/DataTable";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,7 +36,7 @@ const ReviewsPage = async () => {
 					<div className="flex flex-col w-full my-5">
 						<h1 className="text-heading3-bold">OG&apos;s Reviews</h1>
 						<DataTable
-							columns={ReviewsColumns}
+							columns={ReviewsOgColumns}
 							//@ts-ignore
 							data={ogReviews}
 							searchKey="Name"

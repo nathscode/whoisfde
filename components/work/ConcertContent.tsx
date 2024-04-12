@@ -1,18 +1,13 @@
 "use client";
-import { apiClient } from "@/lib/constants";
-import { getValueAfterYoutuBe } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import YoutubeEmbed from "../common/YoutubeEmbed";
-import { ContentSkeleton } from "../skeletons/ContentSkeleton";
 import axios from "axios";
-import { useMediaQuery } from "usehooks-ts";
+import { ContentSkeleton } from "../skeletons/ContentSkeleton";
+import ContentCard from "./ContentCard";
 
 type Props = {};
 
 const ConcertContent = (props: Props) => {
-	const media = useMediaQuery("(max-width: 600px)");
-
-	const mobile = media ? "320px" : "500px";
+	
 	const concertContentData = () => {
 		return axios
 			.get("/api/work/", {
@@ -63,24 +58,7 @@ const ConcertContent = (props: Props) => {
 	return (
 		<div className="flex flex-col w-full py-4">
 			<h1 className="font-heading text-2xl mb-4">Concert</h1>
-			<div className="flex flex-col justify-center sm:items-center gap-4 sm:flex-row sm:gap-2">
-				{data &&
-					data.map((party: any) => (
-						<div key={party.id} className="flex flex-col gap-1 sm:gap-2">
-							{party.links ? (
-								<YoutubeEmbed
-									id={getValueAfterYoutuBe(party.links)!}
-									caption={party.captions}
-								/>
-							) : (
-								<video controls width={mobile}>
-									<source src={party.workFiles[0].url!} type={`video/mp4`} />
-									Your browser does not support the video tag.
-								</video>
-							)}
-						</div>
-					))}
-			</div>
+			<ContentCard data={data} />
 		</div>
 	);
 };

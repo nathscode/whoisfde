@@ -10,7 +10,7 @@ const NavBar = ({ session }: Props) => {
 	return (
 		<div className="">
 			<div className="sm:hidden">
-				<MinimizedTopNav />
+				<MinimizedTopNav session={session!} />
 			</div>
 			<div className="max-sm:hidden">
 				<ExpandedNav session={session!} />

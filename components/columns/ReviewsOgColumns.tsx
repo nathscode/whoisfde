@@ -1,11 +1,11 @@
 "use client";
 
 import { formatDateTime } from "@/lib/utils";
-import { SafeReview } from "@/types";
+import { SafeOgReviewExtras } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteButton from "../common/ReviewDeleteButton";
 
-export const ReviewsColumns: ColumnDef<SafeReview>[] = [
+export const ReviewsOgColumns: ColumnDef<SafeOgReviewExtras>[] = [
 	{
 		accessorKey: "sn",
 		header: "SN",
@@ -28,6 +28,6 @@ export const ReviewsColumns: ColumnDef<SafeReview>[] = [
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => <DeleteButton id={row.original.id} url={"reviews/normal"}/>
+		cell: ({ row }) => <DeleteButton id={row.original.id} url={"reviews/ogs"} />
 	},
 ];

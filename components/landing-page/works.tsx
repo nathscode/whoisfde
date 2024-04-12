@@ -60,7 +60,7 @@ export default function Works() {
 						href={"/pricing"}
 						className="flex justify-center w-fit px-10 py-3 mt-4 text-sm font-semibold text-white bg-black border border-black rounded active:text-gray-500 hover:bg-transparent hover:text-black focus:outline-none focus:ring"
 					>
-						Price list
+						View Packages
 					</Link>
 				</div>
 			</div>

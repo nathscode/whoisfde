@@ -18,40 +18,43 @@ interface Props {
 	type: string;
 	bookDate: Date;
 	bookNumber: string;
+	status: string;
 }
 
-const NewBooking = ({
+const EmailStatus = ({
 	name,
 	email,
 	phone,
 	type,
 	bookDate,
 	bookNumber,
+	status,
 }: Props) => {
 	return (
 		<Html>
 			<Head />
-			<Preview>Whoisfde Booking Confirmation</Preview>
+			<Preview>Whoisfde Booking Status</Preview>
 			<Body style={main}>
 				<Container style={parentContainer}>
 					<Section style={{ marginTop: "32px" }}>
 						<Img
 							src={`https://whoisfde.vercel.app/_next/image?url=%2Fimages%2Flogo%2Flogo-question.png&w=96&q=75`}
 							width="80"
-							height="37"
+							height="80"
 							alt="Vercel"
 							style={logo}
 						/>
 					</Section>
 					<Section style={{ marginTop: "32px" }}>
 						<Text style={h1}>
-							<strong>Booking Confirmation</strong>
+							<strong>Booking Status</strong>
 						</Text>
 						<Text style={paragraph}>Dear {name}</Text>
 						<Text style={paragraph}>
-							Thank you for booking with us. Your booking details are as
-							follows:
+							Your booking status &nbsp;
+							<strong>{status === "SUCCESS" ? "Approved" : status}</strong>
 						</Text>
+						<Text style={paragraph}>Your booking information are below:</Text>
 					</Section>
 					<Section style={{ marginTop: "32px" }}>
 						<table
@@ -126,7 +129,7 @@ const NewBooking = ({
 	);
 };
 
-export default NewBooking;
+export default EmailStatus;
 const main = {
 	backgroundColor: "#ffffff",
 	margin: "auto auto",
@@ -141,12 +144,6 @@ const parentContainer = {
 	padding: "1.2rem",
 };
 
-const container = {
-	maxWidth: "90%",
-	margin: "0 auto",
-	padding: "1.2rem",
-};
-
 const heroSection = {
 	position: "relative" as const,
 	width: "100%",
@@ -154,6 +151,8 @@ const heroSection = {
 };
 const logo = {
 	margin: "0 auto",
+	backgroundColor: "#EEEEEE",
+	borderRadius: "9999px",
 };
 const cta = {
 	padding: "13px 20px",

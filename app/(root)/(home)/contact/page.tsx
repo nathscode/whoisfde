@@ -83,7 +83,7 @@ const ContactPage = async () => {
 											></path>
 										</svg>
 										<Link href="#" className="text-white text-sm ml-3">
-											<strong>Warri, Delta State.</strong>
+											<strong>Lagos, Nigeria.</strong>
 										</Link>
 									</li>
 								</ul>

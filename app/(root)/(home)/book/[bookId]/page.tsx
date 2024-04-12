@@ -6,12 +6,12 @@ import { formatDateTime } from "@/lib/utils";
 
 interface PageProps {
 	params: {
-		id: string;
+		bookId: string;
 	};
 }
 
 const BookingDetailPage = async ({ params }: PageProps) => {
-	const booking = await getSingleBookingById(params.id);
+	const booking = await getSingleBookingById(params.bookId);
 	const isAdmin = await checkIsAdmin();
 	return (
 		<div className="flex flex-col p-5 rounded-lg bg-white w-full">

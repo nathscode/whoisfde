@@ -13,7 +13,7 @@ const NavMenu = () => {
 	const navItems: { href: string; title: string }[] = [
 		{ href: "/", title: "Home" },
 		{ href: "/reviews", title: "Reviews" },
-		{ href: "/pricing", title: "Pricing" },
+		{ href: "/package", title: "Package" },
 		{ href: "/contact", title: "Contact" },
 	];
 

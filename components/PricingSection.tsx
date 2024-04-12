@@ -48,17 +48,17 @@ const PricingSection = () => {
 					className="text-[28px] sm:text-4xl font-bold font-heading"
 					variants={textRevealMotion(0)}
 				>
-					Pricing
+					Packages
 				</motion.div>
 				<motion.div
 					className="text-lg font-light text-left md:text-center"
 					variants={textRevealMotion(0.4)}
 				>
-					Select pricing that best suit your budget.
+					Select package that best suit your budget.
 				</motion.div>
 			</Padding>
-			<div className="max-w-[1200px] mx-auto">
-				<div className="flex flex-col lg:flex-row gap-2 items-start justify-center">
+			<div className="max-w-5xl w-full">
+				<div className="flex flex-wrap justify-center sm:justify-between flex-col md:flex-row w-full  space-y-2  md:space-y-0">
 					{pricingData.map((data, i) => (
 						<PricingCard key={i} {...data} />
 					))}

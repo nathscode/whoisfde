@@ -9,7 +9,7 @@ export default function Footer() {
         bg-[url('/bg-camera.png')] 
         px-2  
         bg-no-repeat w-full 
-        py-20 
+        py-28 
         flex 
         justify-start 
         sm:justify-center 
@@ -32,7 +32,7 @@ export default function Footer() {
 									height={20}
 									alt="location"
 								/>
-								<span>Warri, Delta State</span>
+								<span>Lagos, Nigeria</span>
 							</div>
 							<div className="flex items-center gap-2 ">
 								<Image

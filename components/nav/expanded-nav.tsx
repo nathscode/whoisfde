@@ -46,10 +46,10 @@ export default function ExpandedNav({ session }: Props) {
 						Reviews
 					</Link>
 					<Link
-						href={"/pricing"}
+						href={"/package"}
 						className="hover:cursor-pointer hover:opacity-50 active:opacity-50"
 					>
-						Pricing
+						Package
 					</Link>
 					<Link
 						href={"/contact"}

@@ -28,6 +28,13 @@ export const RequestColumns: ColumnDef<SafeRequest>[] = [
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => <span>View</span>,
+		cell: ({ row }) => (
+			<Link
+				href={`/dashboard/requests/${row.original.id}`}
+				className="hover:underline"
+			>
+				View
+			</Link>
+		),
 	},
 ];

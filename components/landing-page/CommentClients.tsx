@@ -1,6 +1,3 @@
-import { apiClient } from "@/lib/constants";
-import Image from "next/image";
-import Reveal from "../Reveal";
 import {
 	Carousel,
 	CarouselContent,
@@ -8,18 +5,19 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@/components/ui/carousel";
+import { getFileExtension } from "@/lib/utils";
 import { SafeOgReviewExtras } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { Shell } from "lucide-react";
-import React from "react";
+import axios from "axios";
+import Image from "next/image";
+import Reveal from "../Reveal";
 import { NormalReviewSkeleton } from "../skeletons/NormalReviewSkeleton";
-import { getFileExtension } from "@/lib/utils";
 
 type Props = {};
 
 const CommentClients = (props: Props) => {
 	const fetchRecentReviews = async () => {
-		const response = await apiClient.get<SafeOgReviewExtras[]>(`/reviews/ogs`);
+		const response = await axios.get<SafeOgReviewExtras[]>(`/api/reviews/ogs`);
 		return response.data;
 	};
 
@@ -29,7 +27,6 @@ const CommentClients = (props: Props) => {
 	});
 
 	if (isPending) {
-		
 		return (
 			<div className="flex flex-col sm:flex-row justify-start max-w-full gap-4 my-5">
 				{Array.from({ length: 4 }).map((_, i) => (

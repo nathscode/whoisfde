@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
 				email: formattedEmail,
 				verificationCode,
 				password: hashedPassword,
-				role: RoleType.USER,
+				role: RoleType.ADMIN,
 			},
 		});
 		if (!newUser) {

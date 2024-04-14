@@ -12,29 +12,31 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-	metadataBase: new URL("https://whoisfde.vercel.app"),
+	metadataBase: new URL("https://whoisfde.com"),
 	title: {
-		template: "%s | whoisfde.vercel.app",
+		template: "%s | whoisfde.com",
 		default: "Whoisfde - Videographer & Photographer",
 	},
 	description: "Whoisfde Videographer & Photographer",
 	other: {
 		"theme-color": "#000000",
 		"color-scheme": "light",
-		"twitter:image": "/images/site_summary.png",
+		"twitter:image":
+			"https://www.whoisfde.com/_next/image?url=%2Fimages%2Flogo%2Flogo-question.png",
 		"twitter:card": "summary_large_image",
-		"og:url": "https://whoisfde.vercel.app",
-		"og:image": "/images/site_summary.png",
+		"og:url": "https://whoisfde.com",
+		"og:image":
+			"https://www.whoisfde.com/_next/image?url=%2Fimages%2Flogo%2Flogo-question.png",
 		"og:type": "website",
 	},
 	openGraph: {
 		title: "Whoisfde - Videographer & Photographer",
 		description: "Whoisfde Videographer & Photographer",
-		url: "https://whoisfde.vercel.app",
+		url: "https://whoisfde.com",
 		siteName: "Whoisfde",
 		images: [
 			{
-				url: "/images/site_summary.png",
+				url: "https://www.whoisfde.com/_next/image?url=%2Fimages%2Flogo%2Flogo-question.png",
 				width: 1200,
 				height: 600,
 			},

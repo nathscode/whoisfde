@@ -35,6 +35,7 @@ import Link from "next/link";
 import LoadingButton from "../common/LoadingButton";
 import RequestModal from "./RequestModal";
 import { useMutation } from "@tanstack/react-query";
+import RegisterModal from "./RegisterModal";
 
 type Props = {};
 
@@ -138,7 +139,7 @@ const LoginModal = (props: Props) => {
 					</DialogTitle>
 					<DialogDescription className="text-center text-zinc-500">
 						If you don't have OG&apos;s Login details, click this button to join{" "}
-						<RequestModal />
+						<RegisterModal />
 					</DialogDescription>
 				</DialogHeader>
 				<div className="flex items-start flex-col  w-full justify-start p-5">

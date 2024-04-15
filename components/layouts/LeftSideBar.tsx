@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { navLinks } from "@/lib/constants";
+import { signOut } from "next-auth/react";
+import { Button } from "../ui/button";
 
 const LeftSideBar = () => {
 	const pathname = usePathname();
@@ -31,6 +33,9 @@ const LeftSideBar = () => {
 						{link.icon} <p>{link.label}</p>
 					</Link>
 				))}
+				<Button onClick={() => signOut({ callbackUrl: "/" })} type="button">
+					Log out
+				</Button>
 			</div>
 		</div>
 	);

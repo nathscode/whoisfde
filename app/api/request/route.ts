@@ -28,6 +28,27 @@ export async function POST(req: NextRequest) {
 
 		const formattedEmail = email.toLowerCase();
 
+		const isEmailExist = await db.request.findUnique({
+			where: {
+				email: formattedEmail,
+			},
+			select: {
+				id: true,
+			},
+		});
+
+		if (isEmailExist) {
+			return handlerNativeResponse(
+				{
+					status: 409,
+					errors: {
+						message: "Email already taken. please use another email.",
+					},
+				},
+				400
+			);
+		}
+
 		const newBooking = await db.request.create({
 			data: {
 				name,
@@ -43,9 +64,10 @@ export async function POST(req: NextRequest) {
 			);
 		}
 		const emailHtml = render(NewRequest({ name, email, phone, question }));
+		const adminEmail = "whoisfde@gmail.com";
 		await sendMail({
 			name: "whoisfde",
-			to: formattedEmail,
+			to: adminEmail,
 			subject: "New Request Form for OG's",
 			html: emailHtml,
 		});

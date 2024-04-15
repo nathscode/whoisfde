@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 
 import {
@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useMount from "@/hooks/use-mount";
-import { apiClient } from "@/lib/constants";
 import {
 	UserReviewSchema,
 	UserReviewSchemaInfer,
@@ -47,7 +46,7 @@ const NormalUserReview = (props: Props) => {
 				name,
 				content,
 			};
-			const { data } = await apiClient.post("/reviews/normal", payload);
+			const { data } = await axios.post("/api/reviews/normal", payload);
 			return data;
 		},
 		onSuccess: (data) => {

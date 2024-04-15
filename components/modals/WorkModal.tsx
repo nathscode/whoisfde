@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -31,17 +31,16 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import useMount from "@/hooks/use-mount";
-import { apiClient } from "@/lib/constants";
 import { WorkSchema, WorkSchemaInfer } from "@/lib/validators/work";
-import { Accept, useDropzone } from "react-dropzone";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import LoadingButton from "../common/LoadingButton";
-import { ScrollArea } from "../ui/scroll-area";
-import { useToast } from "../ui/use-toast";
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Accept, useDropzone } from "react-dropzone";
+import LoadingButton from "../common/LoadingButton";
 import { Label } from "../ui/label";
+import { ScrollArea } from "../ui/scroll-area";
+import { useToast } from "../ui/use-toast";
 
 type Props = {};
 
@@ -79,7 +78,7 @@ const WorkModal = (props: Props) => {
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (FormData: FormData) => {
-			const { data } = await apiClient.post("/work/", FormData);
+			const { data } = await axios.post("/api/work/", FormData);
 			return data;
 		},
 		onSuccess: (data) => {

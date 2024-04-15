@@ -1,8 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
-import { useState } from "react";
+import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useMount from "@/hooks/use-mount";
-import { apiClient } from "@/lib/constants";
 import { RequestSchema, RequestSchemaInfer } from "@/lib/validators/request";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -65,7 +63,7 @@ const RequestModal = (props: Props) => {
 				email,
 				question,
 			};
-			const { data } = await apiClient.post("/request", payload);
+			const { data } = await axios.post("/api/request", payload);
 			return data;
 		},
 		onSuccess: (data) => {

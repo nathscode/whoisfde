@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 
 import {
@@ -14,23 +14,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useMount from "@/hooks/use-mount";
-import { apiClient } from "@/lib/constants";
 import {
 	OgUserReviewSchema,
 	OgUserReviewSchemaInfer,
 } from "@/lib/validators/og-user-reviews";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import LoadingButton from "../common/LoadingButton";
-import { Textarea } from "../ui/textarea";
 import { CustomUser } from "@/types";
-import { useToast } from "../ui/use-toast";
-import RequestModal from "../modals/RequestModal";
+import { useMutation } from "@tanstack/react-query";
 import { ImageIcon } from "lucide-react";
-import { Accept, useDropzone } from "react-dropzone";
-import { useState } from "react";
-import { Label } from "../ui/label";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Accept, useDropzone } from "react-dropzone";
+import LoadingButton from "../common/LoadingButton";
+import RequestModal from "../modals/RequestModal";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { useToast } from "../ui/use-toast";
 
 type Props = {
 	session: CustomUser;
@@ -67,7 +66,7 @@ const OgUserReview = ({ session }: Props) => {
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (FormData: FormData) => {
-			const { data } = await apiClient.post("/reviews/ogs", FormData);
+			const { data } = await axios.post("/api/reviews/ogs", FormData);
 			return data;
 		},
 		onSuccess: (data) => {

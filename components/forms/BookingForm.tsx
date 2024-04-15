@@ -1,8 +1,4 @@
 "use client";
-import React, { useRef } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { BookingSchema, BookingSchemaInfer } from "@/lib/validators/booking";
 import {
 	Form,
 	FormControl,
@@ -12,6 +8,12 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -19,26 +21,23 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import Datetime from "react-datetime";
-import "react-datetime/css/react-datetime.css";
-import { Input } from "@/components/ui/input";
-import BackButton from "../common/BackButton";
-import { ScrollArea } from "../ui/scroll-area";
-import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { BookingSchema, BookingSchemaInfer } from "@/lib/validators/booking";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
 import { CalendarIcon } from "lucide-react";
 import moment from "moment";
-import LoadingButton from "../common/LoadingButton";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useRef } from "react";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import { useForm } from "react-hook-form";
+import BackButton from "../common/BackButton";
+import LoadingButton from "../common/LoadingButton";
+import { Button } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
 import { Textarea } from "../ui/textarea";
-import axios, { AxiosError } from "axios";
-import { useMutation } from "@tanstack/react-query";
-import { apiClient } from "@/lib/constants";
 import { useToast } from "../ui/use-toast";
 
 type Props = {};
@@ -81,7 +80,7 @@ const BookingForm = (props: Props) => {
 				bookType,
 				date,
 			};
-			const { data } = await apiClient.post("/booking", payload);
+			const { data } = await axios.post("/api/booking", payload);
 			return data;
 		},
 		onSuccess: (data) => {

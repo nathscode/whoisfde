@@ -16,6 +16,7 @@ import NavMenuToggle from "./NavMenuToggle";
 import { CustomUser } from "@/types";
 import { ArrowBigRight } from "lucide-react";
 import { RoleType } from "@prisma/client";
+import { Button } from "../ui/button";
 
 type Props = {
 	session?: CustomUser;
@@ -70,40 +71,14 @@ const NavMenu = ({ session }: Props) => {
 								index={idx + 1}
 								href={item.href}
 								title={item.title}
-								isAdmin={true}
+								isAdmin={isAdmin}
 							/>
 						))}
+
 						{isAdmin && (
-							<motion.li
-								className={`cursor-pointer py-4 relative w-full 
-				 "pointer-events-auto"`}
-							>
-								<Link
-									href={"/dashboard"}
-									className="flex items-center relative w-full"
-								>
-									<motion.div
-										className="absolute left-0 top-0 right-0 bottom-0 bg-black"
-										variants={itemCoverMotion}
-									/>
-									<motion.span
-										className="w-[4ch] text-white text-lg"
-										variants={itemContentMotion}
-									>
-										({"05"})
-									</motion.span>
-									<h1 className="uppercase text-white tracking-wide text-lg sm:text-5xl md:text-6xl flex-1">
-										Dashboard
-									</h1>
-									<motion.div variants={arrowMotion}>
-										<ArrowBigRight className="h-6 w-6 text-white" />
-									</motion.div>
-								</Link>
-								<motion.div
-									className="absolute bottom-0 h-[2px] bg-black w-full origin-left"
-									variants={dividerMotion}
-								/>
-							</motion.li>
+							<Button asChild className="mt-3">
+								<Link href={"/dashboard"}>Visit Dashboard</Link>
+							</Button>
 						)}
 					</motion.ul>
 				</motion.nav>

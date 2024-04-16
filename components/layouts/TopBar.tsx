@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const TopBar = () => {
-	const [dropdownMenu, setDropdownMenu] = useState(false);
 	const pathname = usePathname();
 
 	return (
@@ -48,8 +47,8 @@ const TopBar = () => {
 					<Menu className="cursor-pointer md:hidden" />
 				</DropdownMenuTrigger>
 				<DropdownMenuContent className="max-w-sm">
-					{navLinks.map((link) => (
-						<DropdownMenuItem className="px-10 py-3 justify-start">
+					{navLinks.map((link, idx) => (
+						<DropdownMenuItem key={idx} className="px-10 py-3 justify-start">
 							<Link
 								href={link.url}
 								key={link.label}

@@ -1,6 +1,7 @@
 import checkIsAdmin from "@/actions/checkIsAdmin";
 import { getSingleRequestById } from "@/actions/getSingleRequestById";
 import BackButton from "@/components/common/BackButton";
+import RequestDeleteButton from "@/components/common/RequestDeleteButton";
 import RegisterModal from "@/components/modals/RegisterModal";
 import { redirect } from "next/navigation";
 
@@ -58,8 +59,9 @@ const RequestDetailPage = async ({ params }: PageProps) => {
 						</ul>
 					</div>
 					{isAdmin && (
-						<div className="flex flex-col justify-start my-4">
+						<div className="flex flex-col space-y-3 justify-start  my-4">
 							<RegisterModal />
+							<RequestDeleteButton id={request.id} />
 						</div>
 					)}
 				</div>

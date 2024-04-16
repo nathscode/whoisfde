@@ -30,10 +30,13 @@ import LoadingButton from "../common/LoadingButton";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
 import LoginModal from "./LoginModal";
+import { createRequest } from "@/actions/createRequest";
+import { useTransition } from "react";
 
 type Props = {};
 
 const RequestModal = (props: Props) => {
+	const [isLoading, startTransition] = useTransition();
 	const isMounted = useMount();
 	const router = useRouter();
 	const { toast } = useToast();
@@ -48,60 +51,14 @@ const RequestModal = (props: Props) => {
 		},
 	});
 
-	const isLoading = form.formState.isSubmitting;
-
-	const { mutate, isPending } = useMutation({
-		mutationFn: async ({
-			name,
-			phone,
-			email,
-			question,
-		}: RequestSchemaInfer) => {
-			const payload: RequestSchemaInfer = {
-				name,
-				phone,
-				email,
-				question,
-			};
-			const { data } = await axios.post("/api/request", payload);
-			return data;
-		},
-		onSuccess: (data) => {
-			window.location.reload();
-			form.reset();
-			return toast({
-				description: "Your Request submitted successfully, awaiting approval",
-			});
-		},
-		onError: (err: any) => {
-			if (err instanceof AxiosError) {
-				if (err.response?.data?.status === 409) {
-					return toast({
-						title: "An error occurred.",
-						description: `${err.response?.data?.errors?.message}`,
-						variant: "destructive",
-					});
-				}
-
-				if (err.response?.status === 422) {
-					return toast({
-						title: "Invalid credentials.",
-						description: `${err.response.data?.errors?.message}`,
-						variant: "destructive",
-					});
-				}
-				toast({
-					title: "There was an error",
-					description:
-						"Could not create request, check your network connections",
-					variant: "destructive",
-				});
-			}
-		},
-	});
-
 	const onSubmit = async (values: RequestSchemaInfer) => {
-		mutate(values);
+		startTransition(async () => {
+			const result = await createRequest(values);
+			router.refresh();
+			toast({ title: `${result.message}` });
+			window.location.reload();
+		});
+		form.reset();
 	};
 	if (!isMounted) {
 		return null;
@@ -133,7 +90,7 @@ const RequestModal = (props: Props) => {
 							<FormField
 								control={form.control}
 								name="name"
-								disabled={isPending}
+								disabled={isLoading}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
@@ -155,7 +112,7 @@ const RequestModal = (props: Props) => {
 							<FormField
 								control={form.control}
 								name="phone"
-								disabled={isPending}
+								disabled={isLoading}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
@@ -177,7 +134,7 @@ const RequestModal = (props: Props) => {
 							<FormField
 								control={form.control}
 								name="email"
-								disabled={isPending}
+								disabled={isLoading}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
@@ -204,7 +161,7 @@ const RequestModal = (props: Props) => {
 										<FormLabel>Who is Fde</FormLabel>
 										<FormControl>
 											<Textarea
-												disabled={isPending}
+												disabled={isLoading}
 												className="bg-gray-100 rounded-none"
 												placeholder="Who is Fde"
 												id="question"
@@ -218,7 +175,7 @@ const RequestModal = (props: Props) => {
 
 							<LoadingButton
 								type="submit"
-								loading={isPending}
+								loading={isLoading}
 								className="mt-6 w-full"
 							>
 								Submit

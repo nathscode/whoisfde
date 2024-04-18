@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
 
 		const user = await db.user.findUnique({
 			where: {
-				email			
+				verificationCode: code		
 			},
 			select: {
 				id: true,

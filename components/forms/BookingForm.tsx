@@ -118,7 +118,6 @@ const BookingForm = (props: Props) => {
 
 	function onSubmit(values: BookingSchemaInfer) {
 		mutate(values);
-		console.log(values);
 	}
 	return (
 		<div className="container">

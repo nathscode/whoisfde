@@ -2,6 +2,7 @@
 
 import { CustomUser } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import UserDeleteButton from "../common/UserDeleteButton";
 
 export const UserColumns: ColumnDef<CustomUser>[] = [
 	{
@@ -26,6 +27,6 @@ export const UserColumns: ColumnDef<CustomUser>[] = [
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => <span>View</span>,
+		cell: ({ row }) => <UserDeleteButton id={row.original.id!} />,
 	},
 ];

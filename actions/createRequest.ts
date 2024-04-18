@@ -19,7 +19,6 @@ export async function createRequest(values: z.infer<typeof RequestSchema>) {
 		}
 
 		const { name, email, phone, question } = validatedFields.data;
-
 		const formattedEmail = email.toLowerCase();
 
 		const isEmailExist = await db.request.findUnique({
@@ -36,7 +35,8 @@ export async function createRequest(values: z.infer<typeof RequestSchema>) {
 				message: "Email already taken. please use another email.",
 			};
 		}
-		const newBooking = await db.request.create({
+
+		const createRequestObj = await db.request.create({
 			data: {
 				name,
 				email: formattedEmail,
@@ -44,11 +44,13 @@ export async function createRequest(values: z.infer<typeof RequestSchema>) {
 				answer: question,
 			},
 		});
-		if (!newBooking) {
+
+		if (!createRequestObj) {
 			return {
 				message: "Request not created, Try refreshing and try again",
 			};
 		}
+
 		const emailHtml = render(NewRequest({ name, email, phone, question }));
 		const adminEmail = "whoisfde@gmail.com";
 		await sendMail({
@@ -57,8 +59,11 @@ export async function createRequest(values: z.infer<typeof RequestSchema>) {
 			subject: "New Request Form for OG's",
 			html: emailHtml,
 		});
+
 		return { message: "Request sent successfully." };
+
 	} catch (error) {
+		console.error("Error in createRequest:", error);
 		return { message: "Database Error: Failed to create request." };
 	}
 }

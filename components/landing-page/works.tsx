@@ -57,7 +57,7 @@ export default function Works() {
 
 				<div className="flex justify-end gap-2 items-center mt-4 md:mt-6">
 					<Link
-						href={"/pricing"}
+						href={"/package"}
 						className="flex justify-center w-fit px-10 py-3 mt-4 text-sm font-semibold text-white bg-black border border-black rounded active:text-gray-500 hover:bg-transparent hover:text-black focus:outline-none focus:ring"
 					>
 						View Packages

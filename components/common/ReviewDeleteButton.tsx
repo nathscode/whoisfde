@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import { Loader2, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ConfirmModal } from "../modals/ConfirmModal";
-import { Loader2, Trash } from "lucide-react";
 
 type Props = {
 	id: string | null;

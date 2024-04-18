@@ -84,8 +84,8 @@ const BookingForm = (props: Props) => {
 			return data;
 		},
 		onSuccess: (data) => {
-			window.location.reload();
 			form.reset();
+			window.location.reload();
 			return toast({
 				description: "Booking created successfully",
 			});

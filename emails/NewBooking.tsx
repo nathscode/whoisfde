@@ -12,6 +12,7 @@ import {
 } from "@react-email/components";
 
 interface Props {
+	id: string;
 	name: string;
 	email: string;
 	phone: string;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const NewBooking = ({
+	id,
 	name,
 	email,
 	phone,
@@ -114,7 +116,7 @@ const NewBooking = ({
 					</Section>
 					<Section style={{ textAlign: "center" }}>
 						<Link
-							href={`${process.env.NEXT_PUBLIC_APP_URL}/booking/${bookNumber}}`}
+							href={`${process.env.NEXT_PUBLIC_APP_URL}/book/${id}}`}
 							style={cta}
 						>
 							View Booking

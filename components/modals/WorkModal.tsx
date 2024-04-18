@@ -78,7 +78,11 @@ const WorkModal = (props: Props) => {
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (FormData: FormData) => {
-			const { data } = await axios.post("/api/work/", FormData);
+			const { data } = await axios.post("/api/work/", FormData, {
+				 headers: {
+					 'Content-Type': 'multipart/form-data',
+				 }
+			});
 			return data;
 		},
 		onSuccess: (data) => {

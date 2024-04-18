@@ -16,13 +16,13 @@ export async function GET(req: NextRequest) {
 		const code = params.code;
 		const email = params.email;
 
-		const user = await db.user.findFirst({
+		const user = await db.user.findUnique({
 			where: {
-				email,
-				verificationCode: code,
+				email			
 			},
 			select: {
 				id: true,
+				verificationCode: true
 			},
 		});
 
@@ -31,12 +31,24 @@ export async function GET(req: NextRequest) {
 				{
 					status: 409,
 					errors: {
-						message: "Code is Invalid.",
+						message: "User is not found.",
 					},
 				},
 				400
 			);
 		}
+		if (user.verificationCode !== code){
+				return handlerNativeResponse(
+								{
+									status: 409,
+									errors: {
+										message: "Invalid Code.",
+									},
+								},
+								400
+				);
+		}
+
 		await db.user.update({
 			where: { id: user.id },
 			data: {

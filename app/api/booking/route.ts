@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { ZodError } from "zod";
 import NewBooking from "@/emails/NewBooking";
+import { addOneHour } from "@/lib/utils";
 
 async function generateUniqueBookingNumberCode(): Promise<string> {
 	let bookingNumber: string;
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
 			payload.data;
 
 		const formattedEmail = email.toLowerCase();
+		const newDate = addOneHour(date)
 
 		const bookingNumber = await generateUniqueBookingNumberCode();
 
@@ -51,7 +53,7 @@ export async function POST(req: NextRequest) {
 				email: formattedEmail,
 				bookingNumber,
 				phone,
-				date,
+				date: newDate,
 				typeOfEvent,
 				bookType,
 				note,
@@ -67,8 +69,9 @@ export async function POST(req: NextRequest) {
 		let bookNumber = newBooking.bookingNumber!;
 		let bookDate = newBooking.date!;
 		let type = newBooking.bookType!;
+		let id = newBooking.id!;
 		const emailHtml = render(
-			NewBooking({ name, email, phone, bookNumber, bookDate, type })
+			NewBooking({id, name, email, phone, bookNumber, bookDate, type })
 		);
 		await sendMail({
 			name: "whoisfde",

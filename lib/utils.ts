@@ -6,6 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export function addOneHour(date: Date): Date {
+ const newDate = new Date(date);
+ newDate.setHours(newDate.getHours() + 1);
+ return newDate;
+}
+
 export function stringifyObj(data: Object) {
 	if (typeof data !== "object") return data;
 	return JSON.parse(JSON.stringify(data));

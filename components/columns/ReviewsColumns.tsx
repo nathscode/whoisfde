@@ -19,7 +19,9 @@ export const ReviewsColumns: ColumnDef<SafeReview>[] = [
 	{
 		accessorKey: "content",
 		header: "Content",
-		cell: ({ row }) => row.original.content,
+		cell: ({ row }) => (
+			<div className="max-w-md whitespace-normal">{row.original.content}</div>
+		),
 	},
 	{
 		accessorKey: "Created",
@@ -28,6 +30,8 @@ export const ReviewsColumns: ColumnDef<SafeReview>[] = [
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => <DeleteButton id={row.original.id} url={"reviews/normal"}/>
+		cell: ({ row }) => (
+			<DeleteButton id={row.original.id} url={"reviews/normal"} />
+		),
 	},
 ];

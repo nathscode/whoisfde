@@ -200,6 +200,14 @@ const LoginModal = (props: Props) => {
 									</FormItem>
 								)}
 							/>
+							<div className="flex flex-col justify-end text-right w-full my-5">
+								<Link
+									href={"auth/account/forget-password"}
+									className="text-sm hover:underline"
+								>
+									Forget Password
+								</Link>
+							</div>
 							<LoadingButton
 								type="submit"
 								loading={isPending}

@@ -7,9 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function addOneHour(date: Date): Date {
- const newDate = new Date(date);
- newDate.setHours(newDate.getHours() + 1);
- return newDate;
+	const newDate = new Date(date);
+	newDate.setHours(newDate.getHours() + 1);
+	return newDate;
 }
 
 export function stringifyObj(data: Object) {
@@ -39,4 +39,13 @@ export function getValueAfterYoutuBe(url: string): string | null {
 		console.error("Invalid URL", error);
 		return null;
 	}
+}
+
+export function generateRandomNumbers(count: number): string {
+	let numbers: string[] = [];
+	for (let i = 0; i < count; i++) {
+		let randomNumber = Math.floor(Math.random() * (9 - 0) + 0);
+		numbers.push(randomNumber.toString());
+	}
+	return numbers.join("");
 }

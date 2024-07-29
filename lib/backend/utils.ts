@@ -5,6 +5,10 @@ export function handlerNativeResponse(data: any, status: number) {
 	});
 }
 
+export function normalizeEmail(email: string): string {
+	return email.trim().toLowerCase();
+}
+
 export function generateRandomString(): string {
 	const characters =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

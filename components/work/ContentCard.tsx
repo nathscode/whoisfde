@@ -14,12 +14,11 @@ const ContentCard = ({ data }: Props) => {
 
 	const mobile = media ? "320px" : "500px";
 
-	console.log(data);
 	return (
-		<div className="flex flex-col justify-center  gap-4 sm:flex-row sm:gap-2">
+		<div className="flex flex-col flex-wrap justify-center md:justify-start  gap-4 md:flex-row md:gap-5">
 			{data &&
 				data.map((party: any) => (
-					<div key={party.id} className="w-full md:w-1/2">
+					<div key={party.id} className="w-full md:w-1/3">
 						{party.links ? (
 							<YoutubeEmbed
 								id={getValueAfterYoutuBe(party.links)!}

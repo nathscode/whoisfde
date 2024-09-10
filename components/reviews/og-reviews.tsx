@@ -8,15 +8,19 @@ type Props = {
 export default function OgReviews({ ogReviews }: Props) {
 	return (
 		<ReviewsPadding className="flex flex-col mt-6 gap-8">
-			{ogReviews.map((review, index) => (
-				<OgReview
-					key={index}
-					name={review.user?.name!}
-					image={"/images/logo/logo-question.png"}
-					body={review.content!}
-					files={review.files!}
-				/>
-			))}
+			{ogReviews && ogReviews.length > 0 ? (
+				ogReviews.map((review, index) => (
+					<OgReview
+						key={index}
+						name={review.user?.name!}
+						image={"/images/logo/logo-question.png"}
+						body={review.content!}
+						files={review.files!}
+					/>
+				))
+			) : (
+				<p className="font-semibold text-xl">No OG Reviews Yet</p>
+			)}
 		</ReviewsPadding>
 	);
 }

@@ -11,12 +11,15 @@ export default function OrdinaryReview({
 }) {
 	return (
 		<div className="flex gap-5">
-			<div>
+			<div className="relative shrink-0 w-16  h-16 overflow-hidden  rounded-full">
 				<Image
 					src={image}
-					className="bg-slate-100 rounded-full"
-					width={45}
-					height={45}
+					fill
+					className="
+                            object-cover 
+                            h-full 
+                            w-full 
+                            transition-all"
 					alt="og"
 				/>
 			</div>

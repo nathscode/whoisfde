@@ -3,5 +3,7 @@
     "Ajakaye",
     "Brom",
     "vespa"
-  ]
+  ],
+  "pieces.cloudCapabilities": "Blended",
+  "pieces.telemetry": true
 }

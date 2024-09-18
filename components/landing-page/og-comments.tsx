@@ -1,11 +1,10 @@
 "use client";
 
+import useMount from "@/hooks/use-mount";
 import { Suspense } from "react";
 import Reveal from "../Reveal";
-import CommentClients from "./CommentClients";
-import SuspenseSkeleton from "../skeletons/SuspenseSkeleton";
-import useMount from "@/hooks/use-mount";
 import { NormalReviewSkeleton } from "../skeletons/NormalReviewSkeleton";
+import CommentClients from "./CommentClients";
 
 export default function ClientsAndOgComments() {
 	const mount = useMount();

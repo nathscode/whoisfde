@@ -9,6 +9,25 @@ import {
 import { ZodError } from "zod";
 import getCurrentUser from "@/actions/getCurrentUser";
 import checkIsAdmin from "@/actions/checkIsAdmin";
+export async function GET() {
+	try {
+		const reviews = await db.review.findMany({
+			orderBy: { createdAt: "desc" },
+		});
+		if (!reviews) {
+			return handlerNativeResponse(
+				{ status: 400, message: "No Review yet" },
+				400
+			);
+		}
+		return NextResponse.json(reviews);
+	} catch (error: any) {
+		let status = 500;
+
+		return handlerNativeResponse({ status, message: error.message }, status);
+	}
+}
+
 export async function POST(req: NextRequest) {
 	try {
 		const body: UserReviewSchemaInfer = await req.json();
@@ -52,7 +71,6 @@ export async function POST(req: NextRequest) {
 	}
 }
 
-
 export async function DELETE(req: NextRequest) {
 	if (req.method !== "DELETE") {
 		return handlerNativeResponse(
@@ -94,7 +112,6 @@ export async function DELETE(req: NextRequest) {
 				404
 			);
 		}
-		
 
 		const reviewObj = await db.review.delete({
 			where: {

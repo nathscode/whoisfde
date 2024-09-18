@@ -12,12 +12,15 @@ import axios from "axios";
 import Image from "next/image";
 import Reveal from "../Reveal";
 import { NormalReviewSkeleton } from "../skeletons/NormalReviewSkeleton";
+import { getAllOgsReviews } from "@/actions/getAllOgsReviews";
 
 type Props = {};
 
 const CommentClients = (props: Props) => {
 	const fetchRecentReviews = async () => {
-		const response = await axios.get<SafeOgReviewExtras[]>(`/api/reviews/ogs`);
+		const response = await axios.get<SafeOgReviewExtras[]>(
+			`/api/reviews/normal`
+		);
 		return response.data;
 	};
 
@@ -111,31 +114,34 @@ const CommentClients = (props: Props) => {
 
 							<Reveal>
 								<footer className="flex items-center gap-3 mt-6 md:mt-12">
-									<a
-										href=""
-										target="_blank"
-										className="inline-block font-bold tracking-tight"
-									>
-										<p>{testimonial.user?.name}</p>
-										<p className="font-medium text-black/60 flex items-center mt-1">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												width="24"
-												height="24"
-												viewBox="0 0 24 24"
-												fill="none"
-												stroke="currentColor"
-												strokeWidth="2"
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												className="h-4 w-4 mr-2"
-											>
-												<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-												<circle cx="12" cy="10" r="3" />
-											</svg>{" "}
-											<span>{testimonial.location}</span>
+									<div className="inline-block font-bold tracking-tight">
+										<p>
+											{testimonial.user
+												? testimonial.user?.name
+												: //  @ts-ignore
+												  testimonial.name}
 										</p>
-									</a>
+										{testimonial.location && (
+											<p className="font-medium text-black/60 flex items-center mt-1">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="24"
+													height="24"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													strokeWidth="2"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													className="h-4 w-4 mr-2"
+												>
+													<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+													<circle cx="12" cy="10" r="3" />
+												</svg>{" "}
+												<span>{testimonial.location}</span>
+											</p>
+										)}
+									</div>
 								</footer>
 							</Reveal>
 						</blockquote>

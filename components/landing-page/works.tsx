@@ -8,6 +8,7 @@ import PartiesContent from "../work/PartiesContent";
 import PhotographyContent from "../work/PhotographyContent";
 import WeddingContent from "../work/WeddingContent";
 import Reveal from "../Reveal";
+import { VideoPlayer } from "../VideoPlayer";
 
 export default function Works() {
 	const [activeComponent, setActiveComponent] = useState(<ConcertContent />);
@@ -22,6 +23,7 @@ export default function Works() {
 							MY WORKS
 						</div>
 					</Reveal>
+
 					<div className=" my-8 text-[10.5px] sm:text-[14px] md:text-[18px]">
 						<TabController
 							elementsStyle="flex justify-start space-x-5 items-center mb-1"

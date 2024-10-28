@@ -17,7 +17,7 @@ const UsersPage = async () => {
 			<div className="grid grid-cols-2 md:grid-cols-3 gap-10">
 				<Card>
 					<CardHeader className="flex flex-row justify-between items-center">
-						<CardTitle className="text-lg">Total Users</CardTitle>
+						<CardTitle className="text-lg">Total Works</CardTitle>
 						<User className="max-sm:hidden" />
 					</CardHeader>
 					<CardContent>

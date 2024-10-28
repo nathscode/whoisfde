@@ -34,19 +34,20 @@ import useMount from "@/hooks/use-mount";
 import { WorkSchema, WorkSchemaInfer } from "@/lib/validators/work";
 import { useMutation } from "@tanstack/react-query";
 import { ImageIcon } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Accept, useDropzone } from "react-dropzone";
 import LoadingButton from "../common/LoadingButton";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
 import { useToast } from "../ui/use-toast";
+import { bytesToSize } from "../util/bytesToSize";
 
 type Props = {};
 
 const WorkModal = (props: Props) => {
-	const [files, setFiles] = useState<File>();
+	const [fileUrl, setFileUrl] = useState<File>();
 	const [check, setCheck] = useState<boolean>(false);
+	const [progress, setProgress] = useState<number>(0);
 
 	const isMounted = useMount();
 	const router = useRouter();
@@ -58,10 +59,10 @@ const WorkModal = (props: Props) => {
 		isDragActive: isDragActive,
 		acceptedFiles: acceptedFiles,
 	} = useDropzone({
-		accept: ["image/*", "video/*"] as unknown as Accept,
-		maxSize: 10 * 1024 * 1024, // 10MB
+		accept: ["video/*"] as unknown as Accept,
+		maxSize: 500 * 1024 * 1024,
 		onDrop: (acceptedFiles) => {
-			setFiles(acceptedFiles[0]);
+			setFileUrl(acceptedFiles[0]);
 		},
 	});
 
@@ -78,21 +79,29 @@ const WorkModal = (props: Props) => {
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (FormData: FormData) => {
-			const { data } = await axios.post("/api/work/", FormData, {
-				 headers: {
-					 'Content-Type': 'multipart/form-data',
-				 }
+			const { data } = await axios.post("/api/work/upload-chuck", FormData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+				onUploadProgress: (progressEvent) => {
+					const percentCompleted = Math.round(
+						(progressEvent.loaded * 100) / progressEvent.total!
+					);
+					setProgress(percentCompleted);
+				},
 			});
 			return data;
 		},
 		onSuccess: (data) => {
 			form.reset();
+			setProgress(0);
 			window.location.reload();
 			return toast({
 				description: "Work created successfully",
 			});
 		},
 		onError: (err: any) => {
+			setProgress(0);
 			if (err instanceof AxiosError) {
 				if (err.response?.data?.status === 409) {
 					return toast({
@@ -128,10 +137,10 @@ const WorkModal = (props: Props) => {
 		formData.append("caption", values.caption);
 		formData.append("links", values.link || "");
 		formData.append("workType", values.workType);
-		formData.append("files", files!);
+		formData.append("files", fileUrl!);
 		mutate(formData);
 		form.reset();
-		setFiles(undefined);
+		setFileUrl(undefined);
 	};
 
 	if (!isMounted) {
@@ -251,46 +260,65 @@ const WorkModal = (props: Props) => {
 								</Label>
 							</div>
 							{check && (
-								<div className="flex flex-col">
-									<Label className="mb-4"> File</Label>
-									<div
-										{...getRootProps()}
-										className={`border-2 border-dashed rounded-lg p-4 ${
-											isDragActive ? "border-blue-500" : "border-gray-300"
-										}`}
-									>
-										<input {...getInputProps()} />
-										{isDragActive ? (
-											<p>Drop the files here ...</p>
-										) : (
-											<div className="flex items-start justify-start">
-												<div>
-													<ImageIcon className="w-10 h-10" />
+								<>
+									<div className="flex flex-col">
+										<Label className="mb-4"> File</Label>
+										<div
+											{...getRootProps()}
+											className={`border-2 border-dashed rounded-lg p-4 ${
+												isDragActive ? "border-blue-500" : "border-gray-300"
+											}`}
+										>
+											<input {...getInputProps()} />
+											{isDragActive ? (
+												<p>Drop the files here ...</p>
+											) : (
+												<div className="flex items-start justify-start">
+													<div>
+														<ImageIcon className="w-10 h-10" />
+													</div>
+													<div className="ml-4">
+														<p className="text-sm">
+															{isDragActive
+																? "Drop the files here"
+																: "Drag and drop files here or click to select"}
+														</p>
+														<p className="text-xs text-gray-500 mt-1">
+															Accepted file types: AVI, MOV, MP4. Max file size:
+															500MB.
+														</p>
+													</div>
 												</div>
-												<div className="ml-4">
-													<p className="text-sm">
-														{isDragActive
-															? "Drop the files here"
-															: "Drag and drop files here or click to select"}
-													</p>
-													<p className="text-xs text-gray-500 mt-1">
-														Accepted file types: PNG, JPEG, JPG, MP4. Max file
-														size: 10MB.
-													</p>
+											)}
+											{fileUrl && (
+												<div className="flex flex-col w-full mt-4">
+													<div className="flex justify-between items-center">
+														<p>File name</p>
+														<p className="truncate w-[200px]">
+															{fileUrl?.name.toString()}
+														</p>
+													</div>
+													<div className="flex justify-between items-center">
+														<p>File size</p>
+														<p>{bytesToSize(acceptedFiles[0].size)}</p>
+													</div>
+												</div>
+											)}
+										</div>
+									</div>
+									<div className="flex flex-col">
+										{progress > 0 && (
+											<div className="w-full bg-gray-200 rounded-full mt-2">
+												<div
+													className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+													style={{ width: `${progress}%` }}
+												>
+													{progress}%
 												</div>
 											</div>
 										)}
-										{acceptedFiles.length > 0 && (
-											<Image
-												src={URL.createObjectURL(acceptedFiles[0])}
-												alt={acceptedFiles[0].name}
-												height={14}
-												width={14}
-												className="h-14 w-14 object-cover"
-											/>
-										)}
 									</div>
-								</div>
+								</>
 							)}
 							<LoadingButton
 								type="submit"

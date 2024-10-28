@@ -2,11 +2,11 @@ import { db } from "@/config/db.config";
 import { getRandomNumber, handlerNativeResponse } from "@/lib/backend/utils";
 import { NextRequest, NextResponse } from "next/server";
 
+import checkIsAdmin from "@/actions/checkIsAdmin";
 import getCurrentUser from "@/actions/getCurrentUser";
 import { s3 } from "@/actions/getS3Client";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { ZodError } from "zod";
-import checkIsAdmin from "@/actions/checkIsAdmin";
 
 const Bucket = process.env.TEBI_BUCKET_NAME;
 

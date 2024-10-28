@@ -4,6 +4,7 @@ import React from "react";
 import { useMediaQuery } from "usehooks-ts";
 import YoutubeEmbed from "../common/YoutubeEmbed";
 import Image from "next/image";
+import { VideoPlayer } from "../VideoPlayer";
 
 type Props = {
 	data: any;
@@ -25,10 +26,7 @@ const ContentCard = ({ data }: Props) => {
 								caption={party.captions}
 							/>
 						) : party.workFiles[0] ? (
-							<video controls width={mobile}>
-								<source src={party.workFiles[0].url!} type={`video/mp4`} />
-								Your browser does not support the video tag.
-							</video>
+							<VideoPlayer videoUrl={party.workFiles[0].url!} width={mobile} />
 						) : (
 							<Image
 								src={"/images/logo/logo-question.png"}

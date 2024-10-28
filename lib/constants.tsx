@@ -8,7 +8,10 @@ import {
 	UsersRound,
 } from "lucide-react";
 
-export const baseURL = `${process.env.NEXT_PUBLIC_APP_URL}/api`;
+export const baseURL = process.env.NEXT_PUBLIC_APP_URL
+	? `${process.env.NEXT_PUBLIC_APP_URL.trim()}/api`.replace(/^\/+/, "")
+	: "/api";
+
 export const apiClient = axios.create({
 	baseURL,
 });

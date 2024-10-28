@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { getFilenameFromUrl } from "./util/getVideoId";
-import { baseURL } from "@/lib/constants";
 import Loading from "@/app/loading";
 
 interface VideoPlayerProps {
@@ -78,7 +77,7 @@ export const VideoPlayer = ({
 				controls
 				className="w-full h-auto max-w-full"
 			>
-				<source src={`${baseURL}/video/${videoId}`} type="video/mp4" />
+				<source src={`/api/video/${videoId}`} type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
 		</div>

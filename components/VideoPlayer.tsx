@@ -26,9 +26,10 @@ export const VideoPlayer = ({
 		const videoElement = videoRef.current;
 
 		if (videoElement) {
-			const handleError = (e: ErrorEvent) => {
-				console.error("Video loading error:", e);
-				setError("Failed to load video");
+			const handleError = (e: Event) => {
+				const errorDetails = videoElement.error;
+				console.error("Video loading error:", errorDetails);
+				setError("Failed to load video. Please try again later.");
 			};
 
 			const handleLoadStart = () => {
@@ -41,18 +42,18 @@ export const VideoPlayer = ({
 			};
 
 			// Add event listeners
-			videoElement.addEventListener("error", handleError as EventListener);
+			videoElement.addEventListener("error", handleError);
 			videoElement.addEventListener("loadstart", handleLoadStart);
 			videoElement.addEventListener("loadeddata", handleLoadedData);
 
-			// Reset video when URL changes
+			// Load the video
 			videoElement.pause();
-			videoElement.removeAttribute("src");
+			videoElement.src = `/api/video/${videoId}`;
 			videoElement.load();
 
 			// Cleanup event listeners
 			return () => {
-				videoElement.removeEventListener("error", handleError as EventListener);
+				videoElement.removeEventListener("error", handleError);
 				videoElement.removeEventListener("loadstart", handleLoadStart);
 				videoElement.removeEventListener("loadeddata", handleLoadedData);
 			};
@@ -77,7 +78,6 @@ export const VideoPlayer = ({
 				controls
 				className="w-full h-auto max-w-full"
 			>
-				<source src={`/api/video/${videoId}`} type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
 		</div>

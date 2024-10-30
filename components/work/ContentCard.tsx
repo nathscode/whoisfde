@@ -5,6 +5,7 @@ import { useMediaQuery } from "usehooks-ts";
 import YoutubeEmbed from "../common/YoutubeEmbed";
 import Image from "next/image";
 import { VideoPlayer } from "../VideoPlayer";
+import NewVideoPlayer from "../NewVideoPlayer";
 
 type Props = {
 	data: any;
@@ -26,7 +27,10 @@ const ContentCard = ({ data }: Props) => {
 								caption={party.captions}
 							/>
 						) : party.workFiles[0] ? (
-							<VideoPlayer videoUrl={party.workFiles[0].url!} width={mobile} />
+							<NewVideoPlayer
+								videoUrl={party.workFiles[0].url!}
+								width={mobile}
+							/>
 						) : (
 							<Image
 								src={"/images/logo/logo-question.png"}

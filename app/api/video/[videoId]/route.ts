@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { s3 } from "@/actions/getS3Client";
-import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand, GetObjectCommandOutput } from "@aws-sdk/client-s3";
 
 const BucketName = process.env.TEBI_BUCKET_NAME;
 
@@ -35,11 +35,11 @@ export async function GET(
 		const bucketParams = {
 			Bucket: BucketName,
 			Key: `works/${videoKey}`,
-			Range: `bytes=${start}-${end ?? ""}`,
+			Range: `bytes=${start}-${end !== undefined ? end : ""}`,
 		};
 
 		const command = new GetObjectCommand(bucketParams);
-		const s3Response = await s3.send(command);
+		const s3Response: GetObjectCommandOutput = await s3.send(command);
 
 		if (!s3Response.Body) {
 			return NextResponse.json(
@@ -48,22 +48,20 @@ export async function GET(
 			);
 		}
 
+		// Check ContentLength and handle it safely
+		const contentLength = s3Response.ContentLength ?? 0; // Default to 0 if undefined
+		const actualEnd = end !== undefined ? end : contentLength - 1;
+
 		// Prepare headers for range-based response
 		const headers: Record<string, string> = {
 			"Accept-Ranges": "bytes",
-			"Content-Type": "video/mp4",
-			"Access-Control-Allow-Origin": "https://www.whoisfde.com",
+			"Content-Type": "video/mp4", // Change this if your video format is different
+			"Access-Control-Allow-Origin": "*", // Adjust as necessary for your CORS policy
 			"Access-Control-Expose-Headers":
 				"Content-Range, Accept-Ranges, Content-Length",
+			"Content-Range": `bytes ${start}-${actualEnd}/${contentLength}`,
+			"Content-Length": (actualEnd - start + 1).toString(),
 		};
-
-		if (s3Response.ContentRange) {
-			headers["Content-Range"] = s3Response.ContentRange;
-		}
-
-		if (s3Response.ContentLength !== undefined) {
-			headers["Content-Length"] = s3Response.ContentLength.toString();
-		}
 
 		// Return video stream with partial content status
 		return new NextResponse(s3Response.Body as any, {

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { getFilenameFromUrl } from "./util/getVideoId";
 import Loading from "@/app/loading";
 
 interface VideoPlayerProps {
@@ -20,44 +19,39 @@ export const VideoPlayer = ({
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 
-	const videoId = getFilenameFromUrl(videoUrl);
-
 	useEffect(() => {
 		const videoElement = videoRef.current;
 
-		if (videoElement) {
-			const handleError = (e: Event) => {
-				const errorDetails = videoElement.error;
-				console.error("Video loading error:", errorDetails);
-				setError("Failed to load video. Please try again later.");
-			};
+		if (!videoElement) return;
 
-			const handleLoadStart = () => {
-				setIsLoading(true);
-				setError(null);
-			};
+		const handleError = () => {
+			setError("Failed to load video. Please try again later.");
+			setIsLoading(false);
+		};
 
-			const handleLoadedData = () => {
-				setIsLoading(false);
-			};
+		const handleLoadStart = () => {
+			setIsLoading(true);
+			setError(null);
+		};
 
-			// Add event listeners
-			videoElement.addEventListener("error", handleError);
-			videoElement.addEventListener("loadstart", handleLoadStart);
-			videoElement.addEventListener("loadeddata", handleLoadedData);
+		const handleLoadedData = () => {
+			setIsLoading(false);
+		};
 
-			// Load the video
-			videoElement.pause();
-			videoElement.src = `/api/video/${videoId}`;
-			videoElement.load();
+		videoElement.addEventListener("error", handleError);
+		videoElement.addEventListener("loadstart", handleLoadStart);
+		videoElement.addEventListener("loadeddata", handleLoadedData);
 
-			// Cleanup event listeners
-			return () => {
-				videoElement.removeEventListener("error", handleError);
-				videoElement.removeEventListener("loadstart", handleLoadStart);
-				videoElement.removeEventListener("loadeddata", handleLoadedData);
-			};
+		if (videoElement.src !== videoUrl) {
+			videoElement.src = videoUrl; // Set the source only if it's different
+			videoElement.load(); // Load the new video
 		}
+
+		return () => {
+			videoElement.removeEventListener("error", handleError);
+			videoElement.removeEventListener("loadstart", handleLoadStart);
+			videoElement.removeEventListener("loadeddata", handleLoadedData);
+		};
 	}, [videoUrl]);
 
 	if (error) {
@@ -78,8 +72,11 @@ export const VideoPlayer = ({
 				controls
 				className="w-full h-auto max-w-full"
 			>
+				<source src={videoUrl} type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
 		</div>
 	);
 };
+
+// className="w-full h-auto max-w-full"

@@ -23,6 +23,8 @@ export async function POST(req: NextRequest) {
 		const workType = formData.get("workType") as string;
 		const links = formData.get("links") as string;
 
+		console.log({ file });
+
 		const session = await getCurrentUser();
 		if (!session) {
 			return handlerNativeResponse(

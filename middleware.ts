@@ -4,7 +4,21 @@ import { RoleType } from "@prisma/client";
 
 export default withAuth(
 	function middleware(req: NextRequestWithAuth) {
+		const response = NextResponse.next();
 		const token = req?.nextauth.token;
+		response.headers.set("Access-Control-Allow-Origin", "*");
+		response.headers.set(
+			"Access-Control-Allow-Methods",
+			"GET, POST, PUT, DELETE, OPTIONS"
+		);
+		response.headers.set(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization"
+		);
+		response.headers.set("Cross-Origin-Embedder-Policy", "credentialless");
+		response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
+
+		return response;
 
 		if (
 			token?.user.role !== RoleType.ADMIN &&

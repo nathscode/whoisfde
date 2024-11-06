@@ -1,8 +1,10 @@
 "use client";
 
+import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -32,10 +34,18 @@ import {
 import { Switch } from "@/components/ui/switch";
 import useMount from "@/hooks/use-mount";
 import { WorkSchema, WorkSchemaInfer } from "@/lib/validators/work";
+import {
+	FileActions,
+	QualityType,
+	VideoFormats,
+	VideoInputSettings,
+} from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Accept, useDropzone } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
+import { VideoCondenseProgress } from "../VideoCompressProgress";
+import { VideoOutputDetails } from "../VideoOutputDetail";
 import LoadingButton from "../common/LoadingButton";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
@@ -44,27 +54,72 @@ import { bytesToSize } from "../util/bytesToSize";
 
 type Props = {};
 
+const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
+
 const WorkModal = (props: Props) => {
+	const [ffmpeg] = useState(() => new FFmpeg());
 	const [fileUrl, setFileUrl] = useState<File>();
-	const [check, setCheck] = useState<boolean>(false);
+	const [videoFile, setVideoFile] = useState<FileActions>();
 	const [progress, setProgress] = useState<number>(0);
 
-	const isMounted = useMount();
-	const router = useRouter();
-	const { toast } = useToast();
+	const [time, setTime] = useState<{
+		startTime?: Date;
+		elapsedSeconds?: number;
+	}>({ elapsedSeconds: 0 });
 
-	const {
-		getRootProps: getRootProps,
-		getInputProps: getInputProps,
-		isDragActive: isDragActive,
-		acceptedFiles: acceptedFiles,
-	} = useDropzone({
-		accept: ["video/*"] as unknown as Accept,
-		maxSize: 500 * 1024 * 1024,
-		onDrop: (acceptedFiles) => {
-			setFileUrl(acceptedFiles[0]);
-		},
-	});
+	const [status, setStatus] = useState<
+		"notStarted" | "converted" | "condensing"
+	>("notStarted");
+	const [check, setCheck] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>();
+
+	const { toast } = useToast();
+	const isMounted = useMount();
+
+	useEffect(() => {
+		const loadFFmpeg = async () => {
+			try {
+				await ffmpeg.load({
+					coreURL: await toBlobURL(
+						"https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
+						"text/javascript"
+					),
+					wasmURL: await toBlobURL(
+						"https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm",
+						"application/wasm"
+					),
+				});
+
+				ffmpeg.on("progress", ({ progress }) => {
+					setProgress(progress * 100);
+				});
+			} catch (error: any) {
+				console.error("FFmpeg load error:", error);
+				setError(`Failed to load FFmpeg: ${error.message}`);
+			}
+		};
+
+		loadFFmpeg();
+	}, []);
+
+	useEffect(() => {
+		let timer: NodeJS.Timeout;
+
+		if (time?.startTime && status === "condensing") {
+			timer = setInterval(() => {
+				const now = new Date();
+				const elapsedMs = now.getTime() - time.startTime!.getTime();
+				setTime((prev) => ({
+					...prev,
+					elapsedSeconds: Math.floor(elapsedMs / 1000), // Convert ms to seconds
+				}));
+			}, 1000);
+		}
+
+		return () => {
+			if (timer) clearInterval(timer);
+		};
+	}, [time?.startTime, status]);
 
 	const form = useForm({
 		resolver: zodResolver(WorkSchema),
@@ -75,6 +130,123 @@ const WorkModal = (props: Props) => {
 		},
 	});
 
+	const onDrop = useCallback((acceptedFiles: File[]) => {
+		if (acceptedFiles?.[0]) {
+			setFileUrl(acceptedFiles[0]);
+			setVideoFile({
+				fileName: acceptedFiles[0].name,
+				fileSize: acceptedFiles[0].size,
+				fileType: acceptedFiles[0].type,
+				file: acceptedFiles[0],
+				isError: false,
+			});
+		}
+	}, []);
+
+	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+		onDrop,
+		accept: { "video/*": [] },
+		maxSize: MAX_FILE_SIZE,
+	});
+
+	// Optimized video compression
+	const condense = async () => {
+		if (!videoFile?.file) return;
+
+		try {
+			setStatus("condensing");
+			setTime({ startTime: new Date(), elapsedSeconds: 0 });
+
+			const inputFileName =
+				"input" +
+				videoFile.file.name.substring(videoFile.file.name.lastIndexOf("."));
+			const outputFileName = "output.mp4";
+			await ffmpeg.writeFile(inputFileName, await fetchFile(videoFile.file));
+
+			const ffmpegCommands = [
+				"-i",
+				inputFileName,
+				// Video encoding settings
+				"-c:v",
+				"libx264", // H.264 codec
+				"-preset",
+				"superfast", // Fastest preset for quicker compression
+				"-crf",
+				"15", // Lower CRF for better quality
+				"-tune",
+				"film", // Optimize for high-quality video content
+				"-profile:v",
+				"high", // Use high profile for better quality
+				"-level",
+				"5.2", // Compatibility level for 4K video
+
+				// Resolution and bitrate settings
+				"-vf",
+				"scale=-2:2160", // Scale to 4K maintaining aspect ratio
+				"-maxrate",
+				"20M", // Higher maximum bitrate for 4K video
+				"-bufsize",
+				"40M", // Larger buffer size for rate control
+
+				// Frame rate and GOP settings
+				"-g",
+				"48", // Keyframe interval
+				"-keyint_min",
+				"48", // Minimum GOP length
+				"-sc_threshold",
+				"0", // Scene change threshold
+
+				// Audio settings
+				"-c:a",
+				"aac", // AAC audio codec
+				"-b:a",
+				"192k", // Higher audio bitrate for better quality
+				"-ar",
+				"48000", // Audio sample rate
+
+				// Output optimization
+				"-movflags",
+				"+faststart", // Enable fast start for web playback
+				"-threads",
+				"0", // Use all available CPU threads
+
+				// Additional quality settings
+				"-x264opts",
+				"rc-lookahead=48:ref=4", // Look-ahead and reference frames
+				"-pix_fmt",
+				"yuv420p", // Pixel format for compatibility
+				outputFileName,
+			];
+
+			await ffmpeg.exec(ffmpegCommands);
+
+			// Read the processed file
+			const data = await ffmpeg.readFile(outputFileName);
+			const blob = new Blob([data], { type: "video/mp4" });
+			const url = URL.createObjectURL(blob);
+
+			setVideoFile((prev) => ({
+				...prev!,
+				url,
+				outputBlob: blob,
+				output: outputFileName,
+			}));
+
+			setStatus("converted");
+			setTime((prev) => ({ ...prev, startTime: undefined }));
+			setProgress(0);
+		} catch (error) {
+			console.error("Conversion error:", error);
+			setStatus("notStarted");
+			setProgress(0);
+			setTime({ elapsedSeconds: 0, startTime: undefined });
+			toast({
+				description: "Error converting video.",
+				variant: "destructive",
+			});
+		}
+	};
+
 	const isLoading = form.formState.isSubmitting;
 
 	const { mutate, isPending } = useMutation({
@@ -83,25 +255,17 @@ const WorkModal = (props: Props) => {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
-				onUploadProgress: (progressEvent) => {
-					const percentCompleted = Math.round(
-						(progressEvent.loaded * 100) / progressEvent.total!
-					);
-					setProgress(percentCompleted);
-				},
 			});
 			return data;
 		},
 		onSuccess: (data) => {
 			form.reset();
-			setProgress(0);
 			window.location.reload();
 			return toast({
 				description: "Work created successfully",
 			});
 		},
 		onError: (err: any) => {
-			setProgress(0);
 			if (err instanceof AxiosError) {
 				if (err.response?.data?.status === 409) {
 					return toast({
@@ -137,7 +301,7 @@ const WorkModal = (props: Props) => {
 		formData.append("caption", values.caption);
 		formData.append("links", values.link || "");
 		formData.append("workType", values.workType);
-		formData.append("files", fileUrl!);
+		formData.append("files", videoFile?.outputBlob!);
 		mutate(formData);
 		form.reset();
 		setFileUrl(undefined);
@@ -300,33 +464,44 @@ const WorkModal = (props: Props) => {
 													</div>
 													<div className="flex justify-between items-center">
 														<p>File size</p>
-														<p>{bytesToSize(acceptedFiles[0].size)}</p>
+														<p>{bytesToSize(fileUrl.size)}</p>
 													</div>
 												</div>
 											)}
 										</div>
 									</div>
-									<div className="flex flex-col">
-										{progress > 0 && (
-											<div className="w-full bg-gray-200 rounded-full mt-2">
-												<div
-													className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-													style={{ width: `${progress}%` }}
-												>
-													{progress}%
-												</div>
-											</div>
-										)}
-									</div>
+									{status === "condensing" && (
+										<VideoCondenseProgress
+											progress={progress}
+											seconds={time.elapsedSeconds!}
+										/>
+									)}
 								</>
 							)}
-							<LoadingButton
-								type="submit"
-								loading={isPending}
-								className="mt-6 w-full"
-							>
-								Submit
-							</LoadingButton>
+							{status === "notStarted" && (
+								<button
+									onClick={condense}
+									type="button"
+									className="bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-zinc-700 via-zinc-950 to-zinc-950 rounded-lg text-white/90 relative px-3.5 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-500 focus:ring-zinc-950 flex-shrink-0"
+								>
+									Condense
+								</button>
+							)}
+							{status === "converted" && videoFile && (
+								<VideoOutputDetails
+									timeTaken={time.elapsedSeconds}
+									videoFile={videoFile!}
+								/>
+							)}
+							{status === "converted" && (
+								<LoadingButton
+									type="submit"
+									loading={isPending}
+									className="mt-6 w-full"
+								>
+									Submit
+								</LoadingButton>
+							)}
 						</form>
 					</Form>
 				</div>

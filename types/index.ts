@@ -50,3 +50,31 @@ export type SafeOgReviewExtras = SafeOgReview & {
 export type SafeWorkExtras = SafeWork & {
 	files: WorkFiles[];
 };
+
+export type FileActions = {
+	file: File;
+	fileName: string;
+	fileSize: number;
+	fileType: string;
+	isError?: boolean;
+	url?: string;
+	output?: any;
+	outputBlob?: Blob;
+};
+
+export enum QualityType {
+	High = "15",
+	Medium = "18",
+	Low = "20",
+}
+
+export enum VideoFormats {
+	MP4 = "mp4",
+	WEBM = "webm",
+}
+
+export type VideoInputSettings = {
+	quality: QualityType;
+	videoType: VideoFormats;
+	removeAudio: boolean;
+};

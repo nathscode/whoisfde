@@ -6,19 +6,25 @@ import { formatTimer } from "./util/convert";
 export const VideoCondenseProgress = ({
 	progress,
 	seconds,
+	label,
 }: {
 	progress: number;
 	seconds: number;
+	label?: string;
 }) => {
 	return (
 		<div className="flex justify-between items-center gap-2 p-0.5">
 			<div className="flex-1">
 				<div className="flex justify-between text-sm mb-2">
 					<div className="flex gap-2 items-center">
-						{progress ? <p>Condensing</p> : <p>Loading Video</p>}{" "}
+						{label ? <p>Uploading video</p> : <p>Condensing</p>}
 						<Loader className="animate-spin w-4 h-4" />
 					</div>
-					<p className="text-sm">{formatTimer(seconds)}</p>
+					{label ? (
+						<p>{label}</p>
+					) : (
+						<p className="text-sm">{formatTimer(seconds)}</p>
+					)}
 				</div>
 				<Progress value={progress} />
 			</div>

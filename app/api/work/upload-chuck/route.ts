@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
 		const caption = formData.get("caption") as string;
 		const workType = formData.get("workType") as string;
 		const links = formData.get("links") as string;
-
 		console.log({ file });
 
 		const session = await getCurrentUser();
@@ -37,6 +36,7 @@ export async function POST(req: NextRequest) {
 		}
 
 		let fileUrl = "";
+		let uploadId: string | undefined;
 		if (file?.name) {
 			const uniqueName = `${Date.now()}_${Math.floor(Math.random() * 999999)}`;
 			const extension = file.name.split(".").pop();
@@ -51,16 +51,13 @@ export async function POST(req: NextRequest) {
 					ContentType: file.type,
 				})
 			);
-
-			const uploadId = multipartUpload.UploadId;
+			uploadId = multipartUpload.UploadId;
 			if (!uploadId) throw new Error("Upload ID not found");
 
-			// Step 2: Upload each chunk
-			const chunks = createChunks(file);
-			const MAX_RETRIES = 3;
-
+			// Step 2: Upload each chunk in parallel
+			const MAX_RETRIES = 5;
 			const parts = await Promise.all(
-				chunks.map(async (chunk, index) => {
+				createChunks(file).map(async (chunk, index) => {
 					const partNumber = index + 1;
 					const chunkBuffer = await chunk.arrayBuffer();
 
@@ -87,6 +84,7 @@ export async function POST(req: NextRequest) {
 								console.error(`Failed to upload part ${partNumber}:`, error);
 								throw new Error(`Failed to upload part ${partNumber}`);
 							}
+
 							// Exponential backoff
 							await new Promise((resolve) =>
 								setTimeout(resolve, 1000 * 2 ** attempt)
@@ -103,28 +101,23 @@ export async function POST(req: NextRequest) {
 			);
 
 			// Step 3: Complete the upload with valid parts only
-			await s3.send(
-				new CompleteMultipartUploadCommand({
-					Bucket: bucketName,
-					Key: key,
-					UploadId: uploadId,
-					MultipartUpload: {
-						Parts: validParts.sort((a, b) => a.PartNumber - b.PartNumber),
-					},
-				})
-			);
+			await completeMultipartUpload(uploadId, key, validParts);
+
 			fileUrl = `${process.env.NEXT_PUBLIC_TEBI_URL}/works/${filename}`;
 		}
 
 		const newWork = await db.work.create({
 			data: { caption, links, workType },
 		});
+
 		if (fileUrl) {
 			await db.workFiles.create({
 				data: { url: fileUrl, workId: newWork.id },
 			});
 		}
-		return NextResponse.json({ status: "success" });
+
+		// Return a successful response after the upload has been initiated
+		return NextResponse.json({ status: "success", uploadId });
 	} catch (error: any) {
 		console.error(error);
 		const status = error instanceof ZodError ? 422 : 500;
@@ -132,4 +125,21 @@ export async function POST(req: NextRequest) {
 			error instanceof ZodError ? error.message : "Something went wrong";
 		return handlerNativeResponse({ status, message }, status);
 	}
+}
+
+async function completeMultipartUpload(
+	uploadId: string,
+	key: string,
+	parts: { PartNumber: number; ETag: string }[]
+) {
+	await s3.send(
+		new CompleteMultipartUploadCommand({
+			Bucket: bucketName,
+			Key: key,
+			UploadId: uploadId,
+			MultipartUpload: {
+				Parts: parts.sort((a, b) => a.PartNumber - b.PartNumber),
+			},
+		})
+	);
 }

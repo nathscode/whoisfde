@@ -1,4 +1,4 @@
-export const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks
+export const CHUNK_SIZE = 20 * 1024 * 1024; // 20MB chunks
 
 export const createChunks = (file: File) => {
 	const chunks = [];

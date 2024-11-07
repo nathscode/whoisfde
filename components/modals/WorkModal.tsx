@@ -61,6 +61,7 @@ const WorkModal = (props: Props) => {
 	const [fileUrl, setFileUrl] = useState<File>();
 	const [videoFile, setVideoFile] = useState<FileActions>();
 	const [progress, setProgress] = useState<number>(0);
+	const [uploadProgress, setUploadProgress] = useState<number>(0);
 
 	const [time, setTime] = useState<{
 		startTime?: Date;
@@ -68,10 +69,11 @@ const WorkModal = (props: Props) => {
 	}>({ elapsedSeconds: 0 });
 
 	const [status, setStatus] = useState<
-		"notStarted" | "converted" | "condensing"
+		"notStarted" | "converted" | "condensing" | "uploading"
 	>("notStarted");
 	const [check, setCheck] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>();
+	const [uploadId, setUploadId] = useState<string | null>(null);
 
 	const { toast } = useToast();
 	const isMounted = useMount();
@@ -168,53 +170,53 @@ const WorkModal = (props: Props) => {
 				inputFileName,
 				// Video encoding settings
 				"-c:v",
-				"libx264", // H.264 codec
+				"libx264", // or "libx265" for better compression
 				"-preset",
-				"superfast", // Fastest preset for quicker compression
+				"ultrafast", // Change to ultrafast for speed
 				"-crf",
-				"15", // Lower CRF for better quality
+				"18", // Adjusted for a balance of quality and speed
 				"-tune",
-				"film", // Optimize for high-quality video content
+				"film",
 				"-profile:v",
-				"high", // Use high profile for better quality
+				"high",
 				"-level",
-				"5.2", // Compatibility level for 4K video
+				"5.2",
 
 				// Resolution and bitrate settings
 				"-vf",
-				"scale=-2:2160", // Scale to 4K maintaining aspect ratio
+				"scale=-2:2160",
 				"-maxrate",
-				"20M", // Higher maximum bitrate for 4K video
+				"20M",
 				"-bufsize",
-				"40M", // Larger buffer size for rate control
+				"40M",
 
 				// Frame rate and GOP settings
 				"-g",
-				"48", // Keyframe interval
+				"48",
 				"-keyint_min",
-				"48", // Minimum GOP length
+				"48",
 				"-sc_threshold",
-				"0", // Scene change threshold
+				"0",
 
 				// Audio settings
 				"-c:a",
-				"aac", // AAC audio codec
+				"aac",
 				"-b:a",
-				"192k", // Higher audio bitrate for better quality
+				"192k",
 				"-ar",
-				"48000", // Audio sample rate
+				"48000",
 
 				// Output optimization
 				"-movflags",
-				"+faststart", // Enable fast start for web playback
+				"+faststart",
 				"-threads",
-				"0", // Use all available CPU threads
+				"0",
 
 				// Additional quality settings
 				"-x264opts",
-				"rc-lookahead=48:ref=4", // Look-ahead and reference frames
+				"rc-lookahead=48:ref=4",
 				"-pix_fmt",
-				"yuv420p", // Pixel format for compatibility
+				"yuv420p",
 				outputFileName,
 			];
 
@@ -241,7 +243,7 @@ const WorkModal = (props: Props) => {
 			setProgress(0);
 			setTime({ elapsedSeconds: 0, startTime: undefined });
 			toast({
-				description: "Error converting video.",
+				description: `Error converting video. ${error}`,
 				variant: "destructive",
 			});
 		}
@@ -255,10 +257,18 @@ const WorkModal = (props: Props) => {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
+				onUploadProgress: (progressEvent) => {
+					setStatus("uploading");
+					const percentCompleted = Math.round(
+						(progressEvent.loaded * 100) / progressEvent.total!
+					);
+					setUploadProgress(percentCompleted);
+				},
 			});
 			return data;
 		},
 		onSuccess: (data) => {
+			setUploadId(data.uploadId);
 			form.reset();
 			window.location.reload();
 			return toast({
@@ -476,6 +486,13 @@ const WorkModal = (props: Props) => {
 											seconds={time.elapsedSeconds!}
 										/>
 									)}
+									{status === "uploading" && (
+										<VideoCondenseProgress
+											progress={uploadProgress}
+											seconds={time.elapsedSeconds!}
+											label="Uploading..."
+										/>
+									)}
 								</>
 							)}
 							{status === "notStarted" && (
@@ -493,15 +510,16 @@ const WorkModal = (props: Props) => {
 									videoFile={videoFile!}
 								/>
 							)}
-							{status === "converted" && (
-								<LoadingButton
-									type="submit"
-									loading={isPending}
-									className="mt-6 w-full"
-								>
-									Submit
-								</LoadingButton>
-							)}
+							{status === "converted" ||
+								(status === "uploading" && (
+									<LoadingButton
+										type="submit"
+										loading={isPending}
+										className="mt-6 w-full"
+									>
+										Submit
+									</LoadingButton>
+								))}
 						</form>
 					</Form>
 				</div>

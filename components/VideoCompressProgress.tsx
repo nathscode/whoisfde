@@ -21,7 +21,7 @@ export const VideoCondenseProgress = ({
 						<Loader className="animate-spin w-4 h-4" />
 					</div>
 					{label ? (
-						<p>{label}</p>
+						<p>Hold while {label}</p>
 					) : (
 						<p className="text-sm">{formatTimer(seconds)}</p>
 					)}

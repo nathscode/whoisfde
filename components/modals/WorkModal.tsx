@@ -268,6 +268,7 @@ const WorkModal = (props: Props) => {
 			return data;
 		},
 		onSuccess: (data) => {
+			setStatus("converted");
 			setUploadId(data.uploadId);
 			form.reset();
 			window.location.reload();
@@ -390,7 +391,7 @@ const WorkModal = (props: Props) => {
 										<FormControl>
 											<Input
 												type="text"
-												disabled={isLoading}
+												disabled={isPending}
 												className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
 												placeholder="Enter caption"
 												{...field}
@@ -510,16 +511,15 @@ const WorkModal = (props: Props) => {
 									videoFile={videoFile!}
 								/>
 							)}
-							{status === "converted" ||
-								(status === "uploading" && (
-									<LoadingButton
-										type="submit"
-										loading={isPending}
-										className="mt-6 w-full"
-									>
-										Submit
-									</LoadingButton>
-								))}
+							{status === "converted" && (
+								<LoadingButton
+									type="submit"
+									loading={isPending}
+									className="mt-6 w-full"
+								>
+									Submit
+								</LoadingButton>
+							)}
 						</form>
 					</Form>
 				</div>

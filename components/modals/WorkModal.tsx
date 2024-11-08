@@ -41,7 +41,7 @@ import {
 	VideoInputSettings,
 } from "@/types";
 import { useMutation } from "@tanstack/react-query";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 import { VideoCondenseProgress } from "../VideoCompressProgress";
@@ -61,7 +61,6 @@ const WorkModal = (props: Props) => {
 	const [fileUrl, setFileUrl] = useState<File>();
 	const [videoFile, setVideoFile] = useState<FileActions>();
 	const [progress, setProgress] = useState<number>(0);
-	const [uploadProgress, setUploadProgress] = useState<number>(0);
 
 	const [time, setTime] = useState<{
 		startTime?: Date;
@@ -257,18 +256,10 @@ const WorkModal = (props: Props) => {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
-				onUploadProgress: (progressEvent) => {
-					setStatus("uploading");
-					const percentCompleted = Math.round(
-						(progressEvent.loaded * 100) / progressEvent.total!
-					);
-					setUploadProgress(percentCompleted);
-				},
 			});
 			return data;
 		},
 		onSuccess: (data) => {
-			setStatus("converted");
 			setUploadId(data.uploadId);
 			form.reset();
 			window.location.reload();
@@ -487,13 +478,6 @@ const WorkModal = (props: Props) => {
 											seconds={time.elapsedSeconds!}
 										/>
 									)}
-									{status === "uploading" && (
-										<VideoCondenseProgress
-											progress={uploadProgress}
-											seconds={time.elapsedSeconds!}
-											label="Uploading..."
-										/>
-									)}
 								</>
 							)}
 							{status === "notStarted" && (
@@ -511,14 +495,23 @@ const WorkModal = (props: Props) => {
 									videoFile={videoFile!}
 								/>
 							)}
+
 							{status === "converted" && (
-								<LoadingButton
-									type="submit"
-									loading={isPending}
-									className="mt-6 w-full"
-								>
-									Submit
-								</LoadingButton>
+								<>
+									{isPending && (
+										<div className="flex gap-2 items-center">
+											Uploading video...
+											<Loader className="animate-spin w-4 h-4" />
+										</div>
+									)}
+									<LoadingButton
+										type="submit"
+										loading={isPending}
+										className="mt-6 w-full"
+									>
+										Submit
+									</LoadingButton>
+								</>
 							)}
 						</form>
 					</Form>

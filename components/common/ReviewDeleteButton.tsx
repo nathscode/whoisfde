@@ -9,7 +9,7 @@ import { ConfirmModal } from "../modals/ConfirmModal";
 
 type Props = {
 	id: string | null;
-  url: string
+	url: string;
 };
 
 const DeleteButton = ({ id, url }: Props) => {
@@ -18,11 +18,11 @@ const DeleteButton = ({ id, url }: Props) => {
 	const { toast } = useToast();
 	const { mutate, isPending } = useMutation({
 		mutationFn: async () => {
-			const { data } = await axios.delete(`/api/${url}`, {
+			const { data } = await axios.delete(`/api/rooter/${url}`, {
 				params: {
 					id: id,
 				},
-        headers: {
+				headers: {
 					"Content-Type": "multipart/form-data",
 				},
 			});

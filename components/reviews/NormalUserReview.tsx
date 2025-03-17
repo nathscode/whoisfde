@@ -46,7 +46,7 @@ const NormalUserReview = (props: Props) => {
 				name,
 				content,
 			};
-			const { data } = await axios.post("/api/reviews/normal", payload);
+			const { data } = await axios.post("/api/rooter/reviews/normal", payload);
 			return data;
 		},
 		onSuccess: (data) => {

@@ -7,10 +7,9 @@ import ContentCard from "./ContentCard";
 type Props = {};
 
 const GeneralContent = (props: Props) => {
-	
 	const generalContentData = () => {
 		return axios
-			.get("/api/work/", {
+			.get("/api/rooter/work/", {
 				params: {
 					workType: "Contents",
 				},
@@ -58,7 +57,7 @@ const GeneralContent = (props: Props) => {
 	return (
 		<div className="flex flex-col w-full py-4">
 			<h1 className="font-heading text-2xl mb-4">Contents</h1>
-					<ContentCard data={data} />
+			<ContentCard data={data} />
 		</div>
 	);
 };

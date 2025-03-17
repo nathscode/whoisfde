@@ -66,7 +66,7 @@ const OgUserReview = ({ session }: Props) => {
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (FormData: FormData) => {
-			const { data } = await axios.post("/api/reviews/ogs", FormData);
+			const { data } = await axios.post("/api/rooter/reviews/ogs", FormData);
 			return data;
 		},
 		onSuccess: (data) => {

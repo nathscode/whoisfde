@@ -1,7 +1,6 @@
-import getCurrentUser from "@/actions/getCurrentUser";
+import { CustomUser } from "@/types";
 import ExpandedNav from "./expanded-nav";
 import MinimizedTopNav from "./minimized-nav";
-import { CustomUser } from "@/types";
 type Props = {
 	session: CustomUser;
 };

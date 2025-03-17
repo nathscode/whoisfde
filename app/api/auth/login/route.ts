@@ -7,6 +7,7 @@ import { ZodError } from "zod";
 
 export async function POST(req: NextRequest) {
 	try {
+		console.log("HIT!!!!");
 		const body: LoginSchemaInfer = await req.json();
 		const payload = LoginSchema.safeParse(body);
 		if (!payload.success) {
@@ -48,6 +49,7 @@ export async function POST(req: NextRequest) {
 
 			// Check if the password is correct
 			const isPasswordSame = bcrypt.compareSync(password, user.password!);
+			console.log("LOGGED IN!!!!");
 
 			if (isPasswordSame) {
 				return NextResponse.json({

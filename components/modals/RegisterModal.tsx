@@ -1,16 +1,15 @@
 "use client";
 
-import axios, { AxiosError } from "axios";
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios, { AxiosError } from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -24,15 +23,12 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import useMount from "@/hooks/use-mount";
-import { useToast } from "../ui/use-toast";
-import { Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
-import LoadingButton from "../common/LoadingButton";
 import { UserSchema, UserSchemaInfer } from "@/lib/validators/user";
 import { useMutation } from "@tanstack/react-query";
+import { Eye, EyeOff } from "lucide-react";
+import LoadingButton from "../common/LoadingButton";
+import { useToast } from "../ui/use-toast";
 
 type Props = {};
 
@@ -40,7 +36,6 @@ const RegisterModal = (props: Props) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const isMounted = useMount();
-	const router = useRouter();
 	const { toast } = useToast();
 
 	const form = useForm({

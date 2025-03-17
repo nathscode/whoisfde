@@ -116,7 +116,9 @@ const NewBooking = ({
 					</Section>
 					<Section style={{ textAlign: "center" }}>
 						<Link
-							href={`${process.env.NEXT_PUBLIC_APP_URL}/book/${id}}`}
+							href={`${
+								process.env.NEXT_PUBLIC_APP_URL
+							}/book/${encodeURIComponent(id)}`}
 							style={cta}
 						>
 							View Booking

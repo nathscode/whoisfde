@@ -7,10 +7,9 @@ import ContentCard from "./ContentCard";
 type Props = {};
 
 const ConcertContent = (props: Props) => {
-	
 	const concertContentData = () => {
 		return axios
-			.get("/api/work/", {
+			.get("/api/rooter/work/", {
 				params: {
 					workType: "Concert",
 				},

@@ -80,7 +80,7 @@ const BookingForm = (props: Props) => {
 				bookType,
 				date,
 			};
-			const { data } = await axios.post("/api/booking", payload);
+			const { data } = await axios.post("/api/rooter/booking", payload);
 			return data;
 		},
 		onSuccess: (data) => {

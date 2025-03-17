@@ -3,10 +3,10 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios, { AxiosError } from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
+import { createWork } from "@/actions/createWork";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -32,15 +32,10 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { useCreateVideo } from "@/features/video/video-create";
 import useMount from "@/hooks/use-mount";
 import { WorkSchema, WorkSchemaInfer } from "@/lib/validators/work";
-import {
-	FileActions,
-	QualityType,
-	VideoFormats,
-	VideoInputSettings,
-} from "@/types";
-import { useMutation } from "@tanstack/react-query";
+import { FileActions } from "@/types";
 import { ImageIcon, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
@@ -58,9 +53,12 @@ const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
 
 const WorkModal = (props: Props) => {
 	const [ffmpeg] = useState(() => new FFmpeg());
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [fileUrl, setFileUrl] = useState<File>();
 	const [videoFile, setVideoFile] = useState<FileActions>();
 	const [progress, setProgress] = useState<number>(0);
+	const [isWorkLoading, startTransition] = useTransition();
+	const router = useRouter();
 
 	const [time, setTime] = useState<{
 		startTime?: Date;
@@ -68,11 +66,10 @@ const WorkModal = (props: Props) => {
 	}>({ elapsedSeconds: 0 });
 
 	const [status, setStatus] = useState<
-		"notStarted" | "converted" | "condensing" | "uploading"
+		"notStarted" | "converted" | "condensing" | "uploading" | "completed"
 	>("notStarted");
 	const [check, setCheck] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>();
-	const [uploadId, setUploadId] = useState<string | null>(null);
 
 	const { toast } = useToast();
 	const isMounted = useMount();
@@ -184,6 +181,7 @@ const WorkModal = (props: Props) => {
 				// Resolution and bitrate settings
 				"-vf",
 				"scale=-2:2160",
+				// "scale=-2:720",
 				"-maxrate",
 				"20M",
 				"-bufsize",
@@ -249,71 +247,56 @@ const WorkModal = (props: Props) => {
 	};
 
 	const isLoading = form.formState.isSubmitting;
-
-	const { mutate, isPending } = useMutation({
-		mutationFn: async (FormData: FormData) => {
-			const { data } = await axios.post("/api/work/upload-chuck", FormData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			});
-			return data;
-		},
-		onSuccess: (data) => {
-			setUploadId(data.uploadId);
-			form.reset();
-			window.location.reload();
-			return toast({
-				description: "Work created successfully",
-			});
-		},
-		onError: (err: any) => {
-			if (err instanceof AxiosError) {
-				if (err.response?.data?.status === 409) {
-					return toast({
-						title: "An error occurred.",
-						description: `${err.response?.data?.errors?.message}`,
-						variant: "destructive",
-					});
-				}
-
-				if (err.response?.status === 422) {
-					return toast({
-						title: "Invalid credentials.",
-						description: `${err.response.data?.errors?.message}`,
-						variant: "destructive",
-					});
-				}
-				toast({
-					title: "There was an error",
-					description:
-						"Could not create request, check your network connections",
-					variant: "destructive",
-				});
-			}
-		},
-	});
-
-	const handleSwitchChange = () => {
-		setCheck(!check);
-	};
+	const { isPending, isSuccess, isError, mutate } = useCreateVideo();
+	const handleSwitchChange = () => setCheck((prev) => !prev);
 
 	const onSubmit = async (values: WorkSchemaInfer) => {
-		const formData = new FormData();
-		formData.append("caption", values.caption);
-		formData.append("links", values.link || "");
-		formData.append("workType", values.workType);
-		formData.append("files", videoFile?.outputBlob!);
-		mutate(formData);
-		form.reset();
-		setFileUrl(undefined);
-	};
+		const hasLink = (values.link?.trim() || "").length > 0;
+		const hasFile = !!videoFile?.outputBlob;
+		if (!hasLink && !hasFile) {
+			toast({
+				title: "Missing Data",
+				description: "Provide a link or upload a video.",
+				variant: "destructive",
+			});
+			return;
+		}
 
-	if (!isMounted) {
-		return null;
-	}
+		if (videoFile?.outputBlob) {
+			const formData = new FormData();
+			formData.append("caption", values.caption);
+			formData.append("workType", values.workType);
+			formData.append("links", values.link!);
+			formData.append("files", videoFile.outputBlob);
+
+			setStatus("uploading");
+			mutate(formData, {
+				onSuccess: () => {
+					setIsModalOpen(false);
+					form.reset();
+					router.refresh();
+					toast({ title: "Upload Successful", description: "Work uploaded." });
+					setStatus("completed");
+				},
+			});
+		} else {
+			startTransition(async () => {
+				const res = await createWork({
+					workType: values.workType,
+					caption: values.caption,
+					links: values.link,
+					fileUrl: "",
+				});
+				toast({ title: res.message });
+				router.refresh();
+			});
+			setStatus("completed");
+		}
+	};
+	if (!isMounted) return null;
+
 	return (
-		<Dialog>
+		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
 				<Button variant="default" size="lg" disabled={false}>
 					Add Work
@@ -480,37 +463,60 @@ const WorkModal = (props: Props) => {
 									)}
 								</>
 							)}
-							{status === "notStarted" && (
-								<button
-									onClick={condense}
-									type="button"
-									className="bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-zinc-700 via-zinc-950 to-zinc-950 rounded-lg text-white/90 relative px-3.5 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-500 focus:ring-zinc-950 flex-shrink-0"
+							{!check && (
+								<LoadingButton
+									type="submit"
+									loading={isWorkLoading || isLoading}
+									className="mt-6 w-full"
 								>
-									Condense
-								</button>
-							)}
-							{status === "converted" && videoFile && (
-								<VideoOutputDetails
-									timeTaken={time.elapsedSeconds}
-									videoFile={videoFile!}
-								/>
+									Submit
+								</LoadingButton>
 							)}
 
-							{status === "converted" && (
+							{/* If switch is ON (Add File) */}
+							{check && (
 								<>
-									{isPending && (
-										<div className="flex gap-2 items-center">
-											Uploading video...
-											<Loader className="animate-spin w-4 h-4" />
-										</div>
+									{/* If condensing not started */}
+									{status === "notStarted" && (
+										<button
+											onClick={condense}
+											type="button"
+											className="bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-zinc-700 via-zinc-950 to-zinc-950 rounded-lg text-white/90 relative px-3.5 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-500 focus:ring-zinc-950 flex-shrink-0"
+										>
+											Condense
+										</button>
 									)}
-									<LoadingButton
-										type="submit"
-										loading={isPending}
-										className="mt-6 w-full"
-									>
-										Submit
-									</LoadingButton>
+
+									{/* After condensing */}
+									{status === "converted" && videoFile && (
+										<VideoOutputDetails
+											timeTaken={time.elapsedSeconds}
+											videoFile={videoFile!}
+										/>
+									)}
+									{!isSuccess && (
+										<>
+											{isPending && (
+												<div className="flex gap-2 items-center">
+													Uploading video...
+													<Loader className="animate-spin w-4 h-4" />
+												</div>
+											)}
+											<LoadingButton
+												type="submit"
+												loading={isPending}
+												className="mt-6 w-full"
+											>
+												Submit
+											</LoadingButton>
+										</>
+									)}
+									{isSuccess && (
+										<p className="text-green-500">
+											Video Uploaded Successfully!
+										</p>
+									)}
+									{isError && <p className="text-red-500">Failed to upload.</p>}
 								</>
 							)}
 						</form>

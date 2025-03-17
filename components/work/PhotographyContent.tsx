@@ -6,10 +6,9 @@ import ContentCard from "./ContentCard";
 type Props = {};
 
 const PhotographyContent = (props: Props) => {
-	
 	const photographyContentData = () => {
 		return axios
-			.get("/api/work/", {
+			.get("/api/rooter/work/", {
 				params: {
 					workType: "Photography",
 				},

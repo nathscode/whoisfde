@@ -19,7 +19,7 @@ type Props = {};
 const CommentClients = (props: Props) => {
 	const fetchRecentReviews = async () => {
 		const response = await axios.get<SafeOgReviewExtras[]>(
-			`/api/reviews/normal`
+			`/api/rooter/reviews/normal`
 		);
 		return response.data;
 	};

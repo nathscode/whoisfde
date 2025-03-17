@@ -4,8 +4,19 @@ import { RoleType } from "@prisma/client";
 
 export default withAuth(
 	function middleware(req: NextRequestWithAuth) {
+		const token = req?.nextauth?.token;
+
+		if (
+			req.nextUrl.pathname.startsWith("/dashboard") &&
+			token?.user?.role !== RoleType.ADMIN
+		) {
+			return NextResponse.redirect(new URL("/profile", req.url));
+		}
+
+		// If all checks pass, proceed with the request
 		const response = NextResponse.next();
-		const token = req?.nextauth.token;
+
+		// Add CORS headers if needed
 		response.headers.set("Access-Control-Allow-Origin", "*");
 		response.headers.set(
 			"Access-Control-Allow-Methods",
@@ -19,13 +30,6 @@ export default withAuth(
 		response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
 
 		return response;
-
-		if (
-			token?.user.role !== RoleType.ADMIN &&
-			req.url.startsWith("/dashboard")
-		) {
-			return NextResponse.redirect(new URL("/profile", req.url));
-		}
 	},
 	{
 		callbacks: {

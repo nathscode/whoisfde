@@ -12,6 +12,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import NewBooking from "@/emails/NewBooking";
 import { addOneHour } from "@/lib/utils";
+import { getLogger } from "@/lib/backend/logger";
+
+const logger = getLogger();
 
 async function generateUniqueBookingNumberCode(): Promise<string> {
 	let bookingNumber: string;
@@ -43,7 +46,7 @@ export async function POST(req: NextRequest) {
 			payload.data;
 
 		const formattedEmail = email.toLowerCase();
-		const newDate = addOneHour(date)
+		const newDate = addOneHour(date);
 
 		const bookingNumber = await generateUniqueBookingNumberCode();
 
@@ -71,7 +74,7 @@ export async function POST(req: NextRequest) {
 		let type = newBooking.bookType!;
 		let id = newBooking.id!;
 		const emailHtml = render(
-			NewBooking({id, name, email, phone, bookNumber, bookDate, type })
+			NewBooking({ id, name, email, phone, bookNumber, bookDate, type })
 		);
 		await sendMail({
 			name: "whoisfde",
@@ -81,7 +84,7 @@ export async function POST(req: NextRequest) {
 		});
 		return NextResponse.json({ status: "success" });
 	} catch (error: any) {
-		console.log(error);
+		logger.error("Error in booking:", error);
 		let message: any = "Something went wrong";
 		let status = 500;
 		if (error instanceof ZodError) {

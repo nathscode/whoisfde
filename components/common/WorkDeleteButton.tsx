@@ -17,7 +17,7 @@ const DeleteButton = ({ id }: Props) => {
 	const { toast } = useToast();
 	const { mutate, isPending } = useMutation({
 		mutationFn: async () => {
-			const { data } = await axios.delete(`/api/work`, {
+			const { data } = await axios.delete(`/api/rooter/work`, {
 				params: {
 					id: id,
 				},

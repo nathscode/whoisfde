@@ -55,7 +55,7 @@ const BookingDetailPage = async ({ params }: PageProps) => {
 								</span>
 							</li>
 						</ul>
-						<div className="flex flex-col bg-neutral-100 rounded-lg w-full p-2 my-4 ">
+						<div className="flex flex-col bg-neutral-100 rounded-lg w-full sm:p-2 my-4 ">
 							<h4 className="text-base font-semibold uppercase">Client info</h4>
 							<ul className="flex flex-col space-y-4 flex-1 mt-4">
 								<li className="flex flex-col">

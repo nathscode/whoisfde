@@ -18,10 +18,10 @@ const bucketName = process.env.TEBI_BUCKET_NAME;
 export async function POST(req: NextRequest) {
 	try {
 		const formData = await req.formData();
-		const file = formData.get("files") as File;
-		const caption = formData.get("caption") as string;
-		const workType = formData.get("workType") as string;
-		const links = formData.get("links") as string;
+		const file = (formData.get("files") as File) || null;
+		const caption: string = formData.get("caption") as string;
+		const workType: string = formData.get("workType") as string;
+		const links: string = formData.get("links") as string;
 
 		const session = await getCurrentUser();
 		if (!session) {
@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
 				401
 			);
 		}
-
 		let fileUrl = "";
 		let uploadId: string | undefined;
 		if (file?.name) {
@@ -55,10 +54,12 @@ export async function POST(req: NextRequest) {
 
 			// Step 2: Upload each chunk in parallel
 			const MAX_RETRIES = 5;
+			const chunks = await createChunks(file);
+
 			const parts = await Promise.all(
-				createChunks(file).map(async (chunk, index) => {
+				chunks.map(async (chunk, index) => {
 					const partNumber = index + 1;
-					const chunkBuffer = await chunk.arrayBuffer();
+					const chunkBuffer = await chunk.chunk.arrayBuffer();
 
 					for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
 						try {
@@ -72,7 +73,6 @@ export async function POST(req: NextRequest) {
 								})
 							);
 
-							// Ensure ETag is defined
 							if (!uploadPartResult.ETag) {
 								throw new Error(`ETag is undefined for part ${partNumber}`);
 							}
@@ -93,14 +93,12 @@ export async function POST(req: NextRequest) {
 				})
 			);
 
-			// Filter out any undefined parts
-			const validParts = parts.filter(
-				(part): part is { PartNumber: number; ETag: string } =>
-					part !== undefined
-			);
-
 			// Step 3: Complete the upload with valid parts only
-			await completeMultipartUpload(uploadId, key, validParts);
+			await completeMultipartUpload(
+				uploadId,
+				key,
+				parts as { PartNumber: number; ETag: string }[]
+			);
 
 			fileUrl = `${process.env.NEXT_PUBLIC_TEBI_URL}/works/${filename}`;
 		}
@@ -115,13 +113,15 @@ export async function POST(req: NextRequest) {
 			});
 		}
 
-		// Return a successful response after the upload has been initiated
-		return NextResponse.json({ status: "success", uploadId });
+		return NextResponse.json({ status: "success" });
 	} catch (error: any) {
 		console.error(error);
-		const status = error instanceof ZodError ? 422 : 500;
-		const message =
-			error instanceof ZodError ? error.message : "Something went wrong";
+		let message: any = "Something went wrong";
+		let status = 500;
+		if (error instanceof ZodError) {
+			message = error.message;
+			status = 422;
+		}
 		return handlerNativeResponse({ status, message }, status);
 	}
 }

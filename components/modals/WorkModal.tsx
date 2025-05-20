@@ -50,26 +50,49 @@ import { bytesToSize } from "../util/bytesToSize";
 type Props = {};
 
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
+const VALID_FILE_TYPES = ["video/mp4", "video/quicktime", "video/x-msvideo"];
 
 const WorkModal = (props: Props) => {
 	const [ffmpeg] = useState(() => new FFmpeg());
+	const [isFFmpegLoaded, setIsFFmpegLoaded] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [fileUrl, setFileUrl] = useState<File>();
 	const [videoFile, setVideoFile] = useState<FileActions>();
 	const [progress, setProgress] = useState<number>(0);
+	const [check, setCheck] = useState<boolean>(false);
 	const [isWorkLoading, startTransition] = useTransition();
 	const router = useRouter();
+	const [quality, setQuality] = useState<"low" | "medium" | "high">("medium");
+	const [resolution, setResolution] = useState<
+		"480p" | "720p" | "1080p" | "original"
+	>("720p");
 
+	// Time tracking
 	const [time, setTime] = useState<{
 		startTime?: Date;
 		elapsedSeconds?: number;
 	}>({ elapsedSeconds: 0 });
 
+	// Status tracking
 	const [status, setStatus] = useState<
 		"notStarted" | "converted" | "condensing" | "uploading" | "completed"
 	>("notStarted");
-	const [check, setCheck] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>();
+
+	// Error handling
+	const [error, setError] = useState<{
+		message: string;
+		details?: string;
+		isFatal?: boolean;
+	} | null>(null);
+
+	// Metrics
+	const [metrics, setMetrics] = useState<{
+		inputSize: number;
+		outputSize?: number;
+		compressionRatio?: number;
+		processingTime?: number;
+	}>({ inputSize: 0 });
+	const [abortController, setAbortController] = useState<AbortController>();
 
 	const { toast } = useToast();
 	const isMounted = useMount();
@@ -78,26 +101,45 @@ const WorkModal = (props: Props) => {
 		const loadFFmpeg = async () => {
 			try {
 				await ffmpeg.load({
-					coreURL: await toBlobURL(
-						"https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
-						"text/javascript"
-					),
-					wasmURL: await toBlobURL(
-						"https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm",
-						"application/wasm"
-					),
+					coreURL: "/ffmpeg/ffmpeg-core.js",
+					wasmURL: "/ffmpeg/ffmpeg-core.wasm",
+					workerURL: "/ffmpeg/ffmpeg-core.worker.js",
 				});
 
 				ffmpeg.on("progress", ({ progress }) => {
 					setProgress(progress * 100);
 				});
+
+				ffmpeg.on("log", ({ message }) => {});
+
+				setIsFFmpegLoaded(true);
 			} catch (error: any) {
 				console.error("FFmpeg load error:", error);
-				setError(`Failed to load FFmpeg: ${error.message}`);
+				setError({
+					message: "Failed to load FFmpeg",
+					details: error.message,
+					isFatal: true,
+				});
+				toast({
+					title: "Initialization Error",
+					description:
+						"Failed to load video processor. Please refresh the page.",
+					variant: "destructive",
+					duration: 10000,
+				});
 			}
 		};
 
 		loadFFmpeg();
+
+		return () => {
+			if (videoFile?.url) {
+				URL.revokeObjectURL(videoFile.url);
+			}
+			if (fileUrl) {
+				URL.revokeObjectURL(URL.createObjectURL(fileUrl));
+			}
+		};
 	}, []);
 
 	useEffect(() => {
@@ -109,7 +151,7 @@ const WorkModal = (props: Props) => {
 				const elapsedMs = now.getTime() - time.startTime!.getTime();
 				setTime((prev) => ({
 					...prev,
-					elapsedSeconds: Math.floor(elapsedMs / 1000), // Convert ms to seconds
+					elapsedSeconds: Math.floor(elapsedMs / 1000),
 				}));
 			}, 1000);
 		}
@@ -129,16 +171,35 @@ const WorkModal = (props: Props) => {
 	});
 
 	const onDrop = useCallback((acceptedFiles: File[]) => {
-		if (acceptedFiles?.[0]) {
-			setFileUrl(acceptedFiles[0]);
-			setVideoFile({
-				fileName: acceptedFiles[0].name,
-				fileSize: acceptedFiles[0].size,
-				fileType: acceptedFiles[0].type,
-				file: acceptedFiles[0],
-				isError: false,
+		if (!acceptedFiles?.[0]) return;
+
+		const file = acceptedFiles[0];
+
+		if (!VALID_FILE_TYPES.includes(file.type)) {
+			setError({
+				message: "Unsupported file format",
+				details: `Please upload one of: ${VALID_FILE_TYPES.join(", ")}`,
 			});
+			return;
 		}
+
+		if (file.size > MAX_FILE_SIZE) {
+			setError({
+				message: "File too large",
+				details: `Maximum size is ${bytesToSize(MAX_FILE_SIZE)}`,
+			});
+			return;
+		}
+
+		setError(null);
+		setFileUrl(file);
+		setVideoFile({
+			fileName: file.name,
+			fileSize: file.size,
+			fileType: file.type,
+			file: file,
+			isError: false,
+		});
 	}, []);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -147,9 +208,42 @@ const WorkModal = (props: Props) => {
 		maxSize: MAX_FILE_SIZE,
 	});
 
-	// Optimized video compression
+	const getQualitySettings = () => {
+		switch (quality) {
+			case "low":
+				return { crf: 26, preset: "ultrafast", audioBitrate: "96k" };
+			case "medium":
+				return { crf: 22, preset: "fast", audioBitrate: "128k" };
+			case "high":
+				return { crf: 18, preset: "medium", audioBitrate: "192k" };
+			default:
+				return { crf: 22, preset: "fast", audioBitrate: "128k" };
+		}
+	};
+
+	const getResolutionScale = () => {
+		switch (resolution) {
+			case "480p":
+				return "scale='min(854,iw)':-2";
+			case "720p":
+				return "scale='min(1280,iw)':-2";
+			case "1080p":
+				return "scale='min(1920,iw)':-2";
+			case "original":
+				return "";
+			default:
+				return "scale='min(1280,iw)':-2";
+		}
+	};
+
 	const condense = async () => {
-		if (!videoFile?.file) return;
+		if (!videoFile?.file || !isFFmpegLoaded) {
+			toast({
+				description: "FFmpeg is still loading. Please wait...",
+				variant: "destructive",
+			});
+			return;
+		}
 
 		try {
 			setStatus("condensing");
@@ -159,70 +253,60 @@ const WorkModal = (props: Props) => {
 				"input" +
 				videoFile.file.name.substring(videoFile.file.name.lastIndexOf("."));
 			const outputFileName = "output.mp4";
+
+			const controller = new AbortController();
+			setAbortController(controller);
+
 			await ffmpeg.writeFile(inputFileName, await fetchFile(videoFile.file));
+
+			const { crf, preset, audioBitrate } = getQualitySettings();
+			const scaleFilter = getResolutionScale();
 
 			const ffmpegCommands = [
 				"-i",
 				inputFileName,
-				// Video encoding settings
 				"-c:v",
-				"libx264", // or "libx265" for better compression
+				"libx264",
 				"-preset",
-				"ultrafast", // Change to ultrafast for speed
+				preset,
 				"-crf",
-				"18", // Adjusted for a balance of quality and speed
-				"-tune",
-				"film",
-				"-profile:v",
-				"high",
-				"-level",
-				"5.2",
-
-				// Resolution and bitrate settings
-				"-vf",
-				"scale=-2:2160",
-				// "scale=-2:720",
-				"-maxrate",
-				"20M",
-				"-bufsize",
-				"40M",
-
-				// Frame rate and GOP settings
-				"-g",
-				"48",
-				"-keyint_min",
-				"48",
-				"-sc_threshold",
-				"0",
-
-				// Audio settings
+				crf.toString(),
 				"-c:a",
 				"aac",
 				"-b:a",
-				"192k",
-				"-ar",
-				"48000",
-
-				// Output optimization
+				audioBitrate,
 				"-movflags",
 				"+faststart",
 				"-threads",
 				"0",
-
-				// Additional quality settings
-				"-x264opts",
-				"rc-lookahead=48:ref=4",
-				"-pix_fmt",
-				"yuv420p",
-				outputFileName,
 			];
 
-			await ffmpeg.exec(ffmpegCommands);
+			if (scaleFilter) {
+				ffmpegCommands.push("-vf", scaleFilter);
+			}
 
-			// Read the processed file
+			ffmpegCommands.push(outputFileName);
+
+			try {
+				await ffmpeg.exec(ffmpegCommands);
+			} catch (error: any) {
+				if (controller.signal.aborted) {
+					console.log("Processing was manually aborted");
+					return;
+				}
+			}
+
 			const data = await ffmpeg.readFile(outputFileName);
 			const blob = new Blob([data], { type: "video/mp4" });
 			const url = URL.createObjectURL(blob);
+			// @ts-expect-error
+			const outputSize = data.byteLength;
+			setMetrics({
+				inputSize: videoFile.fileSize,
+				outputSize,
+				compressionRatio: (1 - outputSize / videoFile.fileSize) * 100,
+				processingTime: time.elapsedSeconds,
+			});
 
 			setVideoFile((prev) => ({
 				...prev!,
@@ -234,14 +318,37 @@ const WorkModal = (props: Props) => {
 			setStatus("converted");
 			setTime((prev) => ({ ...prev, startTime: undefined }));
 			setProgress(0);
-		} catch (error) {
+		} catch (error: any) {
+			if (error.name === "AbortError") {
+				console.log("Processing was aborted");
+				return;
+			}
+
 			console.error("Conversion error:", error);
 			setStatus("notStarted");
 			setProgress(0);
 			setTime({ elapsedSeconds: 0, startTime: undefined });
 			toast({
-				description: `Error converting video. ${error}`,
+				description: `Error converting video. ${error.message}`,
 				variant: "destructive",
+			});
+		} finally {
+			try {
+				await ffmpeg.deleteFile("input.mp4");
+				await ffmpeg.deleteFile("output.mp4");
+			} catch (cleanupError) {
+				console.warn("Failed to clean up temporary files:", cleanupError);
+			}
+		}
+	};
+
+	const cancelProcessing = () => {
+		if (abortController) {
+			abortController.abort();
+			setStatus("notStarted");
+			setProgress(0);
+			toast({
+				description: "Processing cancelled",
 			});
 		}
 	};
@@ -278,6 +385,14 @@ const WorkModal = (props: Props) => {
 					toast({ title: "Upload Successful", description: "Work uploaded." });
 					setStatus("completed");
 				},
+				onError: (error) => {
+					toast({
+						title: "Upload Failed",
+						description: error.message,
+						variant: "destructive",
+					});
+					setStatus("converted");
+				},
 			});
 		} else {
 			startTransition(async () => {
@@ -293,6 +408,7 @@ const WorkModal = (props: Props) => {
 			setStatus("completed");
 		}
 	};
+
 	if (!isMounted) return null;
 
 	return (

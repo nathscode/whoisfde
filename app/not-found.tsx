@@ -6,8 +6,8 @@ export default function NotFound() {
 			<div className="text-center">
 				<h1 className="mb-4 text-6xl font-semibold text-black">404</h1>
 				<p className="mb-4 text-lg text-gray-600">
-					Oops! Looks like you're lost or the page you're looking for is not
-					found.
+					Oops! Looks like you're lost or the page you&apos;re looking for is
+					not found.
 				</p>
 				<div className="animate-bounce">
 					<svg
@@ -24,7 +24,7 @@ export default function NotFound() {
 						></path>
 					</svg>
 				</div>
-				<p className="mt-4 text-gray-600">Let's get you back.</p>
+				<p className="mt-4 text-gray-600">Let&apos;s get you back.</p>
 				<div className="mt-5">
 					<BackButton />
 				</div>

@@ -32,7 +32,6 @@ export const useFullscreenScrollFix = (
 		top: string;
 		left: string;
 		touchAction: string;
-		webkitOverflowScrolling: string;
 	}>({
 		overflow: "",
 		position: "",
@@ -41,7 +40,6 @@ export const useFullscreenScrollFix = (
 		top: "",
 		left: "",
 		touchAction: "",
-		webkitOverflowScrolling: "",
 	});
 
 	const isFullscreenRef = useRef(false);
@@ -87,11 +85,6 @@ export const useFullscreenScrollFix = (
 			top: bodyStyle.top,
 			left: bodyStyle.left,
 			touchAction: bodyStyle.touchAction || computedStyle.touchAction,
-			webkitOverflowScrolling:
-				// @ts-ignore
-				bodyStyle.webkitOverflowScrolling ||
-				// @ts-ignore
-				computedStyle.webkitOverflowScrolling,
 		};
 	}, []);
 
@@ -112,8 +105,6 @@ export const useFullscreenScrollFix = (
 			bodyStyle.top = `-${savedScrollPosition.current.y}px`;
 			bodyStyle.left = `-${savedScrollPosition.current.x}px`;
 			bodyStyle.touchAction = "none";
-			// @ts-ignore
-			bodyStyle.webkitOverflowScrolling = "auto";
 
 			// Also lock the html element on mobile
 			htmlStyle.overflow = "hidden";
@@ -166,8 +157,6 @@ export const useFullscreenScrollFix = (
 		bodyStyle.top = saved.top;
 		bodyStyle.left = saved.left;
 		bodyStyle.touchAction = saved.touchAction;
-		// @ts-ignore
-		bodyStyle.webkitOverflowScrolling = saved.webkitOverflowScrolling;
 
 		console.log("Body style restored (Mobile:", isMobileRef.current, ")");
 	}, [disableBodyScroll]);

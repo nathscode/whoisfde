@@ -4,7 +4,7 @@ import { db } from "@/config/db.config";
 import NewRequest from "@/emails/NewRequest";
 import { RequestSchema } from "@/lib/validators/request";
 import { sendMail } from "@/service/mail";
-import { render } from "@react-email/render";
+import { render } from "@react-email/components";
 import { z } from "zod";
 
 export async function createRequest(values: z.infer<typeof RequestSchema>) {
@@ -61,7 +61,6 @@ export async function createRequest(values: z.infer<typeof RequestSchema>) {
 		});
 
 		return { message: "Request sent successfully." };
-
 	} catch (error) {
 		console.error("Error in createRequest:", error);
 		return { message: "Database Error: Failed to create request." };

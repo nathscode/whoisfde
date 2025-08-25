@@ -8,7 +8,7 @@ import { z } from "zod";
 import checkIsAdmin from "./checkIsAdmin";
 import EmailStatus from "@/emails/EmailStatus";
 import { sendMail } from "@/service/mail";
-import { render } from "@react-email/render";
+import { render } from "@react-email/components";
 
 export async function updateBookingStatus(
 	values: z.infer<typeof statusUpdateSchema>

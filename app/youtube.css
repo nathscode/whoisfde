@@ -505,7 +505,8 @@ body.fullscreen-transitioning {
 		display: flex !important;
 	}
 }
-browser variants */ [data-video-player="true"]:fullscreen,
+/*browser variants */
+[data-video-player="true"]:fullscreen,
 [data-video-player="true"]:-webkit-full-screen,
 [data-video-player="true"]:-moz-full-screen,
 [data-video-player="true"]:-ms-fullscreen {
@@ -653,7 +654,7 @@ body:has([data-video-player="true"]:fullscreen)
 @media (max-width: 767px) {
 	body.fullscreen-scroll-locked {
 		-webkit-overflow-scrolling: auto !important;
-		overflow-scrolling: auto !important;
+		overflow: auto !important;
 	}
 }
 

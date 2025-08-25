@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import bcrypt from "bcryptjs";
 import { generate } from "otp-generator";
-import { render } from "@react-email/render";
 import { UserSchema, UserSchemaInfer } from "@/lib/validators/user";
 import { db } from "@/config/db.config";
 import { RoleType } from "@prisma/client";
 import { sendMail } from "@/service/mail";
 import SendVerificationEmail from "@/emails/SendVerificationEmail";
+import { render } from "@react-email/components";
 
 async function generateUniqueVerificationCode(): Promise<string> {
 	let verificationCode: string;

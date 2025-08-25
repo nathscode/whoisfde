@@ -1,8 +1,6 @@
 import { db } from "@/config/db.config";
 import { handlerNativeResponse, normalizeEmail } from "@/lib/backend/utils";
 
-import { render } from "@react-email/render";
-
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { DateTime } from "luxon";
@@ -15,6 +13,7 @@ import {
 } from "@/lib/validators/reset-password";
 import passwordResetEmail from "@/emails/passwordResetEmail";
 import { sendMail } from "@/service/mail";
+import { render } from "@react-email/components";
 
 export async function POST(req: NextRequest) {
 	try {

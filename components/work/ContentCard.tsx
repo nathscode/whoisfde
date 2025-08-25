@@ -1,47 +1,67 @@
 "use client";
-import { getValueAfterYoutuBe } from "@/lib/utils";
+
+import { getYouTubeVideoId, isValidYouTubeId } from "@/lib/utils";
 import React from "react";
 import { useMediaQuery } from "usehooks-ts";
 import YoutubeEmbed from "../common/YoutubeEmbed";
 import Image from "next/image";
-import { VideoPlayer } from "../VideoPlayer";
-import { VideoPlayerNew } from "../VideoPlayerNew";
+import { HomeVideoPlayer } from "./HomeVideoPlayer";
 
 type Props = {
-	data: any;
+	data: any[];
 };
 
 const ContentCard = ({ data }: Props) => {
-	const media = useMediaQuery("(max-width: 600px)");
+	const isMobile = useMediaQuery("(max-width: 768px)");
 
-	const mobile = media ? "320px" : "500px";
+	if (!data || data.length === 0) {
+		return (
+			<div className="flex items-center justify-center p-8">
+				<p className="text-gray-500">No content available</p>
+			</div>
+		);
+	}
 
 	return (
-		<div className="flex flex-col flex-wrap justify-center md:justify-start  gap-4 md:flex-row md:gap-5">
-			{data &&
-				data.map((party: any) => (
-					<div key={party.id} className="w-full md:w-1/3">
-						{party.links ? (
-							<YoutubeEmbed
-								id={getValueAfterYoutuBe(party.links)!}
-								caption={party.captions}
-							/>
-						) : party.workFiles[0] ? (
-							<VideoPlayerNew videoSrc={party.workFiles[0].url!} />
-						) : (
-							<Image
-								src={"/images/logo/logo-question.png"}
-								className="object-fill"
-								alt="who image"
-								height={50}
-								width={80}
-							/>
-						)}
-						<h2 className="font-semibold text-lg text-neutral-700 my-4">
-							{party.caption}
-						</h2>
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+			{data.map((party: any) => {
+				// Extract YouTube video ID if links exist
+				const youtubeId = party.links ? getYouTubeVideoId(party.links) : null;
+				const hasValidYoutubeId = youtubeId && isValidYouTubeId(youtubeId);
+
+				return (
+					<div key={party.id} className="flex flex-col space-y-3">
+						{/* Media Content */}
+						<div className="w-full">
+							{party.links && hasValidYoutubeId ? (
+								<YoutubeEmbed
+									id={youtubeId}
+									caption={party.caption || "Video"}
+									useLite={true}
+									className="shadow-sm"
+								/>
+							) : party.workFiles && party.workFiles[0] ? (
+								<div className="aspect-video w-full">
+									<HomeVideoPlayer
+										videoId={party.workFiles[0].id}
+										className="w-full h-full"
+									/>
+								</div>
+							) : (
+								<div className="aspect-video w-full bg-gray-100 rounded-lg flex items-center justify-center">
+									<Image
+										src="/images/logo/logo-question.png"
+										className="object-contain opacity-50"
+										alt="No content available"
+										height={60}
+										width={60}
+									/>
+								</div>
+							)}
+						</div>
 					</div>
-				))}
+				);
+			})}
 		</div>
 	);
 };

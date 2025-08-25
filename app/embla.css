@@ -1,0 +1,380 @@
+/* Mobile-Optimized Doom Scroll Styles - Add to your global CSS */
+
+/* Ensure full viewport coverage on all devices */
+.doom-scroll-container {
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh; /* Dynamic viewport height for mobile browsers */
+	position: relative;
+	overflow: hidden;
+}
+
+/* Embla carousel mobile optimizations */
+.embla {
+	width: 100%;
+	height: 100vh;
+	height: 100dvh;
+	overflow: hidden;
+	touch-action: pan-y;
+	-webkit-overflow-scrolling: touch;
+}
+
+.embla__viewport {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.embla__container {
+	display: flex;
+	flex-direction: column;
+	height: auto;
+}
+
+.embla__slide {
+	flex: 0 0 100vh;
+	flex: 0 0 100dvh;
+	width: 100%;
+	min-height: 0;
+	position: relative;
+}
+
+/* Video player mobile optimizations */
+.doom-scroll-video-player {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.doom-scroll-video-player video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	background-color: black;
+}
+
+/* Prevent iOS video zoom on double-tap */
+.doom-scroll-video-player video {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile safe areas for notches and status bars */
+@supports (padding: max(0px)) {
+	.mobile-safe-area {
+		padding-top: max(env(safe-area-inset-top), 0px);
+		padding-bottom: max(env(safe-area-inset-bottom), 0px);
+		padding-left: max(env(safe-area-inset-left), 0px);
+		padding-right: max(env(safe-area-inset-right), 0px);
+	}
+}
+
+/* Mobile-specific overlay positioning */
+@media (max-width: 767px) {
+	.video-counter {
+		top: max(env(safe-area-inset-top), 16px);
+		left: max(env(safe-area-inset-left), 16px);
+	}
+
+	.video-side-actions {
+		right: max(env(safe-area-inset-right), 12px);
+		bottom: max(env(safe-area-inset-bottom), 96px);
+	}
+
+	.video-info-overlay {
+		bottom: max(env(safe-area-inset-bottom), 12px);
+		left: max(env(safe-area-inset-left), 12px);
+		right: max(calc(env(safe-area-inset-right) + 80px), 80px);
+	}
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+	.video-counter {
+		top: 16px;
+		left: 16px;
+	}
+
+	.video-side-actions {
+		right: 16px;
+		bottom: 128px;
+	}
+
+	.video-info-overlay {
+		bottom: 16px;
+		left: 16px;
+		right: 96px;
+	}
+}
+
+/* Desktop optimizations */
+@media (min-width: 1024px) {
+	.video-counter {
+		top: 20px;
+		left: 20px;
+	}
+
+	.video-side-actions {
+		right: 20px;
+		bottom: 140px;
+	}
+
+	.video-info-overlay {
+		bottom: 20px;
+		left: 20px;
+		right: 110px;
+	}
+}
+
+/* Prevent body scroll when doom scroll is active */
+body.doom-scroll-active {
+	overflow: hidden !important;
+	height: 100vh !important;
+	height: 100dvh !important;
+	position: fixed !important;
+	width: 100% !important;
+	top: 0 !important;
+	left: 0 !important;
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+	.embla__slide {
+		height: 100vh;
+		height: -webkit-fill-available;
+	}
+
+	.doom-scroll-container {
+		height: 100vh;
+		height: -webkit-fill-available;
+	}
+
+	/* Fix for iOS viewport height issues */
+	.ios-viewport-fix {
+		min-height: 100vh;
+		min-height: -webkit-fill-available;
+	}
+}
+
+/* Android specific fixes */
+@media screen and (max-width: 767px) {
+	.embla__slide {
+		min-height: 100vh;
+		min-height: 100dvh;
+	}
+}
+
+/* Landscape mobile optimization */
+@media screen and (max-width: 767px) and (orientation: landscape) {
+	.video-info-overlay {
+		bottom: 8px;
+		left: 8px;
+		right: 72px;
+	}
+
+	.video-side-actions {
+		right: 8px;
+		bottom: 40px;
+		gap: 8px;
+	}
+
+	.video-counter {
+		top: 8px;
+		left: 8px;
+	}
+
+	.video-info-overlay h3 {
+		font-size: 14px;
+		line-height: 1.3;
+	}
+
+	.video-info-overlay p {
+		font-size: 11px;
+		line-height: 1.3;
+	}
+}
+
+/* Progress bar mobile optimizations */
+.mobile-progress-bar {
+	height: 2px;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 1px;
+	overflow: hidden;
+}
+
+.mobile-progress-fill {
+	height: 100%;
+	background: white;
+	border-radius: 1px;
+	transition: width 0.1s ease;
+}
+
+/* Button touch targets - ensure minimum 44px for accessibility */
+@media (max-width: 767px) {
+	.side-action-button {
+		min-width: 44px;
+		min-height: 44px;
+		padding: 10px;
+	}
+
+	.play-overlay-button {
+		min-width: 60px;
+		min-height: 60px;
+	}
+}
+
+/* Loading spinner mobile optimization */
+@media (max-width: 767px) {
+	.loading-spinner {
+		width: 24px;
+		height: 24px;
+		border-width: 2px;
+	}
+}
+
+/* Text sizing for better mobile readability */
+@media (max-width: 767px) {
+	.video-title-mobile {
+		font-size: 16px;
+		line-height: 1.3;
+		font-weight: 600;
+	}
+
+	.video-description-mobile {
+		font-size: 12px;
+		line-height: 1.4;
+		opacity: 0.9;
+	}
+
+	.video-author-mobile {
+		font-size: 12px;
+		opacity: 0.75;
+	}
+
+	.video-time-mobile {
+		font-size: 10px;
+		font-family: monospace;
+	}
+}
+
+/* Backdrop blur optimization for mobile */
+@media (max-width: 767px) {
+	.backdrop-blur-mobile {
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+	}
+}
+
+/* Prevent zoom on inputs and buttons - fixes iOS zoom issues */
+@media (max-width: 767px) {
+	input,
+	button,
+	select,
+	textarea {
+		font-size: 16px; /* Prevents iOS zoom */
+		-webkit-appearance: none;
+		border-radius: 0;
+	}
+
+	/* Prevent zoom on double-tap */
+	* {
+		touch-action: manipulation;
+	}
+
+	/* Smooth scrolling for touch */
+	.embla__viewport {
+		-webkit-overflow-scrolling: touch;
+		scroll-behavior: smooth;
+	}
+}
+
+/* Hide scrollbars */
+.embla__viewport::-webkit-scrollbar {
+	display: none;
+}
+
+.embla__viewport {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* Video aspect ratio handling */
+@media (max-width: 767px) {
+	.video-aspect-mobile {
+		aspect-ratio: 9/16;
+		width: 100%;
+		max-height: 100vh;
+		max-height: 100dvh;
+	}
+}
+
+/* Fullscreen mode optimizations */
+.fullscreen-video {
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	height: 100dvh !important;
+	z-index: 9999 !important;
+	background: black !important;
+}
+
+/* Performance optimizations */
+.embla__slide {
+	will-change: transform;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+}
+
+.doom-scroll-video-player video {
+	will-change: transform;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+	.embla__slide {
+		transition: none;
+	}
+
+	.mobile-progress-fill {
+		transition: none;
+	}
+
+	.side-action-button {
+		transition: none;
+	}
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+	.doom-scroll-container {
+		background-color: #000;
+	}
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.video-info-overlay {
+		background: rgba(0, 0, 0, 0.9);
+		border-radius: 8px;
+		padding: 8px;
+	}
+
+	.side-action-button {
+		background: rgba(0, 0, 0, 0.9);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+	}
+}

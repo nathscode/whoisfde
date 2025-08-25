@@ -48,7 +48,7 @@ export type SafeOgReviewExtras = SafeOgReview & {
 	files: Files[];
 };
 export type SafeWorkExtras = SafeWork & {
-	files: WorkFiles[];
+	workFiles: WorkFiles[];
 };
 
 export type FileActions = {

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import "./youtube.css";
+import "./embla.css";
 import Providers from "@/components/Providers";
 import { Toaster } from "@/components/ui/toaster";
 

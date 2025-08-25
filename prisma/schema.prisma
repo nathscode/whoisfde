@@ -16,9 +16,10 @@ enum RoleType {
 }
 
 enum BookingStatus {
+    CANCELLED
+    DENIED
     PENDING
     PROCESSING
-    DENIED
     SUCCESS
 }
 

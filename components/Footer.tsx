@@ -32,7 +32,7 @@ export default function Footer() {
 									height={20}
 									alt="location"
 								/>
-								<span>Lagos, Nigeria</span>
+								<span>Ontario, Canada</span>
 							</div>
 							<div className="flex items-center gap-2 ">
 								<Image
@@ -42,7 +42,7 @@ export default function Footer() {
 									height={20}
 									alt="phone"
 								/>
-								<span>+(234)8133676423</span>
+								<span>+(1)365-866-7109</span>
 							</div>
 							<div className="flex gap-4 items-center mt-4">
 								<Link href={"https://www.instagram.com/whoisfde/"}>

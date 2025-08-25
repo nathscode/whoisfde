@@ -1,0 +1,136 @@
+/* YouTube Embed Styles - Add this to your global CSS */
+
+/* YouTube container styling */
+.youtube-embed-container {
+	position: relative;
+	width: 100%;
+	margin: 0 auto;
+}
+
+/* Fix for youtube-nocookie connection issues */
+.yt-lite iframe {
+	/* Force iframe to use regular YouTube domain */
+	background-color: #000;
+}
+
+/* Override LiteYouTubeEmbed to prevent nocookie usage */
+.yt-lite::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events: none;
+}
+
+/* Responsive aspect ratio for YouTube videos */
+.youtube-embed-container .yt-lite {
+	border-radius: 0.5rem;
+	overflow: hidden;
+}
+
+/* Override LiteYouTubeEmbed default styles */
+.yt-lite {
+	background-color: #000;
+	position: relative;
+	display: block;
+	contain: content;
+	background-position: center center;
+	background-size: cover;
+	cursor: pointer;
+	border-radius: 0.5rem;
+}
+
+/* Play button styling */
+.yt-lite > .lty-playbtn {
+	width: 68px;
+	height: 48px;
+	position: absolute;
+	cursor: pointer;
+	transform: translate3d(-50%, -50%, 0);
+	top: 50%;
+	left: 50%;
+	z-index: 1;
+	background-color: transparent;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 48'%3E%3Cpath d='M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z' fill='%23f00'/%3E%3Cpath d='M45 24 27 14v20' fill='white'/%3E%3C/svg%3E");
+	filter: none;
+	transition: all 0.2s cubic-bezier(0, 0, 0.2, 1);
+	border: none;
+}
+
+/* Play button hover effect */
+.yt-lite:hover > .lty-playbtn,
+.yt-lite .lty-playbtn:focus {
+	background-color: transparent;
+	opacity: 0.8;
+	transform: translate3d(-50%, -50%, 0) scale(1.1);
+}
+
+/* Fix iframe connection issues */
+iframe[src*="youtube-nocookie"] {
+	/* Fallback styling for nocookie iframes */
+	border: 2px solid #ff0000;
+	border-radius: 0.5rem;
+}
+
+/* Loading state improvements */
+.youtube-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	border-radius: 0.5rem;
+	position: relative;
+}
+
+.youtube-loading::after {
+	content: "";
+	width: 40px;
+	height: 40px;
+	border: 3px solid rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	border-top-color: white;
+	animation: spin 1s linear infinite;
+}
+
+/* Error state improvements */
+.youtube-error {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+	background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+	border-radius: 0.5rem;
+	padding: 2rem;
+	text-align: center;
+	color: white;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+	.youtube-embed-container {
+		max-width: 100%;
+		padding: 0;
+	}
+
+	.yt-lite > .lty-playbtn {
+		width: 60px;
+		height: 42px;
+	}
+}
+
+/* Spin animation */
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Force iframe protocol */
+iframe[src*="youtube"] {
+	/* Ensure proper loading */
+	background: #000;
+}

@@ -147,7 +147,7 @@ const DoomScrollClient = ({ works }: Props) => {
 
 								<DoomScrollVideoPlayer
 									videoId={workFile.id}
-									autoPlay={index === currentVideoIndex}
+									autoPlay={false}
 									isActive={index === currentVideoIndex}
 									hideControls={false}
 									onVideoEnd={handleVideoEnd}

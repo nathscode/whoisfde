@@ -28,7 +28,7 @@ const PricingCard = ({ name, features }: Props) => {
 						Book Now
 					</Link>
 				</div>
-				<div className="px-6 pt-6 pb-5">
+				{/* <div className="px-6 pt-6 pb-5">
 					<h3 className="text-sm font-medium text-gray-900">
 						What&apos;s included
 					</h3>
@@ -54,7 +54,7 @@ const PricingCard = ({ name, features }: Props) => {
 							</li>
 						))}
 					</ul>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

@@ -1,6 +1,677 @@
-/* YouTube Embed Styles - Add this to your global CSS */
+/* Enhanced Mobile Fullscreen Scroll Fix CSS */
 
-/* YouTube container styling */
+/* Disable smooth scrolling globally to prevent interference */
+html {
+	scroll-behavior: auto !important;
+}
+
+/* Base video player styling */
+[data-video-player="true"] {
+	transition: none !important;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+}
+
+/* Fullscreen video player styling - all browser variants */
+[data-video-player="true"]:fullscreen,
+[data-video-player="true"]:-webkit-full-screen,
+[data-video-player="true"]:-moz-full-screen,
+[data-video-player="true"]:-ms-fullscreen {
+	background: black !important;
+	width: 100vw !important;
+	width: 100dvw !important;
+	height: 100vh !important;
+	height: 100dvh !important;
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	z-index: 2147483647 !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* Mobile-specific fullscreen fixes */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+	[data-video-player="true"]:fullscreen,
+	[data-video-player="true"]:-webkit-full-screen {
+		width: 100vw !important;
+		width: 100dvw !important;
+		height: 100vh !important;
+		height: 100dvh !important;
+		position: fixed !important;
+		top: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
+		bottom: 0 !important;
+		/* Prevent iOS Safari address bar issues */
+		padding-top: env(safe-area-inset-top, 0) !important;
+		padding-bottom: env(safe-area-inset-bottom, 0) !important;
+		padding-left: env(safe-area-inset-left, 0) !important;
+		padding-right: env(safe-area-inset-right, 0) !important;
+	}
+}
+
+/* Ensure fullscreen video element fills entire screen */
+[data-video-player="true"]:fullscreen video,
+[data-video-player="true"]:-webkit-full-screen video,
+[data-video-player="true"]:-moz-full-screen video,
+[data-video-player="true"]:-ms-fullscreen video {
+	width: 100vw !important;
+	width: 100dvw !important;
+	height: 100vh !important;
+	height: 100dvh !important;
+	max-width: none !important;
+	max-height: none !important;
+	object-fit: contain !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+}
+
+/* Mobile video adjustments */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+	[data-video-player="true"]:fullscreen video,
+	[data-video-player="true"]:-webkit-full-screen video {
+		/* Account for mobile safe areas */
+		width: calc(
+			100vw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0)
+		) !important;
+		height: calc(
+			100vh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0)
+		) !important;
+		width: calc(
+			100dvw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0)
+		) !important;
+		height: calc(
+			100dvh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0)
+		) !important;
+		top: env(safe-area-inset-top, 0) !important;
+		left: env(safe-area-inset-left, 0) !important;
+	}
+}
+
+/* Fix controls positioning in fullscreen */
+[data-video-player="true"]:fullscreen .absolute,
+[data-video-player="true"]:-webkit-full-screen .absolute,
+[data-video-player="true"]:-moz-full-screen .absolute,
+[data-video-player="true"]:-ms-fullscreen .absolute {
+	position: fixed !important;
+}
+
+/* Mobile controls adjustments */
+@media (max-width: 767px) {
+	[data-video-player="true"]:fullscreen .absolute {
+		/* Ensure controls respect safe areas */
+		margin-top: env(safe-area-inset-top, 0) !important;
+		margin-bottom: env(safe-area-inset-bottom, 0) !important;
+		margin-left: env(safe-area-inset-left, 0) !important;
+		margin-right: env(safe-area-inset-right, 0) !important;
+	}
+}
+
+/* Body styles when fullscreen is active (managed by hook) */
+body.fullscreen-scroll-locked {
+	overflow: hidden !important;
+	position: fixed !important;
+	width: 100% !important;
+	height: 100% !important;
+	height: 100vh !important;
+	height: 100dvh !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	touch-action: none !important;
+	-webkit-overflow-scrolling: auto !important;
+}
+
+/* HTML element locking for mobile */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+	html:has([data-video-player="true"]:fullscreen),
+	html:has([data-video-player="true"]:-webkit-full-screen) {
+		overflow: hidden !important;
+		height: 100vh !important;
+		height: 100dvh !important;
+		touch-action: none !important;
+		-webkit-overflow-scrolling: auto !important;
+	}
+}
+
+/* Prevent scroll restoration during transitions */
+body.fullscreen-transitioning {
+	scroll-behavior: auto !important;
+	-webkit-overflow-scrolling: auto !important;
+}
+
+/* Mobile Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+	/* iOS Safari fullscreen fixes */
+	[data-video-player="true"]:fullscreen,
+	[data-video-player="true"]:-webkit-full-screen {
+		height: 100vh !important;
+		height: 100dvh !important;
+		height: -webkit-fill-available !important;
+		width: 100vw !important;
+		width: 100dvw !important;
+		/* Prevent Safari bounce */
+		overscroll-behavior: none !important;
+		-webkit-overflow-scrolling: touch !important;
+	}
+
+	body.fullscreen-scroll-locked {
+		height: 100vh !important;
+		height: 100dvh !important;
+		height: -webkit-fill-available !important;
+		overscroll-behavior: none !important;
+		-webkit-overflow-scrolling: auto !important;
+	}
+}
+
+/* Android Chrome specific fixes */
+@media screen and (max-width: 767px) {
+	[data-video-player="true"]:fullscreen {
+		/* Android viewport fixes */
+		min-height: 100vh !important;
+		min-height: 100dvh !important;
+	}
+}
+
+/* Prevent text selection and context menu during fullscreen */
+[data-video-player="true"]:fullscreen,
+[data-video-player="true"]:fullscreen *,
+[data-video-player="true"]:-webkit-full-screen,
+[data-video-player="true"]:-webkit-full-screen * {
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+	-webkit-touch-callout: none !important;
+	-webkit-tap-highlight-color: transparent !important;
+	touch-action: manipulation !important;
+}
+
+/* Prevent iOS Safari bounce scroll during fullscreen */
+@media (max-width: 767px) {
+	[data-video-player="true"]:fullscreen {
+		overscroll-behavior: none !important;
+		-webkit-overflow-scrolling: touch !important;
+	}
+
+	/* Prevent document scroll during fullscreen */
+	body:has([data-video-player="true"]:fullscreen) {
+		position: fixed !important;
+		width: 100% !important;
+		height: 100% !important;
+		overflow: hidden !important;
+		touch-action: none !important;
+		-webkit-overflow-scrolling: auto !important;
+		overscroll-behavior: none !important;
+	}
+}
+
+/* Orientation change handling */
+@media (orientation: landscape) and (max-width: 1023px) {
+	[data-video-player="true"]:fullscreen,
+	[data-video-player="true"]:-webkit-full-screen {
+		/* Landscape mobile optimizations */
+		width: 100vw !important;
+		width: 100dvw !important;
+		height: 100vh !important;
+		height: 100dvh !important;
+	}
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+	[data-video-player="true"]:fullscreen {
+		/* Touch-specific optimizations */
+		-webkit-user-select: none !important;
+		user-select: none !important;
+		touch-action: manipulation !important;
+	}
+
+	/* Prevent accidental zoom on double tap */
+	[data-video-player="true"]:fullscreen * {
+		touch-action: manipulation !important;
+	}
+}
+
+/* High-DPI mobile displays */
+@media (-webkit-min-device-pixel-ratio: 2) and (max-width: 767px) {
+	[data-video-player="true"]:fullscreen video {
+		/* Ensure crisp video on retina mobile displays */
+		image-rendering: -webkit-optimize-contrast !important;
+		image-rendering: optimize-contrast !important;
+	}
+}
+
+/* Animation performance optimizations for mobile */
+@media (max-width: 767px) {
+	[data-video-player="true"],
+	[data-video-player="true"] * {
+		will-change: auto;
+		transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+		/* Optimize for mobile performance */
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+}
+
+/* Reduced motion support for mobile */
+@media (prefers-reduced-motion: reduce) and (max-width: 767px) {
+	[data-video-player="true"]:-webkit-full-screen {
+		transition: none !important;
+		animation: none !important;
+	}
+}
+
+/* Hide other content during mobile fullscreen */
+@media (max-width: 767px) {
+	body:has([data-video-player="true"]:fullscreen)
+		> *:not([data-video-player="true"]) {
+		display: none !important;
+	}
+
+	body:has([data-video-player="true"]:fullscreen)
+		[data-video-player="true"]:fullscreen {
+		display: flex !important;
+	}
+}
+
+/* Ensure fullscreen video element fills entire screen */
+[data-video-player="true"]:fullscreen video,
+[data-video-player="true"]:-webkit-full-screen video,
+[data-video-player="true"]:-moz-full-screen video,
+[data-video-player="true"]:-ms-fullscreen video {
+	width: 100vw !important;
+	width: 100dvw !important;
+	height: 100vh !important;
+	height: 100dvh !important;
+	max-width: none !important;
+	max-height: none !important;
+	object-fit: contain !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+}
+
+/* Mobile video adjustments */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+	[data-video-player="true"]:fullscreen video,
+	[data-video-player="true"]:-webkit-full-screen video {
+		/* Account for mobile safe areas */
+		width: calc(
+			100vw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0)
+		) !important;
+		height: calc(
+			100vh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0)
+		) !important;
+		width: calc(
+			100dvw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0)
+		) !important;
+		height: calc(
+			100dvh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0)
+		) !important;
+		top: env(safe-area-inset-top, 0) !important;
+		left: env(safe-area-inset-left, 0) !important;
+	}
+}
+
+/* Fix controls positioning in fullscreen */
+[data-video-player="true"]:fullscreen .absolute,
+[data-video-player="true"]:-webkit-full-screen .absolute,
+[data-video-player="true"]:-moz-full-screen .absolute,
+[data-video-player="true"]:-ms-fullscreen .absolute {
+	position: fixed !important;
+}
+
+/* Mobile controls adjustments */
+@media (max-width: 767px) {
+	[data-video-player="true"]:fullscreen .absolute {
+		/* Ensure controls respect safe areas */
+		margin-top: env(safe-area-inset-top, 0) !important;
+		margin-bottom: env(safe-area-inset-bottom, 0) !important;
+		margin-left: env(safe-area-inset-left, 0) !important;
+		margin-right: env(safe-area-inset-right, 0) !important;
+	}
+}
+
+/* Body styles when fullscreen is active (managed by hook) */
+body.fullscreen-scroll-locked {
+	overflow: hidden !important;
+	position: fixed !important;
+	width: 100% !important;
+	height: 100% !important;
+	height: 100vh !important;
+	height: 100dvh !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	touch-action: none !important;
+	-webkit-overflow-scrolling: auto !important;
+}
+
+/* HTML element locking for mobile */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+	html:has([data-video-player="true"]:fullscreen),
+	html:has([data-video-player="true"]:-webkit-full-screen) {
+		overflow: hidden !important;
+		height: 100vh !important;
+		height: 100dvh !important;
+		touch-action: none !important;
+		-webkit-overflow-scrolling: auto !important;
+	}
+}
+
+/* Prevent scroll restoration during transitions */
+body.fullscreen-transitioning {
+	scroll-behavior: auto !important;
+	-webkit-overflow-scrolling: auto !important;
+}
+
+/* Mobile Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+	/* iOS Safari fullscreen fixes */
+	[data-video-player="true"]:fullscreen,
+	[data-video-player="true"]:-webkit-full-screen {
+		height: 100vh !important;
+		height: 100dvh !important;
+		height: -webkit-fill-available !important;
+		width: 100vw !important;
+		width: 100dvw !important;
+		/* Prevent Safari bounce */
+		overscroll-behavior: none !important;
+		-webkit-overflow-scrolling: touch !important;
+	}
+
+	body.fullscreen-scroll-locked {
+		height: 100vh !important;
+		height: 100dvh !important;
+		height: -webkit-fill-available !important;
+		overscroll-behavior: none !important;
+		-webkit-overflow-scrolling: auto !important;
+	}
+}
+
+/* Android Chrome specific fixes */
+@media screen and (max-width: 767px) {
+	[data-video-player="true"]:fullscreen {
+		/* Android viewport fixes */
+		min-height: 100vh !important;
+		min-height: 100dvh !important;
+	}
+}
+
+/* Prevent text selection and context menu during fullscreen */
+[data-video-player="true"]:fullscreen,
+[data-video-player="true"]:fullscreen *,
+[data-video-player="true"]:-webkit-full-screen,
+[data-video-player="true"]:-webkit-full-screen * {
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+	-webkit-touch-callout: none !important;
+	-webkit-tap-highlight-color: transparent !important;
+	touch-action: manipulation !important;
+}
+
+/* Prevent iOS Safari bounce scroll during fullscreen */
+@media (max-width: 767px) {
+	[data-video-player="true"]:fullscreen {
+		overscroll-behavior: none !important;
+		-webkit-overflow-scrolling: touch !important;
+	}
+
+	/* Prevent document scroll during fullscreen */
+	body:has([data-video-player="true"]:fullscreen) {
+		position: fixed !important;
+		width: 100% !important;
+		height: 100% !important;
+		overflow: hidden !important;
+		touch-action: none !important;
+		-webkit-overflow-scrolling: auto !important;
+		overscroll-behavior: none !important;
+	}
+}
+
+/* Orientation change handling */
+@media (orientation: landscape) and (max-width: 1023px) {
+	[data-video-player="true"]:fullscreen,
+	[data-video-player="true"]:-webkit-full-screen {
+		/* Landscape mobile optimizations */
+		width: 100vw !important;
+		width: 100dvw !important;
+		height: 100vh !important;
+		height: 100dvh !important;
+	}
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+	[data-video-player="true"]:fullscreen {
+		/* Touch-specific optimizations */
+		-webkit-user-select: none !important;
+		user-select: none !important;
+		touch-action: manipulation !important;
+	}
+
+	/* Prevent accidental zoom on double tap */
+	[data-video-player="true"]:fullscreen * {
+		touch-action: manipulation !important;
+	}
+}
+
+/* High-DPI mobile displays */
+@media (-webkit-min-device-pixel-ratio: 2) and (max-width: 767px) {
+	[data-video-player="true"]:fullscreen video {
+		/* Ensure crisp video on retina mobile displays */
+		image-rendering: -webkit-optimize-contrast !important;
+		image-rendering: optimize-contrast !important;
+	}
+}
+
+/* Animation performance optimizations for mobile */
+@media (max-width: 767px) {
+	[data-video-player="true"],
+	[data-video-player="true"] * {
+		will-change: auto;
+		transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+		/* Optimize for mobile performance */
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+}
+
+/* Reduced motion support for mobile */
+@media (prefers-reduced-motion: reduce) and (max-width: 767px) {
+	[data-video-player="true"]:-webkit-full-screen {
+		transition: none !important;
+		animation: none !important;
+	}
+}
+
+/* Hide other content during mobile fullscreen */
+@media (max-width: 767px) {
+	body:has([data-video-player="true"]:fullscreen)
+		> *:not([data-video-player="true"]) {
+		display: none !important;
+	}
+
+	body:has([data-video-player="true"]:fullscreen)
+		[data-video-player="true"]:fullscreen {
+		display: flex !important;
+	}
+}
+browser variants */ [data-video-player="true"]:fullscreen,
+[data-video-player="true"]:-webkit-full-screen,
+[data-video-player="true"]:-moz-full-screen,
+[data-video-player="true"]:-ms-fullscreen {
+	background: black !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	z-index: 2147483647 !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* Ensure fullscreen video element fills entire screen */
+[data-video-player="true"]:fullscreen video,
+[data-video-player="true"]:-webkit-full-screen video,
+[data-video-player="true"]:-moz-full-screen video,
+[data-video-player="true"]:-ms-fullscreen video {
+	width: 100vw !important;
+	height: 100vh !important;
+	max-width: none !important;
+	max-height: none !important;
+	object-fit: contain !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+}
+
+/* Fix controls positioning in fullscreen */
+[data-video-player="true"]:fullscreen .absolute,
+[data-video-player="true"]:-webkit-full-screen .absolute,
+[data-video-player="true"]:-moz-full-screen .absolute,
+[data-video-player="true"]:-ms-fullscreen .absolute {
+	position: fixed !important;
+}
+
+/* Prevent focus outline issues in fullscreen */
+[data-video-player="true"]:fullscreen *:focus,
+[data-video-player="true"]:-webkit-full-screen *:focus,
+[data-video-player="true"]:-moz-full-screen *:focus,
+[data-video-player="true"]:-ms-fullscreen *:focus {
+	outline: none !important;
+}
+
+/* Body styles when fullscreen is active (managed by hook) */
+body.fullscreen-scroll-locked {
+	overflow: hidden !important;
+	position: fixed !important;
+	width: 100% !important;
+	height: 100% !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* Prevent scroll restoration during transitions */
+body.fullscreen-transitioning {
+	scroll-behavior: auto !important;
+}
+
+/* Hide other content during fullscreen to prevent interference */
+body:has([data-video-player="true"]:fullscreen) > *:not(script):not(style) {
+	visibility: hidden;
+}
+
+body:has([data-video-player="true"]:fullscreen)
+	[data-video-player="true"]:fullscreen {
+	visibility: visible !important;
+}
+
+/* Alternative approach for browsers that don't support :has() */
+.fullscreen-active {
+	overflow: hidden !important;
+}
+
+.fullscreen-active > *:not([data-video-player="true"]) {
+	visibility: hidden !important;
+}
+
+.fullscreen-active [data-video-player="true"] {
+	visibility: visible !important;
+}
+
+/* Webkit-specific fullscreen fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+	[data-video-player="true"]:-webkit-full-screen {
+		width: 100vw !important;
+		height: 100vh !important;
+		background: black !important;
+	}
+}
+
+/* Mobile Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+	[data-video-player="true"]:fullscreen,
+	[data-video-player="true"]:-webkit-full-screen {
+		height: 100vh !important;
+		height: 100dvh !important;
+		width: 100vw !important;
+		width: 100dvw !important;
+	}
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+	[data-video-player="true"]:-moz-full-screen {
+		background: black !important;
+		width: 100vw !important;
+		height: 100vh !important;
+	}
+}
+
+/* Prevent text selection and context menu during fullscreen */
+[data-video-player="true"]:fullscreen,
+[data-video-player="true"]:fullscreen * {
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+	-ms-user-select: none !important;
+	user-select: none !important;
+	-webkit-touch-callout: none !important;
+	-webkit-tap-highlight-color: transparent !important;
+}
+
+/* Ensure proper cursor behavior */
+[data-video-player="true"]:fullscreen {
+	cursor: none;
+}
+
+[data-video-player="true"]:fullscreen:hover {
+	cursor: default;
+}
+
+/* Animation performance optimizations */
+[data-video-player="true"],
+[data-video-player="true"] * {
+	will-change: auto;
+	transform: translateZ(0);
+	-webkit-transform: translateZ(0);
+}
+
+/* Prevent scroll jumping on iOS */
+@media (max-width: 767px) {
+	body.fullscreen-scroll-locked {
+		-webkit-overflow-scrolling: auto !important;
+		overflow-scrolling: auto !important;
+	}
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	[data-video-player="true"]:fullscreen {
+		background: black !important;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	[data-video-player="true"],
+	[data-video-player="true"] * {
+		transition: none !important;
+		animation: none !important;
+	}
+}
 .youtube-embed-container {
 	position: relative;
 	width: 100%;

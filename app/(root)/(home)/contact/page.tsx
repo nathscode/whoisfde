@@ -59,10 +59,10 @@ const ContactPage = async () => {
 											></path>
 										</svg>
 										<Link
-											href="tel:+2348133676423"
+											href="tel:+13658667109"
 											className="text-white text-sm ml-3"
 										>
-											<strong>+2348133676423</strong>
+											<strong>+13658667109</strong>
 										</Link>
 									</li>
 									<li className="flex items-center">
@@ -83,7 +83,7 @@ const ContactPage = async () => {
 											></path>
 										</svg>
 										<Link href="#" className="text-white text-sm ml-3">
-											<strong>Lagos, Nigeria.</strong>
+											<strong>Ontario, Canada.</strong>
 										</Link>
 									</li>
 								</ul>

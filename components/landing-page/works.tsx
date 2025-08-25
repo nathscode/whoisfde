@@ -8,6 +8,7 @@ import Reveal from "../Reveal";
 import TabController from "../util/tab-controller";
 import ContentCard from "../work/ContentCard";
 import { ContentSkeleton } from "../skeletons/ContentSkeleton";
+import { Play } from "lucide-react";
 
 // Types
 interface WorkData {
@@ -84,7 +85,23 @@ const ContentComponent = ({
 
 	return (
 		<div className="flex flex-col w-full py-4">
-			<h1 className="font-heading text-2xl mb-4">{displayName}</h1>
+			<div className="flex justify-between items-center h-full w-full mb-4">
+				<div className="justify-start">
+					<h1 className="font-heading leading-none font-bold text-2xl">
+						{displayName}
+					</h1>
+				</div>
+				<div className="justify-end">
+					<Link
+						href={`/doomscroll`}
+						className="inline-flex justify-center items-center text-sm font-semibold border border-black px-3 py-2 rounded-full hover:bg-black hover:text-white transition-all duration-200"
+					>
+						<span>Doomscroll</span>
+
+						<Play className="inline-block ml-2 h-4 w-4" />
+					</Link>
+				</div>
+			</div>
 			<ContentCard data={data} />
 		</div>
 	);

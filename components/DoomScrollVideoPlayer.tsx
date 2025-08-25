@@ -1,17 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import {
-	Play,
-	Pause,
-	Volume2,
-	VolumeX,
-	Maximize,
-	Minimize,
-	Heart,
-	MessageCircle,
-	Share,
-} from "lucide-react";
+import { useFullscreenScrollFix } from "@/hooks/use-body-scroll-lock";
+import { Maximize, Minimize, Play, Volume2, VolumeX } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface VideoPlayerProps {
 	videoId: string;
@@ -36,6 +27,7 @@ export const DoomScrollVideoPlayer = ({
 }: VideoPlayerProps) => {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const playerRef = useRef<HTMLDivElement>(null);
+
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [progress, setProgress] = useState(0);
 	const [volume, setVolume] = useState(1);
@@ -47,6 +39,17 @@ export const DoomScrollVideoPlayer = ({
 	const [currentTime, setCurrentTime] = useState(0);
 	const [isMobile, setIsMobile] = useState(false);
 	const [hasEnded, setHasEnded] = useState(false);
+
+	// Use the custom fullscreen scroll fix hook
+	const {
+		saveScrollPosition,
+		restoreScrollPosition,
+		isFullscreen: hookIsFullscreen,
+	} = useFullscreenScrollFix({
+		preventScrollJump: true,
+		restoreOnExit: true,
+		disableBodyScroll: true,
+	});
 
 	// Detect mobile device
 	useEffect(() => {
@@ -103,7 +106,6 @@ export const DoomScrollVideoPlayer = ({
 		setHasEnded(true);
 		setProgress(100);
 
-		// Call the callback after a brief delay to ensure state is updated
 		setTimeout(() => {
 			onVideoEnd?.();
 		}, 100);
@@ -122,7 +124,7 @@ export const DoomScrollVideoPlayer = ({
 			const seekTime = (clickPercent / 100) * videoRef.current.duration;
 
 			videoRef.current.currentTime = seekTime;
-			setHasEnded(false); // Reset ended state when seeking
+			setHasEnded(false);
 		},
 		[]
 	);
@@ -143,17 +145,23 @@ export const DoomScrollVideoPlayer = ({
 		return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 	};
 
-	// Toggle fullscreen
-	const toggleFullscreen = useCallback(() => {
+	// Toggle fullscreen with the hook's scroll management
+	const toggleFullscreen = useCallback(async () => {
 		if (!playerRef.current) return;
-		if (!document.fullscreenElement) {
-			playerRef.current.requestFullscreen().catch((err) => {
-				console.error("Fullscreen error:", err);
-			});
-		} else {
-			document.exitFullscreen();
+
+		try {
+			if (!document.fullscreenElement) {
+				// Save scroll position before entering fullscreen
+				saveScrollPosition();
+				await playerRef.current.requestFullscreen();
+			} else {
+				// Exit fullscreen - the hook will handle scroll restoration
+				await document.exitFullscreen();
+			}
+		} catch (err) {
+			console.error("Fullscreen error:", err);
 		}
-	}, []);
+	}, [saveScrollPosition]);
 
 	// Handle video playing based on isActive prop
 	useEffect(() => {
@@ -207,19 +215,12 @@ export const DoomScrollVideoPlayer = ({
 		};
 	}, [isPlaying, hideControls, isMobile, hasEnded]);
 
-	// Handle fullscreen changes
+	// Update fullscreen state from hook
 	useEffect(() => {
-		const handleFullscreenChange = () => {
-			setIsFullscreen(!!document.fullscreenElement);
-		};
+		setIsFullscreen(hookIsFullscreen);
+	}, [hookIsFullscreen]);
 
-		document.addEventListener("fullscreenchange", handleFullscreenChange);
-		return () => {
-			document.removeEventListener("fullscreenchange", handleFullscreenChange);
-		};
-	}, []);
-
-	// Handle keyboard shortcuts (only when video is in focus)
+	// Handle keyboard shortcuts
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (!isActive || !videoRef.current) return;
@@ -233,6 +234,16 @@ export const DoomScrollVideoPlayer = ({
 					e.preventDefault();
 					toggleMute();
 					break;
+				case "f":
+					e.preventDefault();
+					toggleFullscreen();
+					break;
+				case "Escape":
+					if (document.fullscreenElement) {
+						e.preventDefault();
+						document.exitFullscreen();
+					}
+					break;
 				default:
 					return;
 			}
@@ -243,13 +254,14 @@ export const DoomScrollVideoPlayer = ({
 		}
 
 		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [isActive, togglePlay, toggleMute, isMobile]);
+	}, [isActive, togglePlay, toggleMute, toggleFullscreen, isMobile]);
 
 	return (
 		<div
 			ref={playerRef}
 			className={`relative w-full h-full bg-black ${className}`}
 			onClick={togglePlay}
+			data-video-player="true"
 		>
 			<video
 				ref={videoRef}
@@ -319,7 +331,7 @@ export const DoomScrollVideoPlayer = ({
 				</div>
 			)}
 
-			{/* Side Actions (TikTok-style) - Mobile optimized */}
+			{/* Side Actions */}
 			<div
 				className={`absolute ${
 					isMobile ? "right-3 bottom-24" : "right-4 bottom-32"
@@ -330,7 +342,7 @@ export const DoomScrollVideoPlayer = ({
 						e.stopPropagation();
 						toggleMute();
 					}}
-					className="p-3 bg-gray-800/50 bg-opacity-60 rounded-full text-white hover:bg-opacity-80 transition-all"
+					className="p-3 bg-gray-800/50 bg-opacity-60 rounded-full text-white hover:bg-opacity-80 transition-all backdrop-blur-sm"
 				>
 					{isMuted ? (
 						<VolumeX className="w-5 h-5" />
@@ -340,7 +352,7 @@ export const DoomScrollVideoPlayer = ({
 				</button>
 			</div>
 
-			{/* Bottom Info - Mobile optimized */}
+			{/* Bottom Info */}
 			{workData && (
 				<div
 					className={`absolute ${
@@ -369,7 +381,7 @@ export const DoomScrollVideoPlayer = ({
 						@{workData.author || "user"}
 					</p>
 
-					{/* Progress bar - Mobile optimized */}
+					{/* Progress bar */}
 					<div className="mt-3">
 						<div
 							className={`flex items-center space-x-2 ${
@@ -401,6 +413,9 @@ export const DoomScrollVideoPlayer = ({
 							toggleFullscreen();
 						}}
 						className="p-2 bg-gray-800 bg-opacity-60 rounded-full text-white hover:bg-opacity-80 transition-all backdrop-blur-sm"
+						title={
+							isFullscreen ? "Exit fullscreen (Esc)" : "Enter fullscreen (F)"
+						}
 					>
 						{isFullscreen ? (
 							<Minimize className="w-5 h-5" />

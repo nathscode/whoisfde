@@ -29,11 +29,11 @@ interface ContentComponentProps {
 
 // Work types configuration
 const WORK_TYPES = [
-	{ key: "Concert", display: "CONCERTS", title: "Concert" },
-	{ key: "Parties", display: "PARTIES", title: "Parties" },
+	{ key: "Parties", display: "BRAND ADS", title: "Brand Ads" },
+	{ key: "Concert", display: "EVENTS", title: "Events" },
+	{ key: "Contents", display: "PERSONAL PROJECTS", title: "Personal Projects" },
 	{ key: "Wedding", display: "WEDDINGS", title: "Wedding" },
-	{ key: "Contents", display: "CONTENTS", title: "General Content" },
-	{ key: "Photography", display: "Photography", title: "Photography" },
+	{ key: "Photography", display: "Stills", title: "Frozen in times (Stills)" },
 ] as const;
 
 // Generic content component to avoid code duplication

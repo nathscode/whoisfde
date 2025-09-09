@@ -3,7 +3,14 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import {
+	useCallback,
+	useEffect,
+	useState,
+	useTransition,
+	useRef,
+	useMemo,
+} from "react";
 import { useForm } from "react-hook-form";
 
 import { createWork } from "@/actions/createWork";
@@ -36,7 +43,7 @@ import { useCreateVideo } from "@/features/video/video-create";
 import useMount from "@/hooks/use-mount";
 import { WorkSchema, WorkSchemaInfer } from "@/lib/validators/work";
 import { FileActions } from "@/types";
-import { ImageIcon, Loader } from "lucide-react";
+import { ImageIcon, Loader, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 import { VideoCondenseProgress } from "../VideoCompressProgress";
@@ -44,6 +51,7 @@ import { VideoOutputDetails } from "../VideoOutputDetail";
 import LoadingButton from "../common/LoadingButton";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
+import { Alert, AlertDescription } from "../ui/alert";
 import { useToast } from "../ui/use-toast";
 import { bytesToSize } from "../util/bytesToSize";
 
@@ -52,9 +60,14 @@ type Props = {};
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
 const VALID_FILE_TYPES = ["video/mp4", "video/quicktime", "video/x-msvideo"];
 
+// FFmpeg loading states
+type FFmpegLoadingState = "idle" | "loading" | "loaded" | "error";
+
 const WorkModal = (props: Props) => {
-	const [ffmpeg] = useState(() => new FFmpeg());
-	const [isFFmpegLoaded, setIsFFmpegLoaded] = useState(false);
+	const ffmpegRef = useRef<FFmpeg | null>(null);
+	const [ffmpegLoadingState, setFFmpegLoadingState] =
+		useState<FFmpegLoadingState>("idle");
+	const [ffmpegError, setFFmpegError] = useState<string>("");
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [fileUrl, setFileUrl] = useState<File>();
 	const [videoFile, setVideoFile] = useState<FileActions>();
@@ -97,41 +110,101 @@ const WorkModal = (props: Props) => {
 	const { toast } = useToast();
 	const isMounted = useMount();
 
+	// Memoized quality and resolution settings
+	const qualitySettings = useMemo(() => {
+		switch (quality) {
+			case "low":
+				return { crf: 26, preset: "ultrafast", audioBitrate: "96k" };
+			case "medium":
+				return { crf: 22, preset: "fast", audioBitrate: "128k" };
+			case "high":
+				return { crf: 18, preset: "medium", audioBitrate: "192k" };
+			default:
+				return { crf: 22, preset: "fast", audioBitrate: "128k" };
+		}
+	}, [quality]);
+
+	const resolutionScale = useMemo(() => {
+		switch (resolution) {
+			case "480p":
+				return "scale='min(854,iw)':-2";
+			case "720p":
+				return "scale='min(1280,iw)':-2";
+			case "1080p":
+				return "scale='min(1920,iw)':-2";
+			case "original":
+				return "";
+			default:
+				return "scale='min(1280,iw)':-2";
+		}
+	}, [resolution]);
+
+	// Initialize FFmpeg when modal opens
 	useEffect(() => {
-		const loadFFmpeg = async () => {
+		if (!isModalOpen || ffmpegLoadingState !== "idle") return;
+
+		const initFFmpeg = async () => {
 			try {
+				setFFmpegLoadingState("loading");
+
+				if (!ffmpegRef.current) {
+					ffmpegRef.current = new FFmpeg();
+				}
+
+				const ffmpeg = ffmpegRef.current;
+
+				// Check if already loaded
+				if (ffmpeg.loaded) {
+					setFFmpegLoadingState("loaded");
+					return;
+				}
+
 				await ffmpeg.load({
-					coreURL: "/ffmpeg/ffmpeg-core.js",
-					wasmURL: "/ffmpeg/ffmpeg-core.wasm",
-					workerURL: "/ffmpeg/ffmpeg-core.worker.js",
+					coreURL: await toBlobURL("/ffmpeg/ffmpeg-core.js", "text/javascript"),
+					wasmURL: await toBlobURL(
+						"/ffmpeg/ffmpeg-core.wasm",
+						"application/wasm"
+					),
+					workerURL: await toBlobURL(
+						"/ffmpeg/ffmpeg-core.worker.js",
+						"text/javascript"
+					),
 				});
 
 				ffmpeg.on("progress", ({ progress }) => {
 					setProgress(progress * 100);
 				});
 
-				ffmpeg.on("log", ({ message }) => {});
+				ffmpeg.on("log", ({ message }) => {
+					// Optional: handle logs
+				});
 
-				setIsFFmpegLoaded(true);
+				setFFmpegLoadingState("loaded");
+				setFFmpegError("");
 			} catch (error: any) {
 				console.error("FFmpeg load error:", error);
+				setFFmpegLoadingState("error");
+				setFFmpegError(error.message || "Failed to load FFmpeg");
 				setError({
-					message: "Failed to load FFmpeg",
+					message: "Failed to load video processor",
 					details: error.message,
 					isFatal: true,
 				});
 				toast({
 					title: "Initialization Error",
 					description:
-						"Failed to load video processor. Please refresh the page.",
+						"Failed to load video processor. Please try reopening the modal.",
 					variant: "destructive",
 					duration: 10000,
 				});
 			}
 		};
 
-		loadFFmpeg();
+		initFFmpeg();
+	}, [isModalOpen, ffmpegLoadingState, toast]);
 
+	// Cleanup effect
+	useEffect(() => {
 		return () => {
 			if (videoFile?.url) {
 				URL.revokeObjectURL(videoFile.url);
@@ -140,8 +213,9 @@ const WorkModal = (props: Props) => {
 				URL.revokeObjectURL(URL.createObjectURL(fileUrl));
 			}
 		};
-	}, []);
+	}, [videoFile?.url, fileUrl]);
 
+	// Timer effect
 	useEffect(() => {
 		let timer: NodeJS.Timeout;
 
@@ -208,38 +282,20 @@ const WorkModal = (props: Props) => {
 		maxSize: MAX_FILE_SIZE,
 	});
 
-	const getQualitySettings = () => {
-		switch (quality) {
-			case "low":
-				return { crf: 26, preset: "ultrafast", audioBitrate: "96k" };
-			case "medium":
-				return { crf: 22, preset: "fast", audioBitrate: "128k" };
-			case "high":
-				return { crf: 18, preset: "medium", audioBitrate: "192k" };
-			default:
-				return { crf: 22, preset: "fast", audioBitrate: "128k" };
-		}
-	};
-
-	const getResolutionScale = () => {
-		switch (resolution) {
-			case "480p":
-				return "scale='min(854,iw)':-2";
-			case "720p":
-				return "scale='min(1280,iw)':-2";
-			case "1080p":
-				return "scale='min(1920,iw)':-2";
-			case "original":
-				return "";
-			default:
-				return "scale='min(1280,iw)':-2";
-		}
-	};
-
 	const condense = async () => {
-		if (!videoFile?.file || !isFFmpegLoaded) {
+		if (!videoFile?.file) {
 			toast({
-				description: "FFmpeg is still loading. Please wait...",
+				description: "Please select a video file first.",
+				variant: "destructive",
+			});
+			return;
+		}
+
+		if (ffmpegLoadingState !== "loaded" || !ffmpegRef.current) {
+			toast({
+				title: "Video Processor Loading",
+				description:
+					"Please wait for the video processor to finish loading before processing your file.",
 				variant: "destructive",
 			});
 			return;
@@ -249,18 +305,20 @@ const WorkModal = (props: Props) => {
 			setStatus("condensing");
 			setTime({ startTime: new Date(), elapsedSeconds: 0 });
 
-			const inputFileName =
-				"input" +
-				videoFile.file.name.substring(videoFile.file.name.lastIndexOf("."));
-			const outputFileName = "output.mp4";
+			const ffmpeg = ffmpegRef.current;
+			const inputFileName = `input_${Date.now()}${videoFile.file.name.substring(
+				videoFile.file.name.lastIndexOf(".")
+			)}`;
+			const outputFileName = `output_${Date.now()}.mp4`;
 
 			const controller = new AbortController();
 			setAbortController(controller);
 
+			// Write input file
 			await ffmpeg.writeFile(inputFileName, await fetchFile(videoFile.file));
 
-			const { crf, preset, audioBitrate } = getQualitySettings();
-			const scaleFilter = getResolutionScale();
+			const { crf, preset, audioBitrate } = qualitySettings;
+			const scaleFilter = resolutionScale;
 
 			const ffmpegCommands = [
 				"-i",
@@ -294,13 +352,15 @@ const WorkModal = (props: Props) => {
 					console.log("Processing was manually aborted");
 					return;
 				}
+				throw error;
 			}
 
+			// Read output file
 			const data = await ffmpeg.readFile(outputFileName);
 			const blob = new Blob([data], { type: "video/mp4" });
 			const url = URL.createObjectURL(blob);
-			// @ts-expect-error
-			const outputSize = data.byteLength;
+			const outputSize = (data as Uint8Array).byteLength;
+
 			setMetrics({
 				inputSize: videoFile.fileSize,
 				outputSize,
@@ -318,6 +378,14 @@ const WorkModal = (props: Props) => {
 			setStatus("converted");
 			setTime((prev) => ({ ...prev, startTime: undefined }));
 			setProgress(0);
+
+			// Cleanup temporary files
+			try {
+				await ffmpeg.deleteFile(inputFileName);
+				await ffmpeg.deleteFile(outputFileName);
+			} catch (cleanupError) {
+				console.warn("Failed to clean up temporary files:", cleanupError);
+			}
 		} catch (error: any) {
 			if (error.name === "AbortError") {
 				console.log("Processing was aborted");
@@ -329,16 +397,10 @@ const WorkModal = (props: Props) => {
 			setProgress(0);
 			setTime({ elapsedSeconds: 0, startTime: undefined });
 			toast({
-				description: `Error converting video. ${error.message}`,
+				title: "Conversion Failed",
+				description: `Error converting video: ${error.message}`,
 				variant: "destructive",
 			});
-		} finally {
-			try {
-				await ffmpeg.deleteFile("input.mp4");
-				await ffmpeg.deleteFile("output.mp4");
-			} catch (cleanupError) {
-				console.warn("Failed to clean up temporary files:", cleanupError);
-			}
 		}
 	};
 
@@ -347,6 +409,7 @@ const WorkModal = (props: Props) => {
 			abortController.abort();
 			setStatus("notStarted");
 			setProgress(0);
+			setTime({ elapsedSeconds: 0, startTime: undefined });
 			toast({
 				description: "Processing cancelled",
 			});
@@ -409,26 +472,79 @@ const WorkModal = (props: Props) => {
 		}
 	};
 
+	// Reset states when modal closes
+	const handleModalChange = (open: boolean) => {
+		setIsModalOpen(open);
+		if (!open) {
+			// Reset all states when modal closes
+			setStatus("notStarted");
+			setProgress(0);
+			setTime({ elapsedSeconds: 0 });
+			setError(null);
+			setFileUrl(undefined);
+			setVideoFile(undefined);
+			if (abortController) {
+				abortController.abort();
+			}
+		}
+	};
+
 	if (!isMounted) return null;
 
+	const isFFmpegReady = ffmpegLoadingState === "loaded";
+	const isFFmpegLoading = ffmpegLoadingState === "loading";
+	const hasFFmpegError = ffmpegLoadingState === "error";
+
 	return (
-		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+		<Dialog open={isModalOpen} onOpenChange={handleModalChange}>
 			<DialogTrigger asChild>
 				<Button variant="default" size="lg" disabled={false}>
 					Add Work
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="bg-white text-black p-0 overflow-hidden">
+			<DialogContent className="bg-white text-black p-0 overflow-hidden max-w-2xl max-h-[90vh] overflow-y-auto">
 				<DialogHeader className="pt-8 px-6">
 					<DialogTitle className="text-2xl text-center font-bold">
 						Add Work
 					</DialogTitle>
 				</DialogHeader>
-				<div className="flex items-start flex-col  w-full justify-start p-5">
+
+				{/* FFmpeg Loading Status */}
+				{check && isFFmpegLoading && (
+					<div className="px-6">
+						<Alert>
+							<Loader className="h-4 w-4 animate-spin" />
+							<AlertDescription>
+								Loading video processor... This may take a moment.
+							</AlertDescription>
+						</Alert>
+					</div>
+				)}
+
+				{check && hasFFmpegError && (
+					<div className="px-6">
+						<Alert variant="destructive">
+							<AlertCircle className="h-4 w-4" />
+							<AlertDescription>
+								Failed to load video processor: {ffmpegError}
+								<Button
+									variant="outline"
+									size="sm"
+									className="ml-2"
+									onClick={() => setFFmpegLoadingState("idle")}
+								>
+									Retry
+								</Button>
+							</AlertDescription>
+						</Alert>
+					</div>
+				)}
+
+				<div className="flex items-start flex-col w-full justify-start p-6">
 					<Form {...form}>
 						<form
 							onSubmit={form.handleSubmit(onSubmit)}
-							className="space-y-4  w-full"
+							className="space-y-4 w-full"
 						>
 							<FormField
 								control={form.control}
@@ -470,6 +586,7 @@ const WorkModal = (props: Props) => {
 									</FormItem>
 								)}
 							/>
+
 							<FormField
 								control={form.control}
 								name="caption"
@@ -491,6 +608,7 @@ const WorkModal = (props: Props) => {
 									</FormItem>
 								)}
 							/>
+
 							{!check && (
 								<FormField
 									control={form.control}
@@ -514,6 +632,7 @@ const WorkModal = (props: Props) => {
 									)}
 								/>
 							)}
+
 							<div className="flex items-center space-x-2">
 								<Switch
 									id="addFile"
@@ -524,61 +643,127 @@ const WorkModal = (props: Props) => {
 									{check ? "Add Link" : "Add File"}
 								</Label>
 							</div>
+
 							{check && (
 								<>
+									{/* Quality and Resolution Settings */}
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<Label className="text-sm font-medium">Quality</Label>
+											<Select
+												value={quality}
+												onValueChange={(value: "low" | "medium" | "high") =>
+													setQuality(value)
+												}
+											>
+												<SelectTrigger>
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="low">Low (Fast)</SelectItem>
+													<SelectItem value="medium">Medium</SelectItem>
+													<SelectItem value="high">High (Slow)</SelectItem>
+												</SelectContent>
+											</Select>
+										</div>
+										<div>
+											<Label className="text-sm font-medium">Resolution</Label>
+											<Select
+												value={resolution}
+												onValueChange={(
+													value: "480p" | "720p" | "1080p" | "original"
+												) => setResolution(value)}
+											>
+												<SelectTrigger>
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="480p">480p</SelectItem>
+													<SelectItem value="720p">720p</SelectItem>
+													<SelectItem value="1080p">1080p</SelectItem>
+													<SelectItem value="original">Original</SelectItem>
+												</SelectContent>
+											</Select>
+										</div>
+									</div>
+
 									<div className="flex flex-col">
-										<Label className="mb-4"> File</Label>
+										<Label className="mb-4">File</Label>
 										<div
 											{...getRootProps()}
-											className={`border-2 border-dashed rounded-lg p-4 ${
-												isDragActive ? "border-blue-500" : "border-gray-300"
+											className={`border-2 border-dashed rounded-lg p-4 transition-colors ${
+												isDragActive
+													? "border-blue-500 bg-blue-50"
+													: "border-gray-300"
 											}`}
 										>
 											<input {...getInputProps()} />
-											{isDragActive ? (
-												<p>Drop the files here ...</p>
-											) : (
-												<div className="flex items-start justify-start">
-													<div>
-														<ImageIcon className="w-10 h-10" />
-													</div>
-													<div className="ml-4">
-														<p className="text-sm">
-															{isDragActive
-																? "Drop the files here"
-																: "Drag and drop files here or click to select"}
-														</p>
-														<p className="text-xs text-gray-500 mt-1">
-															Accepted file types: AVI, MOV, MP4. Max file size:
-															500MB.
-														</p>
-													</div>
+											<div className="flex items-start justify-start">
+												<div>
+													<ImageIcon className="w-10 h-10" />
 												</div>
-											)}
+												<div className="ml-4">
+													<p className="text-sm">
+														{isDragActive
+															? "Drop the files here"
+															: "Drag and drop files here or click to select"}
+													</p>
+													<p className="text-xs text-gray-500 mt-1">
+														Accepted file types: AVI, MOV, MP4. Max file size:
+														500MB.
+													</p>
+												</div>
+											</div>
 											{fileUrl && (
-												<div className="flex flex-col w-full mt-4">
+												<div className="flex flex-col w-full mt-4 p-2 bg-gray-50 rounded">
 													<div className="flex justify-between items-center">
-														<p>File name</p>
-														<p className="truncate w-[200px]">
-															{fileUrl?.name.toString()}
+														<p className="font-medium">File name:</p>
+														<p className="truncate w-[200px] text-sm">
+															{fileUrl.name}
 														</p>
 													</div>
 													<div className="flex justify-between items-center">
-														<p>File size</p>
-														<p>{bytesToSize(fileUrl.size)}</p>
+														<p className="font-medium">File size:</p>
+														<p className="text-sm">
+															{bytesToSize(fileUrl.size)}
+														</p>
 													</div>
 												</div>
 											)}
 										</div>
 									</div>
+
 									{status === "condensing" && (
-										<VideoCondenseProgress
-											progress={progress}
-											seconds={time.elapsedSeconds!}
-										/>
+										<div className="space-y-2">
+											<VideoCondenseProgress
+												progress={progress}
+												seconds={time.elapsedSeconds!}
+											/>
+											<Button
+												type="button"
+												variant="outline"
+												onClick={cancelProcessing}
+												className="w-full"
+											>
+												Cancel Processing
+											</Button>
+										</div>
 									)}
 								</>
 							)}
+
+							{error && (
+								<Alert variant="destructive">
+									<AlertCircle className="h-4 w-4" />
+									<AlertDescription>
+										{error.message}
+										{error.details && (
+											<div className="text-xs mt-1">{error.details}</div>
+										)}
+									</AlertDescription>
+								</Alert>
+							)}
+
 							{!check && (
 								<LoadingButton
 									type="submit"
@@ -589,50 +774,68 @@ const WorkModal = (props: Props) => {
 								</LoadingButton>
 							)}
 
-							{/* If switch is ON (Add File) */}
 							{check && (
 								<>
-									{/* If condensing not started */}
-									{status === "notStarted" && (
-										<button
+									{status === "notStarted" && fileUrl && (
+										<Button
 											onClick={condense}
 											type="button"
-											className="bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-zinc-700 via-zinc-950 to-zinc-950 rounded-lg text-white/90 relative px-3.5 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition ease-in-out duration-500 focus:ring-zinc-950 flex-shrink-0"
+											disabled={!isFFmpegReady}
+											className="w-full bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-zinc-700 via-zinc-950 to-zinc-950 text-white/90"
 										>
-											Condense
-										</button>
+											{isFFmpegLoading ? (
+												<>
+													<Loader className="animate-spin w-4 h-4 mr-2" />
+													Loading Processor...
+												</>
+											) : (
+												"Condense Video"
+											)}
+										</Button>
 									)}
 
-									{/* After condensing */}
 									{status === "converted" && videoFile && (
 										<VideoOutputDetails
 											timeTaken={time.elapsedSeconds}
-											videoFile={videoFile!}
+											videoFile={videoFile}
 										/>
 									)}
-									{!isSuccess && (
+
+									{(status === "converted" || status === "uploading") && (
 										<>
 											{isPending && (
-												<div className="flex gap-2 items-center">
-													Uploading video...
+												<div className="flex gap-2 items-center justify-center p-2">
 													<Loader className="animate-spin w-4 h-4" />
+													Uploading video...
 												</div>
 											)}
 											<LoadingButton
 												type="submit"
 												loading={isPending}
+												disabled={status === "uploading"}
 												className="mt-6 w-full"
 											>
-												Submit
+												Upload Video
 											</LoadingButton>
 										</>
 									)}
+
 									{isSuccess && (
-										<p className="text-green-500">
-											Video Uploaded Successfully!
-										</p>
+										<Alert>
+											<AlertDescription className="text-green-600">
+												Video uploaded successfully!
+											</AlertDescription>
+										</Alert>
 									)}
-									{isError && <p className="text-red-500">Failed to upload.</p>}
+
+									{isError && (
+										<Alert variant="destructive">
+											<AlertCircle className="h-4 w-4" />
+											<AlertDescription>
+												Failed to upload video. Please try again.
+											</AlertDescription>
+										</Alert>
+									)}
 								</>
 							)}
 						</form>

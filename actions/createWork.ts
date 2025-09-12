@@ -43,7 +43,7 @@ export async function createWork(values: z.infer<typeof uploadSchema>) {
 		}
 
 		return { message: "Work uploaded successfully." };
-	} catch (error) {
+	} catch (error: any) {
 		logger.error("Error in createWork:", error);
 		return { message: "Database Error: Failed to upload work." };
 	}

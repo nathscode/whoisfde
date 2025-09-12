@@ -45,7 +45,7 @@ export default function BrandSection() {
 							<div className="flex">
 								<img
 									className="mx-auto h-5 w-fit dark:invert"
-									src="/images/brands/infinix_logo.png"
+									src="/images/brands/new_infinix_logo.png"
 									alt="infinix Logo"
 									height="20"
 									width="auto"

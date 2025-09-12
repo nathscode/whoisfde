@@ -1,4 +1,5 @@
 import Padding from "@/components/util/home-padding";
+import { Phone } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,15 @@ const ContactPage = async () => {
 									reach out we'd love to hear about your project and provide
 									help.
 								</p>
+								<div className="flex flex-col w-fit mt-5">
+									<Link
+										href="tel:+13658667109"
+										className="inline-flex items-center gap-4 text-white border py-2 px-5 text-sm  w-fit hover:bg-white hover:text-black transition"
+									>
+										<Phone className="size-4" />
+										<strong>Book a call</strong>
+									</Link>
+								</div>
 								<ul className="mt-12 space-y-4">
 									<li className="flex items-center">
 										<svg

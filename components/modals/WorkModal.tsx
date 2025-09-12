@@ -567,6 +567,7 @@ const WorkModal = (props: Props) => {
 															"Concert",
 															"Contents",
 															"Parties",
+															"Estate",
 															"Photography",
 															"Weddings",
 														].map((event, index) => (

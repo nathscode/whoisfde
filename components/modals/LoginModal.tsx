@@ -6,15 +6,6 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
 import {
 	Form,
 	FormControl,
@@ -123,101 +114,89 @@ const LoginModal = (props: Props) => {
 	}
 
 	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant="default" size="lg" disabled={false}>
-					Login
-				</Button>
-			</DialogTrigger>
-			<DialogContent className="bg-white text-black p-0 overflow-hidden">
-				<DialogHeader className="pt-8 px-6">
-					<DialogTitle className="text-2xl text-center font-bold">
-						Login as OG&apos;s
-					</DialogTitle>
-					<DialogDescription className="text-center text-zinc-500">
-						If you don't have OG&apos;s Login details, click this button to join{" "}
-						<RequestModal />
-					</DialogDescription>
-				</DialogHeader>
-				<div className="flex items-start flex-col  w-full justify-start p-5">
-					<Form {...form}>
-						<form
-							onSubmit={form.handleSubmit(onSubmit)}
-							className="space-y-4  w-full"
-						>
-							<FormField
-								control={form.control}
-								name="email"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
-											Email
-										</FormLabel>
+		<div className="bg-white text-black p-0 overflow-hidden">
+			<div className="pt-8 px-6">
+				<h1 className="text-2xl text-center font-bold">Login as OG&apos;s</h1>
+				<div className="text-center text-zinc-500">
+					If you don't have OG&apos;s Login details, click this button to join{" "}
+					<RequestModal />
+				</div>
+			</div>
+			<div className="flex items-start flex-col  w-full justify-start p-5">
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="space-y-4  w-full"
+					>
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+										Email
+									</FormLabel>
+									<FormControl>
+										<Input
+											type="email"
+											disabled={isLoading}
+											className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+											placeholder="Enter Email address"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
+									<div className="relative">
 										<FormControl>
 											<Input
-												type="email"
-												disabled={isLoading}
-												className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-												placeholder="Enter Email address"
+												type={showPassword ? "text" : "password"}
+												placeholder="Enter your password"
+												disabled={form.formState.isSubmitting}
 												{...field}
 											/>
 										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<FormField
-								control={form.control}
-								name="password"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Password</FormLabel>
-										<div className="relative">
-											<FormControl>
-												<Input
-													type={showPassword ? "text" : "password"}
-													placeholder="Enter your password"
-													disabled={form.formState.isSubmitting}
-													{...field}
-												/>
-											</FormControl>
-											<span className="absolute top-[10px] right-3">
-												<button
-													type="button"
-													onClick={togglePasswordVisibility}
-												>
-													{showPassword ? (
-														<Eye className="h-5 w-5" />
-													) : (
-														<EyeOff className="w-5 h-5" />
-													)}{" "}
-												</button>
-											</span>
-										</div>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<div className="flex flex-col justify-end text-right w-full my-5">
-								<Link
-									href={"auth/account/forget-password"}
-									className="text-sm hover:underline"
-								>
-									Forget Password
-								</Link>
-							</div>
-							<LoadingButton
-								type="submit"
-								loading={isPending}
-								className="mt-6 w-full"
+										<span className="absolute top-[10px] right-3">
+											<button type="button" onClick={togglePasswordVisibility}>
+												{showPassword ? (
+													<Eye className="h-5 w-5" />
+												) : (
+													<EyeOff className="w-5 h-5" />
+												)}{" "}
+											</button>
+										</span>
+									</div>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<div className="flex flex-col justify-end text-right w-full my-5">
+							<Link
+								href={"auth/account/forget-password"}
+								className="text-sm hover:underline"
 							>
-								Login
-							</LoadingButton>
-						</form>
-					</Form>
-				</div>
-			</DialogContent>
-		</Dialog>
+								Forget Password
+							</Link>
+						</div>
+						<LoadingButton
+							type="submit"
+							loading={isPending}
+							className="mt-6 w-full"
+						>
+							Login
+						</LoadingButton>
+					</form>
+				</Form>
+			</div>
+		</div>
 	);
 };
 

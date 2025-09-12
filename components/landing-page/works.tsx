@@ -194,7 +194,7 @@ export default function Works() {
 							{WORK_TYPES.map((workType, index) => (
 								<div
 									key={workType.key}
-									className="text-sm uppercase font-medium cursor-pointer transition-colors hover:text-blue-600"
+									className="text-sm uppercase whitespace-nowrap font-medium cursor-pointer transition-colors hover:text-blue-600"
 									onMouseEnter={() => handleTabHover(index)}
 								>
 									{workType.display}

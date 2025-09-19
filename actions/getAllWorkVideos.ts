@@ -15,6 +15,7 @@ export async function getAllWorkVideos(): Promise<SafeWorkExtras[] | []> {
 		const works = await db.work.findMany({
 			where: {
 				isActive: false,
+				isScrolled: true,
 				OR: [{ links: null }, { links: "" }],
 				workFiles: {
 					some: {},

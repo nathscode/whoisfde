@@ -4,6 +4,7 @@ import { formatDateTime } from "@/lib/utils";
 import { SafeWork } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteButton from "../common/WorkDeleteButton";
+import DoomCheck from "../common/DoomCheck";
 
 export const WorkColumns: ColumnDef<SafeWork>[] = [
 	{
@@ -28,6 +29,14 @@ export const WorkColumns: ColumnDef<SafeWork>[] = [
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => <DeleteButton id={row.original.id} />,
+		cell: ({ row }) => (
+			<div className="flex items-center space-x-2">
+				<DoomCheck
+					id={row.original.id}
+					initialChecked={row.original.isScrolled}
+				/>
+				<DeleteButton id={row.original.id} />
+			</div>
+		),
 	},
 ];

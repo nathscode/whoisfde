@@ -155,6 +155,7 @@ model Work {
  caption           String?   @db.VarChar(5000)
  links             String?  @db.VarChar(500)
  isActive          Boolean @default(false)
+ isScrolled        Boolean @default(false)
  createdAt         DateTime @default(now())
  workFiles         WorkFiles[]
  }

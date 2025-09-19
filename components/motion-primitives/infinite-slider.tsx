@@ -100,6 +100,7 @@ export function InfiniteSlider({
 						: { y: translation }),
 					gap: `${gap}px`,
 					flexDirection: direction === "horizontal" ? "row" : "column",
+					transform: "translateZ(0)",
 				}}
 				ref={ref}
 				{...hoverProps}

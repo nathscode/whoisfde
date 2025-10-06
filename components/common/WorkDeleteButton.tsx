@@ -9,12 +9,14 @@ import { Loader2, Trash } from "lucide-react";
 
 type Props = {
 	id: string | null;
+	onCancel?: () => void; // Add this optional prop
 };
 
-const DeleteButton = ({ id }: Props) => {
+const DeleteButton = ({ id, onCancel }: Props) => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
 	const { toast } = useToast();
+
 	const { mutate, isPending } = useMutation({
 		mutationFn: async () => {
 			const { data } = await axios.delete(`/api/rooter/work`, {
@@ -35,6 +37,8 @@ const DeleteButton = ({ id }: Props) => {
 			toast({
 				description: "Delete Successful",
 			});
+			// Call onCancel if provided to close any parent modals/dialogs
+			onCancel?.();
 		},
 		onError: (err: any) => {
 			if (err instanceof AxiosError) {
@@ -52,7 +56,6 @@ const DeleteButton = ({ id }: Props) => {
 						variant: "destructive",
 					});
 				}
-
 				if (err.response?.status === 403) {
 					return toast({
 						title: "Unauthorized request.",
@@ -86,6 +89,7 @@ const DeleteButton = ({ id }: Props) => {
 	const onDeleteWork = () => {
 		mutate();
 	};
+
 	return (
 		<div className="w-full">
 			<ConfirmModal
@@ -98,7 +102,7 @@ const DeleteButton = ({ id }: Props) => {
 					size="icon"
 					disabled={isPending}
 				>
-					{isPending && isPending ? (
+					{isPending ? (
 						<Loader2 size={16} className="animate-spin" />
 					) : (
 						<Trash className="w-5 h-5" />

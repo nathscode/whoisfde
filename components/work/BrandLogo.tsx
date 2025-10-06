@@ -2,33 +2,43 @@
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
 
-type Props = {
+// BrandLogo Component with parent-controlled dimensions
+type BrandLogoProps = {
 	src: string;
 	alt: string;
-	width: number; // natural width of the file you exported
-	height: number; // natural height of the file you exported
+	width?: number;
+	height?: number;
 	className?: string;
 };
 
-export const BrandLogo = ({ src, alt, width, height, className }: Props) => (
-	<div
-		className={cn("shrink-0", className)}
-		style={{
-			aspectRatio: `${width}/${height}`,
-			height: "100%", // takes the height given by parent
-			width: "auto",
-		}}
-	>
-		<Image
-			src={src}
-			alt={alt}
-			width={width}
-			height={height}
-			quality={90}
-			draggable={false}
-			className="h-full w-auto object-contain"
-			sizes="15vw"
-		/>
-	</div>
-);
+export const BrandLogo = ({
+	src,
+	alt,
+	width = 120,
+	height = 60,
+	className,
+}: BrandLogoProps) => {
+	return (
+		<div
+			className={cn("shrink-0 flex items-center justify-center", className)}
+			style={{
+				width: `${width}px`,
+				height: `${height}px`,
+			}}
+		>
+			<Image
+				src={src}
+				alt={alt}
+				width={width}
+				height={height}
+				quality={90}
+				draggable={false}
+				className="h-full w-full object-contain"
+				sizes="(max-width: 640px) 80px, (max-width: 1024px) 100px, 120px"
+				loading="lazy"
+			/>
+		</div>
+	);
+};

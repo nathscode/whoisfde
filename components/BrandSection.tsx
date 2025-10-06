@@ -1,135 +1,74 @@
-import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";
-import { ProgressiveBlur } from "@/components/motion-primitives/progressive-blur";
-import { BrandLogo } from "./work/BrandLogo";
+"use client";
+import "swiper/css";
 import { useMediaQuery } from "usehooks-ts";
+import { BrandLogo } from "./work/BrandLogo";
+import Marquee from "./Marquee";
+import { useEffect, useState } from "react";
 
+const partnersLogo = [
+	{ id: 1, src: "/images/brands/desperados-beer-logo.png", alt: "desperados" },
+	{ id: 2, src: "/images/brands/givenchy_logo.png", alt: "givenchy" },
+	{ id: 3, src: "/images/brands/hennessy_logo.png", alt: "hennessy" },
+	{ id: 4, src: "/images/brands/mikano_logo.png", alt: "mikano" },
+	{ id: 5, src: "/images/brands/momo.png", alt: "momo" },
+	{ id: 6, src: "/images/brands/new_infinix_logo.png", alt: "infinix" },
+	{ id: 7, src: "/images/brands/octafx.png", alt: "octa" },
+	{ id: 8, src: "/images/brands/oraimo_logo.png", alt: "oraimo" },
+	{ id: 9, src: "/images/brands/panarottis_logo.png", alt: "panarottis" },
+	{ id: 10, src: "/images/brands/silverbird_logo.png", alt: "silverbird" },
+	{ id: 11, src: "/images/brands/unicaf.png", alt: "unicaf" },
+];
 export default function BrandSection() {
 	const isMobile = useMediaQuery("(max-width: 600px)");
-	const width500 = isMobile ? 50 : 400;
-	const height50 = isMobile ? 10 : 50;
+	const [logoSize, setLogoSize] = useState({ width: 80, height: 40 });
+
+	useEffect(() => {
+		const updateLogoSize = () => {
+			const width = window.innerWidth;
+
+			if (width < 640) {
+				// Mobile
+				setLogoSize({ width: 60, height: 20 });
+			} else if (width < 1024) {
+				// Tablet
+				setLogoSize({ width: 70, height: 30 });
+			} else {
+				// Desktop
+				setLogoSize({ width: 80, height: 40 });
+			}
+		};
+
+		updateLogoSize();
+		window.addEventListener("resize", updateLogoSize);
+
+		return () => window.removeEventListener("resize", updateLogoSize);
+	}, []);
 
 	return (
-		<section className="overflow-hidden bg-white pt-16">
-			<div className="group relative m-auto max-w-7xl px-6">
-				<div className="flex flex-col items-center md:flex-row">
-					{/* left label */}
-					<div className="md:max-w-44 md:border-r md:pr-6">
-						<p className="text-center text-2xl font-semibold sm:text-end sm:text-sm">
-							Brands I have worked with
-						</p>
+		<section className="overflow-hidden bg-white py-12 md:py-16">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<div className="flex flex-col items-center gap-8 md:flex-row md:gap-6">
+					{/* Left Label */}
+					<div className="w-full text-center md:w-auto md:min-w-[160px] md:max-w-[180px] md:border-r md:border-gray-200 md:pr-6 md:text-right">
+						<h2 className="text-xl font-semibold text-gray-900 sm:text-2xl md:text-base lg:text-lg">
+							Brands I&apos;ve worked with
+						</h2>
 					</div>
 
-					{/* slider area */}
-					<div className="relative py-6 md:w-[calc(100%-11rem)]">
-						<InfiniteSlider
-							speedOnHover={20}
-							speed={40}
-							gap={30}
-							className="flex justify-center items-center w-full"
-						>
-							<BrandLogo
-								src="/images/brands/desperados-beer-logo.png"
-								alt="Desperados"
-								width={50}
-								height={50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/givenchy_logo.png"
-								alt="Givenchy"
-								width={width500}
-								height={isMobile ? 20 : 50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/hennessy_logo.png"
-								alt="Hennessy"
-								width={150}
-								height={50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/new_infinix_logo.png"
-								alt="Infinix"
-								width={width500}
-								height={isMobile ? 10 : 50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/mikano_logo.png"
-								alt="Mikano"
-								width={150}
-								height={50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/unicaf.png"
-								alt="Unicaf"
-								width={width500}
-								height={height50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/momo.png"
-								alt="MTN MoMo"
-								width={150}
-								height={50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/octafx.png"
-								alt="OctaFX"
-								width={width500}
-								height={height50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/oraimo_logo.png"
-								alt="Oraimo"
-								width={width500}
-								height={height50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/panarottis_logo.png"
-								alt="Panarottis"
-								width={150}
-								height={50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-
-							<BrandLogo
-								src="/images/brands/silverbird_logo.png"
-								alt="Silverbird"
-								width={60}
-								height={isMobile ? 40 : 50}
-								className=" flex flex-col justify-center items-center w-full"
-							/>
-						</InfiniteSlider>
-
-						{/* fade edges */}
-						<div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent" />
-						<div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent" />
-
-						<ProgressiveBlur
-							className="pointer-events-none absolute left-0 top-0 h-full w-20"
-							direction="left"
-							blurIntensity={1}
-						/>
-						<ProgressiveBlur
-							className="pointer-events-none absolute right-0 top-0 h-full w-20"
-							direction="right"
-							blurIntensity={1}
-						/>
+					{/* Marquee Slider */}
+					<div className="w-full flex-1">
+						<Marquee speed={30} pauseOnHover={true} className="py-4">
+							{partnersLogo.map((partner) => (
+								<BrandLogo
+									key={partner.id}
+									src={partner.src}
+									alt={partner.alt}
+									width={logoSize.width}
+									height={logoSize.height}
+									className="opacity-70 transition-opacity duration-300 hover:opacity-100"
+								/>
+							))}
+						</Marquee>
 					</div>
 				</div>
 			</div>

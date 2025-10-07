@@ -11,7 +11,7 @@ const PartiesContent = (props: Props) => {
 		return axios
 			.get("/api/rooter/work/", {
 				params: {
-					workType: "Parties",
+					workType: "Brands",
 				},
 			})
 			.then((response) => {

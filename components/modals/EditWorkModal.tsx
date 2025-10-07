@@ -116,11 +116,11 @@ export default function EditWorkModal({
 											<SelectContent>
 												<ScrollArea className="h-[150px] w-full">
 													{[
-														"Concert",
-														"Contents",
-														"Parties",
+														"Brands",
+														"Events",
+														"Personal",
 														"Estate",
-														"Photography",
+														"Stills",
 														"Weddings",
 													].map((type, index) => (
 														<SelectItem

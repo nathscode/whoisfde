@@ -564,11 +564,11 @@ const WorkModal = (props: Props) => {
 												<SelectContent>
 													<ScrollArea className="h-[150px] w-full">
 														{[
-															"Concert",
-															"Contents",
-															"Parties",
+															"Brands",
+															"Events",
+															"Personal",
 															"Estate",
-															"Photography",
+															"Stills",
 															"Weddings",
 														].map((event, index) => (
 															<SelectItem

@@ -11,7 +11,7 @@ const ConcertContent = (props: Props) => {
 		return axios
 			.get("/api/rooter/work/", {
 				params: {
-					workType: "Concert",
+					workType: "Events",
 				},
 			})
 			.then((response) => {

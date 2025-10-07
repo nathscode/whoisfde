@@ -11,7 +11,7 @@ const GeneralContent = (props: Props) => {
 		return axios
 			.get("/api/rooter/work/", {
 				params: {
-					workType: "Contents",
+					workType: "Personal",
 				},
 			})
 			.then((response) => {

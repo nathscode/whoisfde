@@ -10,7 +10,7 @@ const PhotographyContent = (props: Props) => {
 		return axios
 			.get("/api/rooter/work/", {
 				params: {
-					workType: "Photography",
+					workType: "Stills",
 				},
 			})
 			.then((response) => {

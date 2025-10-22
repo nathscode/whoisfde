@@ -165,8 +165,11 @@ model Work {
 model WorkFiles {
     id         String   @id @default(cuid())
     url        String?  @db.VarChar(5000)
+    fallbackUrl String?  @db.VarChar(5000) 
     work        Work @relation(fields: [workId], references: [id], onDelete: Cascade)
-    workId          String
+    workId      String  
+    format    String   @default("regular")
+    metadata  Json?    
     createdAt  DateTime @default(now())
     @@unique([workId, id])
     @@map("Workfiles")

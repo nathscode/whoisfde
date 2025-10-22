@@ -165,7 +165,6 @@ model Work {
 model WorkFiles {
     id         String   @id @default(cuid())
     url        String?  @db.VarChar(5000)
-    fallbackUrl String?  @db.VarChar(5000) 
     work        Work @relation(fields: [workId], references: [id], onDelete: Cascade)
     workId      String  
     format    String   @default("regular")
